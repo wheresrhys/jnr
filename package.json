@@ -1,0 +1,35 @@
+{
+  "name": "jnr",
+  "version": "1.0.0",
+  "description": "Offline first jigsnreels webapp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wheresrhys/jnr.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wheresrhys/jnr/issues"
+  },
+  "homepage": "https://github.com/wheresrhys/jnr#readme",
+  "dependencies": {
+    "pouchdb": "^5.1.0"
+  },
+  "devDependencies": {
+    "jspm": "^0.16.14"
+  },
+  "jspm": {
+    "dependencies": {
+      "pouchdb": "github:pouchdb/pouchdb@^5.1.0"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
+  }
+}
