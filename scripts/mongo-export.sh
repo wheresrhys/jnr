@@ -1,6 +1,4 @@
 for collection in {arrangements,dodgyPractices,dodgyTunes,oldperformances,oldsets,oldtunes,pieces,sets,tunes,users}; do
-	mongoexport -h ds057000.mongolab.com:57000 -d heroku_app18207259 -u heroku_app18207259 -p ${MONGO_PASSWORD} -o mongo-export/tmp_${collection}.json --jsonArray -c ${collection}
-	echo "{\"docs\":`cat mongo-export/tmp_${collection}.json`}" > mongo-export/${collection}.json
+	mongoexport -h ds057000.mongolab.com:57000 -d heroku_app18207259 -u heroku_app18207259 -p ${MONGO_PASSWORD} -o mongo-export/${collection}.json --jsonArray -c ${collection}
 done;
-find mongo-export -name 'tmp_*.json' | xargs rm
 unset collection;

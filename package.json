@@ -17,10 +17,12 @@
   },
   "homepage": "https://github.com/wheresrhys/jnr#readme",
   "dependencies": {
+    "isomorphic-fetch": "^2.2.0",
     "pouchdb": "^5.1.0"
   },
   "devDependencies": {
-    "jspm": "^0.16.14"
+    "jspm": "^0.16.14",
+    "shellpromise": "^1.3.0"
   },
   "jspm": {
     "dependencies": {
