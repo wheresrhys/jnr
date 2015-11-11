@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/wheresrhys/jnr#readme",
   "dependencies": {
+    "fetchres": "^1.5.1",
     "isomorphic-fetch": "^2.2.0",
     "pouchdb": "^5.1.0"
   },
