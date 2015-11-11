@@ -32,6 +32,7 @@
   },
   "jspm": {
     "dependencies": {
+      "page": "npm:page@^1.6.4",
       "pouchdb": "github:pouchdb/pouchdb@^5.1.0"
     },
     "devDependencies": {
