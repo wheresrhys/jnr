@@ -6,15 +6,23 @@ const app = require('koa')();
 const router = require('koa-router')();
 const db = new PouchDB(process.env.POUCHDB_HOST);
 
-const configureRoutes = require('../shared/configure-routes');
+const configureRoutes = require('../webapp/lib/configure-routes');
+
+const serve = require('koa-static');
+
+app.use(serve('webapp'));
 
 app.use(function *(next) {
 	this.html = `<!doctype html>
   <script src="/jspm_packages/system.js"></script>
   <script src="/config.js"></script>
   <script>
-    System.import('client/main.js');
-  </script>`
+    System.import('main.js');
+  </script>
+  <a href='/tunes'>tunes</a>
+  <a href='/learn'>learn</a>
+  <a href='/rehearse'>rehearse</a>
+  <a href='/sets'>sets</a>`
   yield next;
 })
 

@@ -12,4 +12,5 @@ import:
 
 mongo-import: mongo-export import
 
-
+run:
+	nodemon --verbose server/app.js

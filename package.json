@@ -23,6 +23,7 @@
     "isomorphic-fetch": "^2.2.0",
     "koa": "^1.1.2",
     "koa-router": "^5.2.3",
+    "koa-static": "^1.5.2",
     "pouchdb": "^5.1.0"
   },
   "devDependencies": {
@@ -31,6 +32,9 @@
     "shellpromise": "^1.3.0"
   },
   "jspm": {
+    "directories": {
+      "baseURL": "webapp"
+    },
     "dependencies": {
       "page": "npm:page@^1.6.4",
       "pouchdb": "github:pouchdb/pouchdb@^5.1.0"
