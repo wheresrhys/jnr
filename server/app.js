@@ -9,7 +9,9 @@ const db = new PouchDB(process.env.POUCHDB_HOST);
 const serve = require('koa-static');
 app.use(serve('webapp'));
 app.use(function *(next) {
-	this.data = {};
+	this.data = {
+		user: 'wheresrhys'
+	};
 	yield next;
 });
 
@@ -18,9 +20,7 @@ const routeConfig = require('../webapp/lib/route-config');
 app.use(function *(next) {
 	this.data.nav = routeConfig.mappings;
 	yield next;
-})
-
-
+});
 
 const controllers = {
 	home: function *(next) {
@@ -55,7 +55,7 @@ const marko = require('marko');
 
 app
   .use(function *(next) {
-	  this.body = marko.load(`./webapp/views/layout.marko`).stream(this.data);
+	  this.body = marko.load(`./webapp/layout.marko`).stream(this.data);
 	  this.type = 'text/html';
 	})
 

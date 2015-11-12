@@ -14,3 +14,6 @@ mongo-import: mongo-export import
 
 run:
 	nodemon --verbose server/app.js
+
+build:
+	node-sass webapp/main.scss -o webapp/main.css
