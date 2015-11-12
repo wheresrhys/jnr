@@ -1,7 +1,7 @@
 'use strict';
 require('isomorphic-fetch');
 
-const log = console.log.bind(console)
+const log = console.log.bind(console);
 const shell = require('shellpromise');
 const fetchres = require('fetchres');
 
@@ -23,7 +23,7 @@ const tunes = require('../mongo-export/tunes').map(rec => {
 	};
 });
 
-const sets = require('../mongo-export/sets').map(rec => {
+let sets = require('../mongo-export/sets').map(rec => {
 	return {
 		type: 'set',
 		mongoId: rec._id.$oid,
@@ -33,7 +33,7 @@ const sets = require('../mongo-export/sets').map(rec => {
 	};
 });
 
-const arrangements = require('../mongo-export/arrangements').map(rec => {
+let arrangements = require('../mongo-export/arrangements').map(rec => {
 	return {
 		type: 'arrangement',
 		abc: rec.abc,
@@ -47,7 +47,7 @@ const arrangements = require('../mongo-export/arrangements').map(rec => {
 	}
 });
 
-const pieces = require('../mongo-export/pieces').reduce((arr, rec) => {
+let pieces = require('../mongo-export/pieces').reduce((arr, rec) => {
 	if (rec.type === 'tune') {
 		arr.push({
 			type: 'piece',
@@ -75,6 +75,8 @@ const pieces = require('../mongo-export/pieces').reduce((arr, rec) => {
 	return arr;
 }, []);
 
+let transitions = new Set();
+
 shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 	.then(() => shell(`curl -X PUT ${process.env.POUCHDB_HOST}`))
 	.then(() => fetch(`${process.env.POUCHDB_HOST}/_bulk_docs`, {
@@ -93,28 +95,68 @@ shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 		.then(fetchres.json)
 		.then(tunes => tunes.rows.map(t => t.doc)))
 		.then(tunes => {
+
 			//pieces mongoIds => newIds
 			pieces = pieces.map(p => {
 				p.tuneId = tunes.find(t => t.mongoId === p.tuneId)._id;
 				return p;
 			})
+
 			arrangements = arrangements.map(a => {
 				a.tuneId = tunes.find(t => t.mongoId === a.tuneId)._id;
 				return a;
 			})
+
 			sets = sets.map(s => {
+
 				s.tuneIds = s.tuneIds.map(id => tunes.find(t => t.mongoId === id)._id);
+
+				s.tunes = s.tuneIds.map((id, i) => {
+					return {
+						tuneId: tunes.find(t => t._id === id)._id,
+						key: s.keys[i]
+					}
+				});
+
+				delete s.tuneIds;
 				delete s.mongoId;
 				return s;
 			})
+
+			sets.map(s => s.tunes)
+				.forEach(arr => arr.forEach((tuneObj, i) => {
+					if (i > 0) {
+						transitions.add([arr[i-1].tuneId, arr[i-1].key, tuneObj.tuneId, tuneObj.key].join('|'))
+					}
+				}));
+
+			transitions = Array.from(transitions)
+				.map(t => {
+					t = t.split('|');
+					// TODO add meter here too
+					return {
+						type: 'transition',
+						from: {
+							tuneId: t[0],
+							key: t[1]
+						},
+						to: {
+							tuneId: t[2],
+							key: t[3]
+						}
+					}
+				});
+
+
 		})
 		.then(() => fetch(`${process.env.POUCHDB_HOST}/_bulk_docs`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({docs: pieces.concat(sets, arrangements)})
+			body: JSON.stringify({docs: pieces.concat(sets, arrangements, transitions)})
 		})
-		.catch(log))
+		.catch(log)
+	)
 
 
