@@ -2,7 +2,7 @@
 
 import page from 'page';
 import routeConfig from 'lib/route-config';
-
+// https://github.com/kentjs/koa-client
 const controllers = {
 	home: function (e) {
 	  console.log('Hello World: ' + Object.keys(e.params).map(k => k + ':' + e.params[k]).join(' '));

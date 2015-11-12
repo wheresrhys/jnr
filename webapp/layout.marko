@@ -10,8 +10,8 @@
 		<link rel="stylesheet" href="/main.css">
 	</head>
 	<body>
-		<include template="./components/nav/tpl.marko" template-data=data />
-		<include template="./pages/${data.tpl}" />
+		<include template="./components/nav/tpl.marko" template-data=data.data />
+		<include template="./pages/${data.tpl}" template-data=data.data />
 	  <script>
 			window.user = ${data.user};
 		</script>

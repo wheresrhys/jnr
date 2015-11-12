@@ -1,5 +1,5 @@
 'use strict';
-
+const log = console.log.bind(console);
 const PouchDB = require('PouchDB');
 
 const app = require('koa')();
@@ -24,23 +24,29 @@ app.use(function *(next) {
 
 const controllers = {
 	home: function *(next) {
-	  this.data.tpl = 'home.marko';
+	  this.tpl = 'home.marko';
 	  yield next
 	},
 	learn: function *(next) {
-	  this.data.tpl = 'learn.marko';
+	  this.tpl = 'learn.marko';
 	  yield next
 	},
 	rehearse: function *(next) {
-	  this.data.tpl = 'rehearse.marko';
+	  this.tpl = 'rehearse.marko';
 	  yield next
 	},
 	tunes: function *(next) {
-	  this.data.tpl = 'tunes.marko';
+	  this.tpl = 'tunes.marko';
+	  this.data.tunes = yield db.allDocs({include_docs: true})
+	  	.then(data => data.rows
+	  		.filter(t => t.doc.type === 'tune')
+	  		.slice(0, 10)
+	  		.map(t => t.doc)
+	  	);
 	  yield next
 	},
 	sets: function *(next) {
-	  this.data.tpl = 'sets.marko';
+	  this.tpl = 'sets.marko';
 	  yield next
 	}
 };
@@ -55,7 +61,7 @@ const marko = require('marko');
 
 app
   .use(function *(next) {
-	  this.body = marko.load(`./webapp/layout.marko`).stream(this.data);
+	  this.body = marko.load(`./webapp/layout.marko`).stream(this);
 	  this.type = 'text/html';
 	})
 
