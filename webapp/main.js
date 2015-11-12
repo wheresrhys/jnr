@@ -1,10 +1,10 @@
 'use strict';
 
 import page from 'page';
-import configureRoutes from 'lib/configure-routes';
+import routeConfig from 'lib/route-config';
 
 const controllers = {
-	root: function (e) {
+	home: function (e) {
 	  console.log('Hello World: ' + Object.keys(e.params).map(k => k + ':' + e.params[k]).join(' '));
 	},
 	learn: function (e) {
@@ -21,7 +21,7 @@ const controllers = {
 	}
 };
 
-configureRoutes({
+routeConfig.configureRoutes({
 	get: page
 }, controllers);
 

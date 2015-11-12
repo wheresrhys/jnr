@@ -8,38 +8,44 @@ const db = new PouchDB(process.env.POUCHDB_HOST);
 
 const serve = require('koa-static');
 app.use(serve('webapp'));
+app.use(function *(next) {
+	this.data = {};
+	yield next;
+});
 
-const configureRoutes = require('../webapp/lib/configure-routes');
+const routeConfig = require('../webapp/lib/route-config');
+
+app.use(function *(next) {
+	this.data.nav = routeConfig.mappings;
+	yield next;
+})
+
+
 
 const controllers = {
-	root: function *(next) {
-	  this.data = {page: 'Hello World: ' + Object.keys(this.params).map(k => k + ':' + this.params[k]).join(' ')};
-	  this.tpl = 'root';
+	home: function *(next) {
+	  this.data.tpl = 'home.marko';
 	  yield next
 	},
 	learn: function *(next) {
-	  this.data = {page: 'learn: ' + Object.keys(this.params).map(k => k + ':' + this.params[k]).join(' ')};
-	  this.tpl = 'learn';
+	  this.data.tpl = 'learn.marko';
 	  yield next
 	},
 	rehearse: function *(next) {
-	  this.data = {page: 'rehearse: ' + Object.keys(this.params).map(k => k + ':' + this.params[k]).join(' ')};
-	  this.tpl = 'rehearse';
+	  this.data.tpl = 'rehearse.marko';
 	  yield next
 	},
 	tunes: function *(next) {
-	  this.data = {page: 'tunes: ' + Object.keys(this.params).map(k => k + ':' + this.params[k]).join(' ')};
-	  this.tpl = 'tunes';
+	  this.data.tpl = 'tunes.marko';
 	  yield next
 	},
 	sets: function *(next) {
-	  this.data = {page: 'sets: ' + Object.keys(this.params).map(k => k + ':' + this.params[k]).join(' ')};
-	  this.tpl = 'sets';
+	  this.data.tpl = 'sets.marko';
 	  yield next
 	}
 };
 
-configureRoutes(router, controllers);
+routeConfig.configureRoutes(router, controllers);
 
 app
   .use(router.routes())
@@ -49,7 +55,7 @@ const marko = require('marko');
 
 app
   .use(function *(next) {
-	  this.body = marko.load(`./webapp/views/pages/${this.tpl}.marko`).stream(this.data);
+	  this.body = marko.load(`./webapp/views/layout.marko`).stream(this.data);
 	  this.type = 'text/html';
 	})
 

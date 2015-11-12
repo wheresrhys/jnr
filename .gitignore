@@ -1,4 +1,5 @@
 /node_modules/
 /webapp/jspm_packages/
+/webapp/views/**/*.js
 /mongo-export/
 .env

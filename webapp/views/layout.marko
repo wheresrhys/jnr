@@ -1,10 +1,13 @@
-`<!doctype html>
+<!doctype html>
+<head>
+</head>
+<body>
+	<include template="./partials/nav.marko" template-data=data />
+	<include template="./pages/${data.tpl}" />
   <script src="/jspm_packages/system.js"></script>
   <script src="/config.js"></script>
   <script>
     System.import('main.js');
   </script>
-  <a href='/tunes'>tunes</a>
-  <a href='/learn'>learn</a>
-  <a href='/rehearse'>rehearse</a>
-  <a href='/sets'>sets</a>`
+
+</body>
