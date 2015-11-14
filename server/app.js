@@ -21,7 +21,10 @@ app.use(function *(next) {
 	yield next;
 });
 
+
 // routing
+import qs from 'koa-qs';
+qs(app);
 import koaRouter from 'koa-router';
 const router = koaRouter();
 import {routeMappings, configureRoutes} from '../webapp/lib/route-config';

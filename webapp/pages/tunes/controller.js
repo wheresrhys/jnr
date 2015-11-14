@@ -1,10 +1,14 @@
-import {db} from '../../pouch';
+import {query} from '../../pouch';
 
 export default function *controller () {
-	this.data.tunes = yield db.allDocs({include_docs: true})
+	this.data.tunes = yield query('tunes', {
+		include_docs: true,
+		limit: this.query.limit || 10,
+		skip: this.query.page ? (this.query.limit || 10) * this.query.page : 0
+	})
+			.catch(logErr)
 			.then(data => data.rows
-				.filter(t => t.doc.type === 'tune')
-				.slice(0, 10)
 				.map(t => t.doc)
-			);
+			)
+
 }
