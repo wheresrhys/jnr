@@ -8,12 +8,10 @@ global.logErr = (err) => {
 // create a koa app and initialise the database
 import koa from 'koa';
 const app = koa();
-import * as pouch from '../webapp/pouch';
-const db = pouch.db;
 
 // static assets
 import serve from 'koa-static';
-app.use(serve(process.env.WEB_ROOT || 'webapp'));
+app.use(serve(process.env.WEB_ROOT));
 
 // dump out useful global config
 app.use(function *(next) {
@@ -27,6 +25,7 @@ app.use(function *(next) {
 import koaRouter from 'koa-router';
 const router = koaRouter();
 import {routeMappings, configureRoutes} from '../webapp/lib/route-config';
+import pages from '../webapp/pages';
 
 app.use(function *(next) {
 	this.data.nav = routeMappings;
@@ -35,29 +34,24 @@ app.use(function *(next) {
 
 const controllers = {
 	home: function *(next) {
-		this.tpl = 'home.marko';
+		this.tpl = 'home/tpl.marko';
 		yield next
 	},
 	learn: function *(next) {
-		this.tpl = 'learn.marko';
+		this.tpl = 'learn/tpl.marko';
 		yield next
 	},
 	rehearse: function *(next) {
-		this.tpl = 'rehearse.marko';
+		this.tpl = 'rehearse/tpl.marko';
 		yield next
 	},
 	tunes: function *(next) {
-		this.tpl = 'tunes.marko';
-		this.data.tunes = yield db.allDocs({include_docs: true})
-			.then(data => data.rows
-				.filter(t => t.doc.type === 'tune')
-				.slice(0, 10)
-				.map(t => t.doc)
-			);
+		this.tpl = 'tunes/tpl.marko';
+		yield pages.tunes.call(this);
 		yield next
 	},
 	sets: function *(next) {
-		this.tpl = 'sets.marko';
+		this.tpl = 'sets/tpl.marko';
 		yield next
 	}
 };
@@ -77,5 +71,7 @@ app
 		this.type = 'text/html';
 	})
 
-pouch.init()
+import {init} from '../webapp/pouch';
+
+init()
 	.then(() => app.listen(3000));
