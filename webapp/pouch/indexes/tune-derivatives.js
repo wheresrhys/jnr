@@ -4,7 +4,7 @@ module.exports = {
 		_id: '_design/tune-derivatives',
 		views: {
 			index: {
-				map: function m (doc) {
+				map: function (doc) {
 					var keys = doc.type === 'tune' ? [doc._id] :
 										doc.type === 'piece' ? [doc.tuneId] :
 										doc.type === 'arrangement' ? [doc.tuneId] :

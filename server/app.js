@@ -1,17 +1,21 @@
-'use strict';
+// Set up some useful global utilities
 global.log = console.log.bind(console);
 global.logErr = (err) => {
 	log(err);
 	throw err;
 };
 
-const app = require('koa')();
-const router = require('koa-router')();
-const pouch = require('../webapp/pouch');
-const db = pouch.get();
+// create a koa app and initialise the database
+import koa from 'koa';
+const app = koa();
+import * as pouch from '../webapp/pouch';
+const db = pouch.db;
 
-const serve = require('koa-static');
-app.use(serve('webapp'));
+// static assets
+import serve from 'koa-static';
+app.use(serve(process.env.WEB_ROOT || 'webapp'));
+
+// dump out useful global config
 app.use(function *(next) {
 	this.data = {
 		user: 'wheresrhys'
@@ -19,54 +23,58 @@ app.use(function *(next) {
 	yield next;
 });
 
-const routeConfig = require('../webapp/lib/route-config');
+// routing
+import koaRouter from 'koa-router';
+const router = koaRouter();
+import {routeMappings, configureRoutes} from '../webapp/lib/route-config';
 
 app.use(function *(next) {
-	this.data.nav = routeConfig.mappings;
+	this.data.nav = routeMappings;
 	yield next;
 });
 
 const controllers = {
 	home: function *(next) {
-	  this.tpl = 'home.marko';
-	  yield next
+		this.tpl = 'home.marko';
+		yield next
 	},
 	learn: function *(next) {
-	  this.tpl = 'learn.marko';
-	  yield next
+		this.tpl = 'learn.marko';
+		yield next
 	},
 	rehearse: function *(next) {
-	  this.tpl = 'rehearse.marko';
-	  yield next
+		this.tpl = 'rehearse.marko';
+		yield next
 	},
 	tunes: function *(next) {
-	  this.tpl = 'tunes.marko';
-	  this.data.tunes = yield db.allDocs({include_docs: true})
-	  	.then(data => data.rows
-	  		.filter(t => t.doc.type === 'tune')
-	  		.slice(0, 10)
-	  		.map(t => t.doc)
-	  	);
-	  yield next
+		this.tpl = 'tunes.marko';
+		this.data.tunes = yield db.allDocs({include_docs: true})
+			.then(data => data.rows
+				.filter(t => t.doc.type === 'tune')
+				.slice(0, 10)
+				.map(t => t.doc)
+			);
+		yield next
 	},
 	sets: function *(next) {
-	  this.tpl = 'sets.marko';
-	  yield next
+		this.tpl = 'sets.marko';
+		yield next
 	}
 };
 
-routeConfig.configureRoutes(router, controllers);
+configureRoutes(router, controllers);
 
 app
-  .use(router.routes())
-  .use(router.allowedMethods())
+	.use(router.routes())
+	.use(router.allowedMethods())
 
-const marko = require('marko');
+// templating
+import marko from 'marko';
 
 app
-  .use(function *(next) {
-	  this.body = marko.load(`./webapp/layout.marko`).stream(this);
-	  this.type = 'text/html';
+	.use(function *(next) {
+		this.body = marko.load(`./webapp/layout.marko`).stream(this);
+		this.type = 'text/html';
 	})
 
 pouch.init()

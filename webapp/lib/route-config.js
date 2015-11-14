@@ -1,6 +1,6 @@
 'use strict';
 
-const mappings = {
+export const routeMappings = {
 	home: ['/'],
 	learn: ['/learn', '/learn/:tunebook'],
 	rehearse: ['/rehearse', '/rehearse/:tunebook'],
@@ -8,13 +8,10 @@ const mappings = {
 	sets: ['/sets', '/sets/:action/:tuneId']
 };
 
-module.exports = {
-	mappings: mappings,
-	configureRoutes: function (router, controllers) {
-		for(let name in mappings) {
-			mappings[name].forEach(pattern => {
-				router.get(pattern, controllers[name]);
-			});
-		}
+export function configureRoutes(router, controllers) {
+	for(let name in routeMappings) {
+		routeMappings[name].forEach(pattern => {
+			router.get(pattern, controllers[name]);
+		});
 	}
-};
+}

@@ -1,19 +1,18 @@
-'use strict'
-
 const PouchDB = require('PouchDB');
-const db = new PouchDB(process.env ? process.env.POUCHDB_HOST : 'jnr');
 const indexes = {
   'tune-derivatives': require('./indexes/tune-derivatives'),
   'tune-derivatives-by-type': require('./indexes/tune-derivatives-by-type')
 };
 
-function init () {
+export const db = new PouchDB(process.env ? process.env.POUCHDB_HOST : 'jnr');
+
+export function init () {
 	return Promise.all(Object.keys(indexes).map(createIndex))
     .then(() => db)
     .catch(logErr);
 }
 
-function createIndex (indexName) {
+export function createIndex (indexName) {
   if (indexes[indexName].isInitialised) {
     return Promise.resolve();
   }
@@ -24,13 +23,6 @@ function createIndex (indexName) {
   })
     .then(() => indexes[indexName].isInitialised = true);
 }
-
-module.exports = {
-  createIndex: createIndex,
-	init: init,
-	get: () => db
-}
-
 
 // // save the design doc
 // db.put(ddoc).catch(function (err) {
