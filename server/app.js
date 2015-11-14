@@ -49,7 +49,6 @@ const controllers = {
 		yield next
 	},
 	tunes: function *(next) {
-		this.tpl = 'tunes/tpl.marko';
 		yield pages.tunes.call(this);
 		yield next
 	},
