@@ -1,1 +1,0 @@
-# http://docs.couchdb.org/en/latest/api/ddoc/common.html#put--db-_design-ddoc

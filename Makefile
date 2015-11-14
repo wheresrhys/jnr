@@ -9,7 +9,6 @@ mongo-export:
 
 import:
 	node scripts/convert-mongo-to-couch
-	node scripts/create-indexes
 
 mongo-import: mongo-export import
 

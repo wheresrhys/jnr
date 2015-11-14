@@ -1,10 +1,14 @@
 'use strict';
-const log = console.log.bind(console);
-const PouchDB = require('PouchDB');
+global.log = console.log.bind(console);
+global.logErr = (err) => {
+	log(err);
+	throw err;
+};
 
 const app = require('koa')();
 const router = require('koa-router')();
-const db = new PouchDB(process.env.POUCHDB_HOST);
+const pouch = require('../webapp/pouch');
+const db = pouch.get();
 
 const serve = require('koa-static');
 app.use(serve('webapp'));
@@ -65,4 +69,5 @@ app
 	  this.type = 'text/html';
 	})
 
-app.listen(3000);
+pouch.init()
+	.then(() => app.listen(3000));
