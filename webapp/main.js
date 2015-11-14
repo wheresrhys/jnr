@@ -1,8 +1,11 @@
 'use strict';
 
 import page from 'page';
-import routeConfig from 'lib/route-config';
+import {routeMappings, configureRoutes} from './lib/route-config';
 // https://github.com/kentjs/koa-client
+//
+import pages from './pages/index';
+
 const controllers = {
 	home: function (e) {
 	  console.log('Hello World: ' + Object.keys(e.params).map(k => k + ':' + e.params[k]).join(' '));
@@ -14,6 +17,7 @@ const controllers = {
 	  console.log('rehearse: ' + Object.keys(e.params).map(k => k + ':' + e.params[k]).join(' '));
 	},
 	tunes: function (e) {
+		pages.tunes.call(this);
 	  console.log('tunes: ' + Object.keys(e.params).map(k => k + ':' + e.params[k]).join(' '));
 	},
 	sets: function (e) {
@@ -21,7 +25,7 @@ const controllers = {
 	}
 };
 
-routeConfig.configureRoutes({
+configureRoutes({
 	get: page
 }, controllers);
 

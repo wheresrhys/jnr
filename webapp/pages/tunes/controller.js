@@ -1,4 +1,4 @@
-import {query, db} from '../../pouch';
+import {query, db} from '../../pouch/index';
 import view from './view/controller';
 
 export default function *controller () {

@@ -1,11 +1,20 @@
-const PouchDB = require('PouchDB');
-const indexes = {
-  'tune-derivatives': require('./indexes/tune-derivatives'),
-  'tune-derivatives-by-type': require('./indexes/tune-derivatives-by-type'),
-  'tunes': require('./indexes/tunes')
-};
+import PouchDB from 'pouchdb';
+import * as tdbt from './indexes/tune-derivatives-by-type';
+import * as t from './indexes/tunes';
+import * as td from './indexes/tune-derivatives';
 
-export const db = new PouchDB(process.env ? process.env.POUCHDB_HOST : 'jnr');
+const indexes = {
+  'tune-derivatives': td,
+  'tune-derivatives-by-type': tdbt,
+  'tunes': t
+};
+let dbName;
+try {
+  dbName = process.env.POUCHDB_HOST;
+} catch (e) {
+  dbName = 'jnr';
+}
+export const db = new PouchDB(dbName);
 
 export function init () {
 	return Promise.all(Object.keys(indexes).map(createIndex))
