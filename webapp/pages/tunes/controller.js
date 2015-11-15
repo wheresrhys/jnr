@@ -1,18 +1,14 @@
 import {query, db} from '../../pouch/index';
 import view from './view/controller';
+import resolveTpl from '../../lib/resolve-tpl';
 
 export default function *controller () {
 	if (this.params.action) {
-		this.tpl = `tunes/${this.params.action}/tpl.marko`;
+		this.tpl = resolveTpl(`./pages/tunes/${this.params.action}/tpl.marko`);
 		this.data.tune = yield db.get(this.params.tuneId);
 		// yield view.call(this);
 	} else {
-		console.log(this, {
-			include_docs: true,
-			limit: this.query.limit ? Number(this.query.limit) : 10,
-			skip: this.query.page ? (this.query.limit || 10) * this.query.page : 0
-		});
-		this.tpl = 'tunes/tpl.marko';
+		this.tpl = resolveTpl('./pages/tunes/tpl.marko');
 		this.data.tunes = yield query('tunes', {
 			include_docs: true,
 			limit: this.query.limit ? Number(this.query.limit) : 10,
@@ -22,5 +18,6 @@ export default function *controller () {
 				.then(data => data.rows
 					.map(t => t.doc)
 				)
+				console.log(this.data.tunes.length)
 	}
 }

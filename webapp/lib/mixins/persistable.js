@@ -1,6 +1,6 @@
 'use strict';
 
-exports default function () {
+export default function () {
 	this.isPersistable = true;
 	this.save = function () {
 		fetch(`/api/${this.dataType}${this.id ? '/' + this.id : ''}`, {

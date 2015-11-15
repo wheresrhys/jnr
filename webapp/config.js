@@ -18,11 +18,15 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.29",
     "co": "npm:co@4.6.0",
     "core-js": "npm:core-js@1.2.6",
+    "hbs": "github:davis/plugin-hbs@1.2.1",
     "marko": "npm:marko@2.7.29",
     "page": "npm:page@1.6.4",
     "pouchdb": "github:pouchdb/pouchdb@5.1.0",
     "qs": "npm:qs@6.0.0",
     "querystring": "github:jspm/nodelibs-querystring@0.1.0",
+    "github:davis/plugin-hbs@1.2.1": {
+      "handlebars": "github:components/handlebars.js@4.0.4"
+    },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
