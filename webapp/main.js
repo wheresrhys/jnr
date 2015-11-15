@@ -16,32 +16,32 @@ function updateNav (e) {
 	console.log(e);
 }
 
-function koaize (e) {
+function koaify (e) {
 	e.data = {};
 	e.query = querystring.parse(e.querystring);
 }
 
 const controllers = {
 	home: co.wrap(function* (e) {
-		koaize(e);
+		koaify(e);
 		updateNav(e);
 	}),
 	learn: co.wrap(function* (e) {
-		koaize(e);
+		koaify(e);
 		updateNav(e);
 	}),
 	rehearse: co.wrap(function* (e) {
-		koaize(e);
+		koaify(e);
 		updateNav(e);
 	}),
 	tunes: co.wrap(function* (e) {
-		koaize(e);
+		koaify(e);
 		updateNav(e);
 		yield pages.tunes.call(e);
 		console.log(e.data);
 	}),
 	sets: co.wrap(function* (e) {
-		koaize(e);
+		koaify(e);
 		updateNav(e);
 	})
 };

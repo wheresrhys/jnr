@@ -1,6 +1,7 @@
 /node_modules/
-/webapp/jspm_packages/
 /webapp/**/*.marko.js
-/webapp/main.css
 /mongo-export/
 .env
+/public
+/jnr-mrview*
+/jnr/

@@ -2,7 +2,6 @@
 
 install:
 	npm install
-	jspm install
 
 mongo-export:
 	bash scripts/mongo-export.sh
@@ -16,4 +15,5 @@ run:
 	source ./.env; nodemon -e js,marko server
 
 build:
-	node-sass webapp/main.scss -o webapp/main.css
+	node-sass webapp/main.scss -o public
+	webpack --watch

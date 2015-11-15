@@ -11,10 +11,11 @@ const app = koa();
 
 // static assets
 import serve from 'koa-static';
-app.use(serve(process.env.WEB_ROOT));
+app.use(serve('public'));
 
 // dump out useful global config
 app.use(function *(next) {
+
 	this.data = {
 		user: 'wheresrhys'
 	};
@@ -37,15 +38,15 @@ app.use(function *(next) {
 
 const controllers = {
 	home: function *(next) {
-		this.tpl = 'home/tpl.marko';
+		this.tpl = './pages/home/tpl.marko';
 		yield next
 	},
 	learn: function *(next) {
-		this.tpl = 'learn/tpl.marko';
+		this.tpl = './pages/learn/tpl.marko';
 		yield next
 	},
 	rehearse: function *(next) {
-		this.tpl = 'rehearse/tpl.marko';
+		this.tpl = './pages/rehearse/tpl.marko';
 		yield next
 	},
 	tunes: function *(next) {
@@ -53,7 +54,7 @@ const controllers = {
 		yield next
 	},
 	sets: function *(next) {
-		this.tpl = 'sets/tpl.marko';
+		this.tpl = './pages/sets/tpl.marko';
 		yield next
 	}
 };

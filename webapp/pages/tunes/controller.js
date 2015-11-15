@@ -3,16 +3,12 @@ import view from './view/controller';
 
 export default function *controller () {
 	if (this.params.action) {
-		this.tpl = `tunes/${this.params.action}/tpl.marko`;
+		this.tpl = `./pages/tunes/${this.params.action}/tpl.marko`;
 		this.data.tune = yield db.get(this.params.tuneId);
 		// yield view.call(this);
 	} else {
-		console.log(this, {
-			include_docs: true,
-			limit: this.query.limit ? Number(this.query.limit) : 10,
-			skip: this.query.page ? (this.query.limit || 10) * this.query.page : 0
-		});
-		this.tpl = 'tunes/tpl.marko';
+		this.tpl = './pages/tunes/tpl.marko';
+		console.log(this);
 		this.data.tunes = yield query('tunes', {
 			include_docs: true,
 			limit: this.query.limit ? Number(this.query.limit) : 10,
