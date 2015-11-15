@@ -1,17 +1,17 @@
 import {query, db} from '../../pouch/index';
 import view from './view/controller';
 
-export default function *controller () {
+export default async (ctx) => {
 	if (this.params.action) {
-		this.tpl = `tunes/${this.params.action}/tpl.marko`;
-		this.data.tune = yield db.get(this.params.tuneId);
-		// yield view.call(this);
+		ctx.tpl = `tunes/${ctx.params.action}/tpl.marko`;
+		ctx.data.tune = await db.get(ctx.params.tuneId);
+		// await view.call(ctx);
 	} else {
-		this.tpl = 'tunes/tpl.marko';
-		this.data.tunes = yield query('tunes', {
+		ctx.tpl = 'tunes/tpl.marko';
+		ctx.data.tunes = await query('tunes', {
 			include_docs: true,
-			limit: this.query.limit || 10,
-			skip: this.query.page ? (this.query.limit || 10) * this.query.page : 0
+			limit: ctx.query.limit || 10,
+			skip: ctx.query.page ? (ctx.query.limit || 10) * ctx.query.page : 0
 		})
 				.catch(logErr)
 				.then(data => data.rows

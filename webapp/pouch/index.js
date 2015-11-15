@@ -9,6 +9,7 @@ const indexes = {
   'tunes': t
 };
 let dbName;
+
 try {
   dbName = process.env.POUCHDB_HOST;
 } catch (e) {
@@ -46,22 +47,3 @@ export function query (indexName, options) {
 //     }))
 //     .then()
 // }
-
-
-// // save the design doc
-// db.put(ddoc).catch(function (err) {
-//   if (err.status !== 409) {
-//     throw err;
-//   }
-//   // ignore if doc already exists
-// }).then(function () {
-//   // find docs where title === 'Lisa Says'
-//   return db.query('index', {
-//     key: 'Lisa Says',
-//     include_docs: true
-//   });
-// }).then(function (result) {
-//   // handle result
-// }).catch(function (err) {
-//   console.log(err);
-// });

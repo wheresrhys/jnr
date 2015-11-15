@@ -6,19 +6,20 @@ global.logErr = (err) => {
 };
 
 // create a koa app and initialise the database
-import koa from 'koa';
-const app = koa();
+import Koa from 'koa';
+const app = new Koa();
+const convert = require('koa-convert');
 
 // static assets
 import serve from 'koa-static';
-app.use(serve(process.env.WEB_ROOT));
+app.use(convert(serve(process.env.WEB_ROOT)));
 
 // dump out useful global config
-app.use(function *(next) {
-	this.data = {
+app.use(async (ctx, next) => {
+	ctx.data = {
 		user: 'wheresrhys'
 	};
-	yield next;
+	await next;
 });
 
 
@@ -30,47 +31,48 @@ const router = koaRouter();
 import {routeMappings, configureRoutes} from '../webapp/lib/route-config';
 import pages from '../webapp/pages';
 
-app.use(function *(next) {
-	this.data.nav = routeMappings;
-	yield next;
+app.use(async (ctx, next) => {
+	ctx.data.nav = routeMappings;
+	await next;
 });
 
 const controllers = {
-	home: function *(next) {
-		this.tpl = 'home/tpl.marko';
-		yield next
+	home: async (ctx, next) => {
+		ctx.tpl = 'home/tpl.marko';
+		console.log('asdasd')
+		await next
 	},
-	learn: function *(next) {
-		this.tpl = 'learn/tpl.marko';
-		yield next
+	learn: async (ctx, next) => {
+		ctx.tpl = 'learn/tpl.marko';
+		await next
 	},
-	rehearse: function *(next) {
-		this.tpl = 'rehearse/tpl.marko';
-		yield next
+	rehearse: async (ctx, next) => {
+		ctx.tpl = 'rehearse/tpl.marko';
+		await next
 	},
-	tunes: function *(next) {
-		yield pages.tunes.call(this);
-		yield next
+	tunes: async (ctx, next) => {
+		await pages.tunes.call(ctx);
+		await next
 	},
-	sets: function *(next) {
-		this.tpl = 'sets/tpl.marko';
-		yield next
+	sets: async (ctx, next) => {
+		ctx.tpl = 'sets/tpl.marko';
+		await next
 	}
 };
 
 configureRoutes(router, controllers);
 
 app
-	.use(router.routes())
-	.use(router.allowedMethods())
+	.use(convert(router.routes()))
+	.use(convert(router.allowedMethods()))
 
 // templating
 import marko from 'marko';
 
 app
-	.use(function *(next) {
-		this.body = marko.load(`./webapp/layout.marko`).stream(this);
-		this.type = 'text/html';
+	.use(async (ctx, next) => {
+		ctx.body = marko.load(`./webapp/layout.marko`).stream(ctx);
+		ctx.type = 'text/html';
 	})
 
 import {init} from '../webapp/pouch';

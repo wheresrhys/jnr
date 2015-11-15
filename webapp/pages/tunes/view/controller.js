@@ -1,4 +1,4 @@
 
-export default function *controller () {
+export default async () => {
 
 }
