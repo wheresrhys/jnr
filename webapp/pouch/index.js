@@ -8,13 +8,22 @@ const indexes = {
   'tune-derivatives-by-type': tdbt,
   'tunes': t
 };
+let env;
 let dbName;
+
 try {
   dbName = process.env.POUCHDB_HOST;
+  env = 'server';
 } catch (e) {
   dbName = 'jnr';
+  env = 'browser';
 }
+
 export const db = new PouchDB(dbName);
+
+if (env === 'browser') {
+  PouchDB.sync('jnr', `${location.protocol}//${location.hostname}:5984/jnr`);
+}
 
 export function init () {
 	return Promise.all(Object.keys(indexes).map(createIndex))
@@ -35,6 +44,7 @@ export function createIndex (indexName) {
 }
 
 export function query (indexName, options) {
+  console.log(options);
   return createIndex(indexName)
     .then(() => db.query(`${indexName}/index`, options))
 }

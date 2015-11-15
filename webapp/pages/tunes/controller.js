@@ -7,10 +7,15 @@ export default function *controller () {
 		this.data.tune = yield db.get(this.params.tuneId);
 		// yield view.call(this);
 	} else {
+		console.log(this, {
+			include_docs: true,
+			limit: this.query.limit ? Number(this.query.limit) : 10,
+			skip: this.query.page ? (this.query.limit || 10) * this.query.page : 0
+		});
 		this.tpl = 'tunes/tpl.marko';
 		this.data.tunes = yield query('tunes', {
 			include_docs: true,
-			limit: this.query.limit || 10,
+			limit: this.query.limit ? Number(this.query.limit) : 10,
 			skip: this.query.page ? (this.query.limit || 10) * this.query.page : 0
 		})
 				.catch(logErr)
