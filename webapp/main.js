@@ -6,11 +6,15 @@ window.logErr = (err) => {
 };
 import page from 'page';
 import co from 'co';
+import marko from 'marko';
 import querystring from 'querystring';
 import {routeMappings, configureRoutes} from './lib/route-config';
-// https://github.com/kentjs/koa-client
-//
 import pages from './pages/index';
+
+import {setMap} from './lib/resolve-tpl'
+import pageTemplates from './_template-map';
+
+setMap(pageTemplates);
 
 function updateNav (e) {
 	console.log(e);
@@ -39,6 +43,8 @@ const controllers = {
 		updateNav(e);
 		yield pages.tunes.call(e);
 		console.log(e.data);
+		var template = marko.load(e.tpl);
+		document.querySelector('main').innerHTML = template.renderSync(e.data);
 	}),
 	sets: co.wrap(function* (e) {
 		koaify(e);
