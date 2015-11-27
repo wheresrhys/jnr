@@ -10,11 +10,11 @@ import marko from 'marko';
 import querystring from 'querystring';
 import {routeMappings, configureRoutes} from './lib/route-config';
 import pages from './pages/index';
-
-import {setMap} from './lib/resolve-tpl'
 import pageTemplates from './_template-map';
 
-setMap(pageTemplates);
+for (let key in pageTemplates) {
+	pageTemplates[key] = marko.load(pageTemplates[key]);
+}
 
 function updateNav (e) {
 	console.log(e);
@@ -23,6 +23,11 @@ function updateNav (e) {
 function koaify (e) {
 	e.data = {};
 	e.query = querystring.parse(e.querystring);
+}
+
+function render(e) {
+	var template = pageTemplates[e.tpl];
+	document.querySelector('main').innerHTML = template.renderSync(e.data);
 }
 
 const controllers = {
@@ -42,9 +47,7 @@ const controllers = {
 		koaify(e);
 		updateNav(e);
 		yield pages.tunes.call(e);
-		console.log(e.data);
-		var template = marko.load(e.tpl);
-		document.querySelector('main').innerHTML = template.renderSync(e.data);
+		render(e)
 	}),
 	sets: co.wrap(function* (e) {
 		koaify(e);
