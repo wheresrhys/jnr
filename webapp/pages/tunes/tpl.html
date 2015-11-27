@@ -4,3 +4,9 @@
 	{% endfor %}
 </ul>
 
+<nav>
+	{% if pagination.prev %}
+		<a href="/tunes/?limit={{pagination.perPage}}&amp;page={{pagination.prev}}">Previous</a>
+	{% endif %}
+		<a href="/tunes/?limit={{pagination.perPage}}&amp;page={{pagination.next}}">Next</a>
+</nav>

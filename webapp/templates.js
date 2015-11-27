@@ -122,6 +122,310 @@ root: root
 
 })();
 })();
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["pages/home/page.tpl.html"] = (function() {
+function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+var parentTemplate = null;
+env.getTemplate("layout.html", true, "pages/home/page.tpl.html", false, function(t_2,_parentTemplate) {
+if(t_2) { cb(t_2); return; }
+parentTemplate = _parentTemplate
+for(var t_1 in parentTemplate.blocks) {
+context.addBlock(t_1, parentTemplate.blocks[t_1]);
+}
+output += "\n";
+(parentTemplate ? function(e, c, f, r, cb) { cb(""); } : context.getBlock("body"))(env, context, frame, runtime, function(t_4,t_3) {
+if(t_4) { cb(t_4); return; }
+output += t_3;
+if(parentTemplate) {
+parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
+} else {
+cb(null, output);
+}
+})});
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+function b_body(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+output += "\n\t";
+env.getTemplate("pages/home/tpl.html", false, "pages/home/page.tpl.html", null, function(t_7,t_5) {
+if(t_7) { cb(t_7); return; }
+t_5.render(context.getVariables(), frame, function(t_8,t_6) {
+if(t_8) { cb(t_8); return; }
+output += t_6
+output += "\n";
+cb(null, output);
+})});
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+b_body: b_body,
+root: root
+};
+
+})();
+})();
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["pages/home/tpl.html"] = (function() {
+function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+var parentTemplate = null;
+output += "home";
+if(parentTemplate) {
+parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
+} else {
+cb(null, output);
+}
+;
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+root: root
+};
+
+})();
+})();
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["pages/learn/page.tpl.html"] = (function() {
+function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+var parentTemplate = null;
+env.getTemplate("layout.html", true, "pages/learn/page.tpl.html", false, function(t_2,_parentTemplate) {
+if(t_2) { cb(t_2); return; }
+parentTemplate = _parentTemplate
+for(var t_1 in parentTemplate.blocks) {
+context.addBlock(t_1, parentTemplate.blocks[t_1]);
+}
+output += "\n";
+(parentTemplate ? function(e, c, f, r, cb) { cb(""); } : context.getBlock("body"))(env, context, frame, runtime, function(t_4,t_3) {
+if(t_4) { cb(t_4); return; }
+output += t_3;
+if(parentTemplate) {
+parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
+} else {
+cb(null, output);
+}
+})});
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+function b_body(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+output += "\n\t";
+env.getTemplate("pages/learn/tpl.html", false, "pages/learn/page.tpl.html", null, function(t_7,t_5) {
+if(t_7) { cb(t_7); return; }
+t_5.render(context.getVariables(), frame, function(t_8,t_6) {
+if(t_8) { cb(t_8); return; }
+output += t_6
+output += "\n";
+cb(null, output);
+})});
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+b_body: b_body,
+root: root
+};
+
+})();
+})();
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["pages/learn/tpl.html"] = (function() {
+function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+var parentTemplate = null;
+output += "learn\n";
+if(parentTemplate) {
+parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
+} else {
+cb(null, output);
+}
+;
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+root: root
+};
+
+})();
+})();
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["pages/rehearse/page.tpl.html"] = (function() {
+function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+var parentTemplate = null;
+env.getTemplate("layout.html", true, "pages/rehearse/page.tpl.html", false, function(t_2,_parentTemplate) {
+if(t_2) { cb(t_2); return; }
+parentTemplate = _parentTemplate
+for(var t_1 in parentTemplate.blocks) {
+context.addBlock(t_1, parentTemplate.blocks[t_1]);
+}
+output += "\n";
+(parentTemplate ? function(e, c, f, r, cb) { cb(""); } : context.getBlock("body"))(env, context, frame, runtime, function(t_4,t_3) {
+if(t_4) { cb(t_4); return; }
+output += t_3;
+if(parentTemplate) {
+parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
+} else {
+cb(null, output);
+}
+})});
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+function b_body(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+output += "\n\t";
+env.getTemplate("pages/rehearse/tpl.html", false, "pages/rehearse/page.tpl.html", null, function(t_7,t_5) {
+if(t_7) { cb(t_7); return; }
+t_5.render(context.getVariables(), frame, function(t_8,t_6) {
+if(t_8) { cb(t_8); return; }
+output += t_6
+output += "\n";
+cb(null, output);
+})});
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+b_body: b_body,
+root: root
+};
+
+})();
+})();
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["pages/rehearse/tpl.html"] = (function() {
+function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+var parentTemplate = null;
+output += "rehearse\n";
+if(parentTemplate) {
+parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
+} else {
+cb(null, output);
+}
+;
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+root: root
+};
+
+})();
+})();
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["pages/sets/page.tpl.html"] = (function() {
+function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+var parentTemplate = null;
+env.getTemplate("layout.html", true, "pages/sets/page.tpl.html", false, function(t_2,_parentTemplate) {
+if(t_2) { cb(t_2); return; }
+parentTemplate = _parentTemplate
+for(var t_1 in parentTemplate.blocks) {
+context.addBlock(t_1, parentTemplate.blocks[t_1]);
+}
+output += "\n";
+(parentTemplate ? function(e, c, f, r, cb) { cb(""); } : context.getBlock("body"))(env, context, frame, runtime, function(t_4,t_3) {
+if(t_4) { cb(t_4); return; }
+output += t_3;
+if(parentTemplate) {
+parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
+} else {
+cb(null, output);
+}
+})});
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+function b_body(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+output += "\n\t";
+env.getTemplate("pages/sets/tpl.html", false, "pages/sets/page.tpl.html", null, function(t_7,t_5) {
+if(t_7) { cb(t_7); return; }
+t_5.render(context.getVariables(), frame, function(t_8,t_6) {
+if(t_8) { cb(t_8); return; }
+output += t_6
+output += "\n";
+cb(null, output);
+})});
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+b_body: b_body,
+root: root
+};
+
+})();
+})();
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["pages/sets/tpl.html"] = (function() {
+function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+var parentTemplate = null;
+output += "sets\n";
+if(parentTemplate) {
+parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
+} else {
+cb(null, output);
+}
+;
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+root: root
+};
+
+})();
+})();
 (function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["pages/tunes/page.tpl.html"] = (function() {
 function root(env, context, frame, runtime, cb) {
 var lineno = null;
@@ -207,7 +511,20 @@ output += "\" target=\"_blank\">session</a>)</li>\n\t";
 }
 }
 frame = frame.pop();
-output += "\n</ul>\n\n";
+output += "\n</ul>\n\n<nav>\n\t";
+if(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "pagination")),"prev")) {
+output += "\n\t\t<a href=\"/tunes/?limit=";
+output += runtime.suppressValue(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "pagination")),"perPage"), env.opts.autoescape);
+output += "&amp;page=";
+output += runtime.suppressValue(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "pagination")),"prev"), env.opts.autoescape);
+output += "\">Previous</a>\n\t";
+;
+}
+output += "\n\t\t<a href=\"/tunes/?limit=";
+output += runtime.suppressValue(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "pagination")),"perPage"), env.opts.autoescape);
+output += "&amp;page=";
+output += runtime.suppressValue(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "pagination")),"next"), env.opts.autoescape);
+output += "\">Next</a>\n</nav>\n";
 if(parentTemplate) {
 parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
 } else {

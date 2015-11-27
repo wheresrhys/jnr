@@ -33,15 +33,19 @@ function appify (generator) {
 
 const controllers = {
 	home: appify(function* (e) {
+		yield pages.home.call(e);
 	}),
 	learn: appify(function* (e) {
+		yield pages.learn.call(e);
 	}),
 	rehearse: appify(function* (e) {
+		yield pages.rehearse.call(e);
 	}),
 	tunes: appify(function* (e) {
 		yield pages.tunes.call(e);
 	}),
 	sets: appify(function* (e) {
+		yield pages.sets.call(e);
 	})
 };
 
