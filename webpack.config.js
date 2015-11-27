@@ -16,7 +16,11 @@ module.exports = {
 					// presets: ['es2015'],
 					plugins: ['transform-es2015-modules-commonjs']
 				}
-			}
+			},
+			{
+        test: /nunjucks\/browser\/nunjucks(-slim)?/,
+        loader: 'exports?nunjucks'
+      }
 		]
 	}
 };

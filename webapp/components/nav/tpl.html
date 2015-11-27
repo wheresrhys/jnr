@@ -1,0 +1,5 @@
+<nav class="nav">
+	{% for name, urls in nav %}
+		<a class="nav__link" href="{{urls[0]}}">{{ name }}</a>&nbsp;
+	{% endfor %}
+</nav>

@@ -16,9 +16,7 @@ run:
 
 build:
 	node-sass webapp/main.scss -o public
-	markoc ./webapp/pages
-	markoc ./webapp/components
-	find ./webapp -type f -iname '*.marko' | grep -v layout | sed s/'webapp\/'// | awk '{print "exports['\''"$$1"'\'']\ =\ require('\''"$$1".js'\'');"}' > webapp/_template-map.js
+	nunjucks-precompile webapp > webapp/templates.js
 	webpack
 
 watch: build

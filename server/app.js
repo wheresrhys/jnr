@@ -66,11 +66,12 @@ app
 	.use(router.allowedMethods())
 
 // templating
-import marko from 'marko';
+import nunjucks from 'nunjucks';
+nunjucks.configure('webapp', { autoescape: true });
 
 app
 	.use(function *(next) {
-		this.body = marko.load(`./webapp/layout.marko`).stream(this);
+		this.body = nunjucks.render(this.tpl.replace('tpl.html', 'page.tpl.html'), this.data);
 		this.type = 'text/html';
 	})
 

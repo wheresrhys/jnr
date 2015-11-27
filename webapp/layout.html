@@ -10,9 +10,9 @@
 		<link rel="stylesheet" href="/main.css">
 	</head>
 	<body>
-		<include template="./components/nav/tpl.marko" template-data=data.data />
+		{% include "components/nav/tpl.html" %}
 		<main>
-			<include template="${data.tpl}" template-data=data.data />
+			{% block body %}{% endblock %}
 		</main>
 	  <script>
 			//xwindow.user = $data.user;

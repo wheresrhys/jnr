@@ -6,15 +6,11 @@ window.logErr = (err) => {
 };
 import page from 'page';
 import co from 'co';
-import marko from 'marko';
+import nunjucks from 'nunjucks/browser/nunjucks-slim';
+import templates from './templates';
 import querystring from 'querystring';
 import {routeMappings, configureRoutes} from './lib/route-config';
 import pages from './pages/index';
-import pageTemplates from './_template-map';
-
-for (let key in pageTemplates) {
-	pageTemplates[key] = marko.load(pageTemplates[key]);
-}
 
 function updateNav (e) {
 	console.log(e);
@@ -26,8 +22,16 @@ function koaify (e) {
 }
 
 function render(e) {
-	var template = pageTemplates[e.tpl];
-	document.querySelector('main').innerHTML = template.renderSync(e.data);
+	document.querySelector('main').innerHTML = nunjucks.render(e.tpl, e.data);
+}
+
+function appify (generator) {
+	return co.wrap(function* (e) {
+		koaify(e);
+		updateNav(e);
+		yield(co.wrap(generator));
+		render(e)
+	})
 }
 
 const controllers = {
