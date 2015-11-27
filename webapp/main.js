@@ -12,47 +12,36 @@ import querystring from 'querystring';
 import {routeMappings, configureRoutes} from './lib/route-config';
 import pages from './pages/index';
 
+let justLoaded = true;
 function updateNav (e) {
 	console.log(e);
 }
 
-function koaify (e) {
-	e.data = {};
-	e.query = querystring.parse(e.querystring);
-}
-
-function render(e) {
-	document.querySelector('main').innerHTML = nunjucks.render(e.tpl, e.data);
-}
-
 function appify (generator) {
 	return co.wrap(function* (e) {
-		koaify(e);
+		if (justLoaded) {
+			justLoaded = false;
+			return;
+		}
+		e.data = {};
+		e.query = querystring.parse(e.querystring);
 		updateNav(e);
 		yield(co.wrap(generator))(e);
-		render(e)
+		document.querySelector('main').innerHTML = nunjucks.render(e.tpl, e.data);
 	})
 }
 
 const controllers = {
-	home: co.wrap(function* (e) {
-		koaify(e);
-		updateNav(e);
+	home: appify(function* (e) {
 	}),
-	learn: co.wrap(function* (e) {
-		koaify(e);
-		updateNav(e);
+	learn: appify(function* (e) {
 	}),
-	rehearse: co.wrap(function* (e) {
-		koaify(e);
-		updateNav(e);
+	rehearse: appify(function* (e) {
 	}),
 	tunes: appify(function* (e) {
 		yield pages.tunes.call(e);
 	}),
-	sets: co.wrap(function* (e) {
-		koaify(e);
-		updateNav(e);
+	sets: appify(function* (e) {
 	})
 };
 
