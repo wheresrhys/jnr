@@ -71,7 +71,7 @@ nunjucks.configure('webapp', { autoescape: true });
 
 app
 	.use(function *(next) {
-		this.body = nunjucks.render(this.tpl.replace('tpl.html', 'page.tpl.html'), this.data);
+		this.body = nunjucks.render(`pages/${this.controller}/${this.params.action ? this.params.action + '/' : ''}page.tpl.html`, this.data);
 		this.type = 'text/html';
 	})
 

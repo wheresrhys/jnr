@@ -26,8 +26,9 @@ function appify (generator) {
 		e.data = {};
 		e.query = querystring.parse(e.querystring);
 		updateNav(e);
-		yield(co.wrap(generator))(e);
-		document.querySelector('main').innerHTML = nunjucks.render(e.tpl, e.data);
+		yield (co.wrap(generator))(e);
+		const tpl = `pages/${e.controller}/${e.params.action ? e.params.action + '/' : ''}tpl.html`;
+		document.querySelector('main').innerHTML = nunjucks.render(tpl, e.data);
 	})
 }
 
