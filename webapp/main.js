@@ -29,7 +29,7 @@ function appify (generator) {
 	return co.wrap(function* (e) {
 		koaify(e);
 		updateNav(e);
-		yield(co.wrap(generator));
+		yield(co.wrap(generator))(e);
 		render(e)
 	})
 }
@@ -47,11 +47,8 @@ const controllers = {
 		koaify(e);
 		updateNav(e);
 	}),
-	tunes: co.wrap(function* (e) {
-		koaify(e);
-		updateNav(e);
+	tunes: appify(function* (e) {
 		yield pages.tunes.call(e);
-		render(e)
 	}),
 	sets: co.wrap(function* (e) {
 		koaify(e);
