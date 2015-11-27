@@ -38,15 +38,15 @@ app.use(function *(next) {
 
 const controllers = {
 	home: function *(next) {
-		this.tpl = './pages/home/tpl.marko';
+		yield pages.home.call(this);
 		yield next
 	},
 	learn: function *(next) {
-		this.tpl = './pages/learn/tpl.marko';
+		yield pages.learn.call(this);
 		yield next
 	},
 	rehearse: function *(next) {
-		this.tpl = './pages/rehearse/tpl.marko';
+		yield pages.rehearse.call(this);
 		yield next
 	},
 	tunes: function *(next) {
@@ -54,7 +54,7 @@ const controllers = {
 		yield next
 	},
 	sets: function *(next) {
-		this.tpl = './pages/sets/tpl.marko';
+		yield pages.sets.call(this);
 		yield next
 	}
 };
@@ -66,11 +66,12 @@ app
 	.use(router.allowedMethods())
 
 // templating
-import marko from 'marko';
+import nunjucks from 'nunjucks';
+nunjucks.configure('webapp', { autoescape: true });
 
 app
 	.use(function *(next) {
-		this.body = marko.load(`./webapp/layout.marko`).stream(this);
+		this.body = nunjucks.render(`pages/${this.controller}/${this.params.action ? this.params.action + '/' : ''}page.tpl.html`, this.data);
 		this.type = 'text/html';
 	})
 
