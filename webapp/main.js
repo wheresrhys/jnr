@@ -11,43 +11,47 @@ import templates from './templates';
 import querystring from 'querystring';
 import {routeMappings, configureRoutes} from './lib/route-config';
 import pages from './pages/index';
-
+import enhance from './pages/enhancements-index';
 let justLoaded = true;
 function updateNav (e) {
 	console.log(e);
 }
 
-function appify (generator) {
+function appify (generator, controller) {
 	return co.wrap(function* (e) {
-		if (justLoaded) {
-			justLoaded = false;
-			return;
-		}
+		e.action = e.params.action;
+		e.controller = controller;
 		e.data = {};
 		e.query = querystring.parse(e.querystring);
+
+		if (justLoaded) {
+			justLoaded = false;
+			enhance(e);
+			return;
+		}
 		updateNav(e);
 		yield (co.wrap(generator))(e);
-		const tpl = `pages/${e.controller}/${e.params.action ? e.params.action + '/' : ''}tpl.html`;
-		document.querySelector('main').innerHTML = nunjucks.render(tpl, e.data);
+		document.querySelector('main').innerHTML = nunjucks.render(`pages/${e.controller}${e.action ? '/' + e.action : ''}/tpl.html`, e.data);
+		enhance(e);
 	})
 }
 
 const controllers = {
 	home: appify(function* (e) {
 		yield pages.home.call(e);
-	}),
+	}, 'home'),
 	learn: appify(function* (e) {
 		yield pages.learn.call(e);
-	}),
+	}, 'learn'),
 	rehearse: appify(function* (e) {
 		yield pages.rehearse.call(e);
-	}),
+	}, 'rehearse'),
 	tunes: appify(function* (e) {
 		yield pages.tunes.call(e);
-	}),
+	}, 'tunes'),
 	sets: appify(function* (e) {
 		yield pages.sets.call(e);
-	})
+	}, 'sets')
 };
 
 configureRoutes({
