@@ -11,7 +11,7 @@ const app = koa();
 
 // static assets
 import serve from 'koa-static';
-app.use(serve('public'));
+app.use(serve(process.env.WEB_ROOT))
 
 // dump out useful global config
 app.use(function *(next) {

@@ -2,6 +2,7 @@
 
 install:
 	npm install
+	jspm install
 
 mongo-export:
 	bash scripts/mongo-export.sh
@@ -15,12 +16,10 @@ run:
 	source ./.env; nodemon -e js,marko server
 
 build:
-	node-sass webapp/main.scss -o public
-	nunjucks-precompile webapp > webapp/templates.js
-	webpack
+	node-sass webapp/main.scss -o webapp
+	# nunjucks-precompile webapp > webapp/templates.js
 
 watch: build
-	webpack --watch
 
 
 

@@ -1,8 +1,7 @@
 /node_modules/
-/webapp/**/*.marko.js
+/webapp/jspm_packages/
+/webapp/main.css
 /mongo-export/
 .env
 /public
-/jnr-mrview*
 /jnr/
-/webapp/_template-map.js

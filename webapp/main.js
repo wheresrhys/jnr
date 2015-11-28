@@ -6,51 +6,57 @@ window.logErr = (err) => {
 };
 import page from 'page';
 import co from 'co';
-import nunjucks from 'nunjucks/browser/nunjucks-slim';
-import templates from './templates';
+import nunjucks from 'nunjucks/browser/nunjucks';
+// import templates from './templates';
 import querystring from 'querystring';
 import {routeMappings, configureRoutes} from './lib/route-config';
 import pages from './pages/index';
 import enhance from './pages/enhancements-index';
 let justLoaded = true;
-function updateNav (e) {
-	console.log(e);
+function updateNav (ev) {
+	console.log(ev);
 }
 
+// using [] as base url because a) it's truthy, so gets used b) [].toString = ''
+const templateLoader = new nunjucks.Environment(new nunjucks.WebLoader([], {async: true}))
+
 function appify (generator, controller) {
-	return co.wrap(function* (e) {
-		e.action = e.params.action;
-		e.controller = controller;
-		e.data = {};
-		e.query = querystring.parse(e.querystring);
+	return co.wrap(function* (ev) {
+		ev.action = ev.params.action;
+		ev.controller = controller;
+		ev.data = {};
+		ev.query = querystring.parse(ev.querystring);
 
 		if (justLoaded) {
 			justLoaded = false;
-			enhance(e);
+			enhance(ev);
 			return;
 		}
-		updateNav(e);
-		yield (co.wrap(generator))(e);
-		document.querySelector('main').innerHTML = nunjucks.render(`pages/${e.controller}${e.action ? '/' + e.action : ''}/tpl.html`, e.data);
-		enhance(e);
+		updateNav(ev);
+		yield (co.wrap(generator))(ev);
+		console.log(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`);
+		templateLoader.render(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`, ev.data, (err, res) => {
+			document.querySelector('main').innerHTML = res;
+		});
+		enhance(ev);
 	})
 }
 
 const controllers = {
-	home: appify(function* (e) {
-		yield pages.home.call(e);
+	home: appify(function* (ev) {
+		yield pages.home.call(ev);
 	}, 'home'),
-	learn: appify(function* (e) {
-		yield pages.learn.call(e);
+	learn: appify(function* (ev) {
+		yield pages.learn.call(ev);
 	}, 'learn'),
-	rehearse: appify(function* (e) {
-		yield pages.rehearse.call(e);
+	rehearse: appify(function* (ev) {
+		yield pages.rehearse.call(ev);
 	}, 'rehearse'),
-	tunes: appify(function* (e) {
-		yield pages.tunes.call(e);
+	tunes: appify(function* (ev) {
+		yield pages.tunes.call(ev);
 	}, 'tunes'),
-	sets: appify(function* (e) {
-		yield pages.sets.call(e);
+	sets: appify(function* (ev) {
+		yield pages.sets.call(ev);
 	}, 'sets')
 };
 
