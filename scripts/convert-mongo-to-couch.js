@@ -1,10 +1,10 @@
 'use strict';
 require('isomorphic-fetch');
-
+const _ = require('lodash');
 const log = console.log.bind(console);
 const shell = require('shellpromise');
 const fetchres = require('fetchres');
-
+const tuneUpdates = [];
 const tunes = require('../mongo-export/tunes').map(rec => {
 	return {
 		type: 'tune',
@@ -19,6 +19,7 @@ const tunes = require('../mongo-export/tunes').map(rec => {
 		oldId: rec.oldId && rec.oldId.$oid,
 		quality: rec.quality,
 		rhythms: rec.rhythms,
+		repertoire: [],
 		sessionId: rec.sessionId
 	};
 });
@@ -47,38 +48,33 @@ let arrangements = require('../mongo-export/arrangements').map(rec => {
 	}
 });
 
-let pieces = require('../mongo-export/pieces').reduce((arr, rec) => {
-	if (rec.type === 'tune') {
-		console.log(rec.lastPracticed && rec.lastPracticed.$date, rec.srcId.$oid)
-		const practices = rec.lastPracticed && rec.lastPracticed.$date ? [{
-			date: rec.lastPracticed.$date,
-			urgency: rec.lastPracticeQuality === -1 ? 10 : rec.lastPracticeQuality === 1 ? 1 : 5
-		}] : [];
 
-		arr.push({
-			type: 'piece',
-			practices: practices,
-			tuneId: rec.srcId.$oid,
-			tunebook: rec.tunebook
-		})
+function createCouchPractice (mongoPractice, id, key, obj) {
+	const practices = mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
+		date: mongoPractice.lastPracticed.$date,
+		urgency: mongoPractice.lastPracticeQuality === -1 ? 10 : mongoPractice.lastPracticeQuality === 1 ? 1 : 5
+	}] : [];
+	obj[id] = obj[id] || [];
+	obj[id].push({
+		practices: practices,
+		key: key,
+		tunebook: mongoPractice.tunebook
+	});
+}
+
+let pieces = require('../mongo-export/pieces').reduce((obj, rec) => {
+	if (rec.type === 'tune') {
+		const tune = tunes.find(t => t.mongoId === rec.srcId.$oid)
+		createCouchPractice(rec, rec.srcId.$oid, tune.keys[0], obj);
 	} else {
-		arr = arr.concat(sets.find(s => s.mongoId === rec.srcId.$oid).tuneIds.map((t, i) => {
-			console.log(rec.lastPracticed && rec.lastPracticed.$date, rec.srcId.$oid)
-			const practices = rec.lastPracticed && rec.lastPracticed.$date ? [{
-				date: rec.lastPracticed.$date,
-				urgency: rec.lastPracticeQuality === -1 ? 10 : rec.lastPracticeQuality === 1 ? 1 : 5
-			}] : [];
-			return {
-				type: 'piece',
-				practices: practices,
-				tuneId: t,
-				tunebook: rec.tunebook
-			}
-		}))
+		const set = sets.find(s => s.mongoId === rec.srcId.$oid)
+		set.tuneIds.map((id, i) => {
+			createCouchPractice(rec, id, set.keys[i], obj);
+		})
 	}
 
-	return arr;
-}, []);
+	return obj;
+}, {});
 
 let transitions = new Set();
 
@@ -97,24 +93,27 @@ shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 				'Accept': 'application/json'
 			}
 		})
-		.then(fetchres.json)
-		.then(tunes => tunes.rows.map(t => t.doc)))
+		.then(res => res.json())
+		.then(tunes => tunes.rows)
 		.then(tunes => {
 
-			//pieces mongoIds => newIds
-			pieces = pieces.map(p => {
-				p.tuneId = tunes.find(t => t.mongoId === p.tuneId)._id;
-				return p;
+			Object.keys(pieces).forEach(tuneId => {
+
+				const tuneDoc = tunes.find(t => t.doc.mongoId === tuneId).doc;
+				tuneDoc.repertoire = _.uniq(pieces[tuneId], function(n) {
+				  return n.tunebook + n.key
+				});
+				tuneUpdates.push(tuneDoc);
 			})
 
 			arrangements = arrangements.map(a => {
-				a.tuneId = tunes.find(t => t.mongoId === a.tuneId)._id;
+				a.tuneId = tunes.find(t => t.doc.mongoId === a.tuneId)._id;
 				return a;
 			})
 
 			sets = sets.map(s => {
 
-				s.tuneIds = s.tuneIds.map(id => tunes.find(t => t.mongoId === id)._id);
+				s.tuneIds = s.tuneIds.map(id => tunes.find(t => t.doc.mongoId === id)._id);
 
 				s.tunes = s.tuneIds.map((id, i) => {
 					return {
@@ -159,8 +158,8 @@ shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({docs: pieces.concat(sets, arrangements, transitions)})
-		})
+			body: JSON.stringify({docs: tuneUpdates.concat(sets, arrangements, transitions)})
+		}))
 		.catch(log)
 	)
 

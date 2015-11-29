@@ -9,15 +9,15 @@ export default function *controller () {
 		startkey: ["wheresrhys:mandolin"],
 		endkey: ["wheresrhys:mandolin", {}]
 	})
-			.then(data => data.rows
-				.map(t => t.doc.tuneId)
-			)
-			.then(ids => {
-				return db.allDocs({
-					include_docs: true,
-					keys: ids
-				})
-			})
+			// .then(data => data.rows
+			// 	.map(t => t.doc.tuneId)
+			// )
+			// .then(ids => {
+			// 	return db.allDocs({
+			// 		include_docs: true,
+			// 		keys: ids
+			// 	})
+			// })
 			// .then(data => console.log(data.rows[0].doc))
 			.then(data => data.rows
 				.map(t => t.doc)
