@@ -1,1 +1,12 @@
-learn
+<ul>
+	{% for tune in tunes %}
+	<li><a href="/tunes/view/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>)</li>
+	{% endfor %}
+</ul>
+
+<nav>
+	{% if pagination.prev %}
+		<a href="/tunes/?limit={{pagination.perPage}}&amp;page={{pagination.prev}}">Previous</a>
+	{% endif %}
+		<a href="/tunes/?limit={{pagination.perPage}}&amp;page={{pagination.next}}">Next</a>
+</nav>

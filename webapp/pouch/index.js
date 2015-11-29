@@ -2,12 +2,14 @@ import PouchDB from 'pouchdb';
 import * as tdbt from './indexes/tune-derivatives-by-type';
 import * as t from './indexes/tunes';
 import * as td from './indexes/tune-derivatives';
+import * as l from './indexes/learn';
 import isBrowser from '../lib/is-browser';
 
 const indexes = {
   'tune-derivatives': td,
   'tune-derivatives-by-type': tdbt,
-  'tunes': t
+  'tunes': t,
+  'learn': l
 };
 
 export const db = new PouchDB(isBrowser() ? 'jnr' : process.env.POUCHDB_HOST);

@@ -13,7 +13,7 @@ import:
 mongo-import: mongo-export import
 
 run:
-	source ./.env; nodemon -e js,marko server
+	source ./.env; nodemon -e js,html server
 
 build:
 	node-sass webapp/main.scss -o webapp

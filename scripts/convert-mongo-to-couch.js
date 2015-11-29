@@ -49,23 +49,28 @@ let arrangements = require('../mongo-export/arrangements').map(rec => {
 
 let pieces = require('../mongo-export/pieces').reduce((arr, rec) => {
 	if (rec.type === 'tune') {
+		console.log(rec.lastPracticed && rec.lastPracticed.$date, rec.srcId.$oid)
+		const practices = rec.lastPracticed && rec.lastPracticed.$date ? [{
+			date: rec.lastPracticed.$date,
+			urgency: rec.lastPracticeQuality === -1 ? 10 : rec.lastPracticeQuality === 1 ? 1 : 5
+		}] : [];
+
 		arr.push({
 			type: 'piece',
-			practices: [{
-				date: rec.lastPracticed && rec.lastPracticed.$date,
-				urgency: rec.lastPracticeQuality === -1 ? 10 : rec.lastPracticeQuality === 1 ? 1 : 5
-			}],
+			practices: practices,
 			tuneId: rec.srcId.$oid,
 			tunebook: rec.tunebook
 		})
 	} else {
 		arr = arr.concat(sets.find(s => s.mongoId === rec.srcId.$oid).tuneIds.map((t, i) => {
+			console.log(rec.lastPracticed && rec.lastPracticed.$date, rec.srcId.$oid)
+			const practices = rec.lastPracticed && rec.lastPracticed.$date ? [{
+				date: rec.lastPracticed.$date,
+				urgency: rec.lastPracticeQuality === -1 ? 10 : rec.lastPracticeQuality === 1 ? 1 : 5
+			}] : [];
 			return {
 				type: 'piece',
-				practices: [{
-					date: rec.lastPracticed && rec.lastPracticed.$date,
-					urgency: rec.lastPracticeQuality === -1 ? 10 : rec.lastPracticeQuality === 1 ? 1 : 5
-				}],
+				practices: practices,
 				tuneId: t,
 				tunebook: rec.tunebook
 			}
