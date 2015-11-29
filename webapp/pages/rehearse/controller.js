@@ -1,21 +1,15 @@
 import {query, db} from '../../pouch/index';
-// import view from './view/controller';
+
+import {buildSets} from '../../lib/set-constructor';
 
 export default function *controller () {
 	this.controller = 'rehearse';
-	// if (this.params.action) {
-	// 	this.tpl = `pages/tunes/${this.params.action}/tpl.html`;
-	// 	this.data.tune = yield db.get(this.params.tuneId);
-	// 	// yield view.call(this);
-	// } else {
-		// this.data.tunes = yield query('tunes', {
-		// 	include_docs: true,
-		// 	limit: this.query.limit ? Number(this.query.limit) : 10,
-		// 	skip: this.query.page ? (this.query.limit || 10) * this.query.page : 0
-		// })
-		// 		.catch(logErr)
-		// 		.then(data => data.rows
-		// 			.map(t => t.doc)
-		// 		)
-	// }
+	const tunes = yield query('learn', {
+		include_docs: true,
+		limit: 200,
+		descending: false,
+		startkey: ["wheresrhys:mandolin"],
+		endkey: ["wheresrhys:mandolin", {}]
+	})
+	this.data.sets = yield buildSets(tunes, 20, 4);
 }
