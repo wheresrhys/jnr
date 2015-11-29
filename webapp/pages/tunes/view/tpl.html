@@ -1,2 +1,7 @@
 <p>{{tune.name}}</p>
-<pre>{{tune.arrangements[0].abc}}</pre>
+<pre>
+K: {{tune.arrangements[0].root}}{{tune.arrangements[0].mode}}
+M: {{tune.arrangements[0].meter}}
+R: {{tune.arrangements[0].rhythm}}
+{{tune.arrangements[0].abc}}
+</pre>

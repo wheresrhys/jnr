@@ -7,7 +7,7 @@ import isBrowser from '../lib/is-browser';
 
 const indexes = {
   'tune-derivatives': td,
-  'tune-derivatives-by-type': tdbt,
+  // 'tune-derivatives-by-type': tdbt,
   'tunes': t,
   'learn': l
 };
@@ -37,9 +37,9 @@ export function createIndex (indexName) {
 }
 
 export function query (indexName, options) {
-  console.log(options);
   return createIndex(indexName)
     .then(() => db.query(`${indexName}/index`, options))
+    .then(data => data.rows.map(r => r.doc))
 }
 // import textSearch from '../lib/search';
 // export function search (docType, field) {

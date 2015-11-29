@@ -53,7 +53,7 @@ function decomposeABC (abc) {
 		rhythm: (abc.match(/R:(?:\s*)(.*)/) || [])[1],
 		mode: (abc.match(/K:(?:\s*)[A-Z]([A-Za-z]*)/) || [])[1],
 		root: (abc.match(/K:(?:\s*)([A-Z](?:b|#)?)/) || [])[1],
-		abc: abc.split(/(M|K|R):.*/i).pop()
+		abc: abc.split(/(M|K|R):.*/i).pop().trim()
 	}
 }
 
@@ -121,12 +121,10 @@ shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 		.then(tunes => tunes.rows)
 		.then(tunes => {
 			sets = sets.map(s => {
-
-				s.tuneIds = s.tuneIds.map(id => tunes.find(t => t.doc.mongoId === id)._id);
-
+				s.tuneIds = s.tuneIds.map(id => tunes.find(t => t.doc.mongoId === id).id);
 				s.tunes = s.tuneIds.map((id, i) => {
 					return {
-						tuneId: tunes.find(t => t._id === id)._id,
+						tuneId: tunes.find(t => t.id === id).id,
 						key: s.keys[i]
 					}
 				});
