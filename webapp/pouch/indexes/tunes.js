@@ -5,7 +5,7 @@ export const ddoc = {
 		index: {
 			map: function (doc) {
 				if (doc.type === 'tune') {
-					emit(doc.name.replace(/^(The|Y) /, ''), doc);
+					emit(doc.name.replace(/^(The|Y) /, ''));
 				}
 			}.toString()
 		}

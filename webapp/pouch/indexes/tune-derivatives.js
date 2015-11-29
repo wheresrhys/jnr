@@ -8,7 +8,7 @@ export const ddoc = {
 									doc.type === 'transition' ? [doc.from.tuneId, doc.to.tuneId] : [];
 
 				keys.forEach(function (key) {
-					emit(key, doc);
+					emit(key);
 				})
 			}.toString()
 		}

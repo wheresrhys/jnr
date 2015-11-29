@@ -14,7 +14,7 @@ export const ddoc = {
 						} else {
 							val = 1;
 						}
-						emit([piece.tunebook, val], doc);
+						emit([piece.tunebook, val]);
 					})
 
 
