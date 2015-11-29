@@ -5,6 +5,7 @@ export default function *controller () {
 	this.controller = 'tunes';
 	if (this.params.action) {
 		this.data.tune = yield db.get(this.params.tuneId);
+		console.log(this.data.tune)
 		yield view.call(this);
 	} else {
 		this.data.tunes = yield query('tunes', {

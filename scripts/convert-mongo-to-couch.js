@@ -10,8 +10,7 @@ const tunes = require('../mongo-export/tunes').map(rec => {
 		type: 'tune',
 		mongoId: rec._id.$oid,
 		abc: rec.abc,
-		abcId: rec.abcId.$oid,
-		arrangements: rec.arrangements.map(a => a.$oid),
+		arrangements: [],
 		author: rec.author,
 		keys: rec.keys,
 		meters: rec.meters,
@@ -34,19 +33,38 @@ let sets = require('../mongo-export/sets').map(rec => {
 	};
 });
 
-let arrangements = require('../mongo-export/arrangements').map(rec => {
-	return {
-		type: 'arrangement',
+require('../mongo-export/arrangements').forEach(rec => {
+	const tune = tunes.find(t => t.mongoId === rec.tune.$oid)
+
+	tune.arrangements.push({
 		abc: rec.abc,
 		author: rec.author,
 		meter: rec.meter,
 		mode: rec.mode,
 		rhythm: rec.rhythm,
 		root: rec.root,
-		tuneId: rec.tune.$oid,
 		variants: rec.variants
-	}
+	})
 });
+
+function decomposeABC (abc) {
+	return {
+		meter: (abc.match(/M:(?:\s*)(.*)/) || [])[1],
+		rhythm: (abc.match(/R:(?:\s*)(.*)/) || [])[1],
+		mode: (abc.match(/K:(?:\s*)[A-Z]([A-Za-z]*)/) || [])[1],
+		root: (abc.match(/K:(?:\s*)([A-Z](?:b|#)?)/) || [])[1],
+		abc: abc.split(/(M|K|R):.*/i).pop()
+	}
+}
+
+
+tunes.forEach(tune => {
+	if (tune.arrangements.length === 0) {
+		tune.arrangements.unshift(decomposeABC(tune.abc));
+	}
+	tune.arrangements = _.uniq(tune.arrangements, 'abc');
+	delete tune.abc;
+})
 
 
 function createCouchPractice (mongoPractice, id, key, obj) {
@@ -72,9 +90,15 @@ let pieces = require('../mongo-export/pieces').reduce((obj, rec) => {
 			createCouchPractice(rec, id, set.keys[i], obj);
 		})
 	}
-
 	return obj;
 }, {});
+
+
+Object.keys(pieces).forEach(tuneId => {
+	tunes.find(t => t.mongoId === tuneId).repertoire = _.uniq(pieces[tuneId], function(n) {
+	  return n.tunebook + n.key
+	})
+})
 
 let transitions = new Set();
 
@@ -96,21 +120,6 @@ shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 		.then(res => res.json())
 		.then(tunes => tunes.rows)
 		.then(tunes => {
-
-			Object.keys(pieces).forEach(tuneId => {
-
-				const tuneDoc = tunes.find(t => t.doc.mongoId === tuneId).doc;
-				tuneDoc.repertoire = _.uniq(pieces[tuneId], function(n) {
-				  return n.tunebook + n.key
-				});
-				tuneUpdates.push(tuneDoc);
-			})
-
-			arrangements = arrangements.map(a => {
-				a.tuneId = tunes.find(t => t.doc.mongoId === a.tuneId)._id;
-				return a;
-			})
-
 			sets = sets.map(s => {
 
 				s.tuneIds = s.tuneIds.map(id => tunes.find(t => t.doc.mongoId === id)._id);
@@ -158,7 +167,7 @@ shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({docs: tuneUpdates.concat(sets, arrangements, transitions)})
+			body: JSON.stringify({docs: sets.concat(transitions)})
 		}))
 		.catch(log)
 	)
