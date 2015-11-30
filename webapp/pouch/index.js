@@ -12,11 +12,19 @@ const indexes = {
   'learn': l
 };
 
-export const db = new PouchDB(isBrowser() ? 'jnr' : process.env.POUCHDB_HOST);
+let pouch;
 
 if (isBrowser()) {
+  pouch = new PouchDB('jnr', {adapter: 'websql'});
+  if (!pouch.adapter) { // websql not supported by this browser
+    pouch = new PouchDB('jnr');
+  }
   PouchDB.sync('jnr', `${location.protocol}//${location.hostname}:5984/jnr`);
+} else {
+  pouch = new PouchDB(process.env.POUCHDB_HOST);
 }
+
+export const db = pouch;
 
 export function init () {
 	return Promise.all(Object.keys(indexes).map(createIndex))

@@ -8,8 +8,8 @@ export default function *controller () {
 		include_docs: true,
 		limit: 150,
 		descending: true,
-		startkey: ["wheresrhys:mandolin", {}],
-		endkey: ["wheresrhys:mandolin"]
+		startkey: ["mandolin", {}],
+		endkey: ["mandolin"]
 	})
 	this.data.sets = yield buildSets(tunes, 15, 2);
 }

@@ -6,10 +6,10 @@ export function buildSet (set, tunes, transitions, tunesPerSet) {
 		return set;
 	}
 
-	let nextTune = transitions.find(tr => tr.from.tuneId === set[set.length -1]._id)
+	let nextTune = transitions.find(tr => tr.from.id === set[set.length -1]._id)
 
 	if (nextTune) {
-		nextTune = tunes.find(t => t._id === nextTune.to.tuneId);
+		nextTune = tunes.find(t => t._id === nextTune.to.id);
 		if (nextTune) {
 			set.push(tunes.splice(tunes.indexOf(nextTune), 1)[0]	)
 		}
@@ -19,9 +19,9 @@ export function buildSet (set, tunes, transitions, tunesPerSet) {
 		return set;
 	}
 
-	let prevTune = transitions.find(tr => tr.to.tuneId === set[0]._id)
+	let prevTune = transitions.find(tr => tr.to.id === set[0]._id)
 	if (prevTune) {
-		prevTune = tunes.find(t => t._id === prevTune.from.tuneId);
+		prevTune = tunes.find(t => t._id === prevTune.from.id);
 		if (prevTune) {
 			set.unshift(tunes.splice(tunes.indexOf(prevTune), 1)[0])
 		}
@@ -50,7 +50,6 @@ export function* buildSets (tunes, setCount, tunesPerSet) {
 		keys: tunes.map(t => t._id)
 	})
 		.then(recs => recs.filter(rec => rec.type === 'transition'))
-	console.log(Date.now() - t)
 	const sets = [];
 	while (tunes.length && sets.length <= setCount) {
 
