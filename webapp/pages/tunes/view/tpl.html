@@ -1,7 +1,12 @@
 <p>{{tune.name}}</p>
 <pre>
-K: {{tune.arrangements[0].root}}{{tune.arrangements[0].mode}}
-M: {{tune.arrangements[0].meter}}
-R: {{tune.arrangements[0].rhythm}}
-{{tune.arrangements[0].abc}}
+K: {{arrangement.root}}{{arrangement.mode}}
+M: {{arrangement.meter}}
+R: {{arrangement.rhythm}}
+{{arrangement.abc}}
 </pre>
+{%if nextArrangement %}
+<nav>
+		<a href="/tunes/view/{{tune._id}}?arrangement={{nextArrangement}}">Next arrangement</a>
+</nav>
+{%endif%}
