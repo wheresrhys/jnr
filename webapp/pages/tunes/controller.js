@@ -1,5 +1,6 @@
 import {query, db} from '../../pouch/index';
 import view from './view/controller';
+import edit from './edit/controller';
 
 export default function *controller () {
 	this.controller = 'tunes';
@@ -7,6 +8,9 @@ export default function *controller () {
 		this.data.tune = yield db.get(this.params.tuneId);
 		if (this.params.action === 'view') {
 			yield view.call(this);
+		}
+		if (this.params.action === 'edit') {
+			yield edit.call(this);
 		}
 	} else {
 		this.data.tunes = yield query('tunes', {

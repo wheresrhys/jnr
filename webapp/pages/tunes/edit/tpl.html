@@ -1,0 +1,17 @@
+<form action="/api/tunes/edit/{{tune._id}}?arrangement={{arrangementIndex}}" method="post">
+	<label for="name">Name</label><input name="name" value="{{tune.name}}">
+	<textarea name="abc">
+	K: {{arrangement.root}}{{arrangement.mode}}
+	M: {{arrangement.meter}}
+	R: {{arrangement.rhythm}}
+	{{arrangement.abc}}
+	</textarea>
+
+	<nav>
+	{%if nextArrangement %}
+			<a href="/tunes/edit/{{tune._id}}?arrangement={{nextArrangement}}">Next arrangement</a>
+	{%endif%}
+			<button type="submit" value="new-arrangement">New arrangement</button>
+	</nav>
+	<input type="submit" value="save">
+</form>
