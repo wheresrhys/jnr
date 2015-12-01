@@ -4,8 +4,7 @@ export const ddoc = {
 	views: {
 		index: {
 			map: function (doc) {
-				var keys = doc.type === 'set' ? doc.tunes.map(function (t) {return t.tuneId}) :
-									doc.type === 'transition' ? [doc.from.tuneId, doc.to.tuneId] : [];
+				var keys = doc.type === 'transition' ? [doc.from.id, doc.to.id] : [];
 
 				keys.forEach(function (key) {
 					emit(key);

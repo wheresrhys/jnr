@@ -3,7 +3,11 @@ learn
 	{% for set in sets %}
 	<li>
 	{% for tune in set %}
-	<a href="/tunes/view/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>),
+	<a href="/tunes/view/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>)
+		<form action="/api/rate/tune/{{tune._id}}/piece/{{tune.pieceIndex}}" method="post">
+			<input type="range" max="10" min="1" value="1">
+			<input type="submit" value="rate">
+		</form>
 	{% endfor %}
 </li>
 	{% endfor %}

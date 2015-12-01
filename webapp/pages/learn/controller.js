@@ -11,5 +11,5 @@ export default function *controller () {
 		startkey: ["mandolin", {}],
 		endkey: ["mandolin"]
 	})
-	this.data.sets = yield buildSets(tunes, 15, 2);
+	this.data.sets = yield buildSets(tunes, 8, 2);
 }

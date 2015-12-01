@@ -1,7 +1,8 @@
 import {query, db} from '../pouch/index';
 
 export function buildSet (set, tunes, transitions, tunesPerSet) {
-
+	// console.log(set.length, tunes.length, tunesPerSet)
+	// console.log(transitions[0], set[0])
 	if (set.length >= tunesPerSet) {
 		return set;
 	}
@@ -44,7 +45,6 @@ export function buildSet (set, tunes, transitions, tunesPerSet) {
 import co from 'co';
 
 export function* buildSets (tunes, setCount, tunesPerSet) {
-	let t = Date.now();
 	const transitions = yield query('tune-derivatives', {
 		include_docs: true,
 		keys: tunes.map(t => t._id)

@@ -119,12 +119,12 @@ transitions = Array.from(transitions)
 			_id: t,
 			type: 'transition',
 			from: {
-				tuneId: t[0],
-				key: t[1]
+				id: tunes[0],
+				key: tunes[1]
 			},
 			to: {
-				tuneId: t[2],
-				key: t[3]
+				id: tunes[2],
+				key: tunes[3]
 			}
 		}
 	});
