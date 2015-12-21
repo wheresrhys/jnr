@@ -5,6 +5,7 @@ global.logErr = (err) => {
 	throw err;
 };
 
+import 'isomorphic-fetch';
 // create a koa app and initialise the database
 import koa from 'koa';
 const app = koa();
@@ -56,6 +57,14 @@ const controllers = {
 	sets: function *(next) {
 		yield pages.sets.call(this);
 		yield next
+	},
+	thesession: function *(next) {
+		yield fetch(`https://thesession.org/tunes/${this.params.tuneId}?format=json`)
+			.then(res => res.json())
+			.then(json => {
+				this.type = 'application/json';
+				this.body = JSON.stringify(json);
+			})
 	}
 };
 
@@ -78,4 +87,6 @@ app
 import {init} from '../webapp/pouch';
 
 init()
-	.then(() => app.listen(3000));
+	.then(() => app.listen(3000, function () {
+		console.log(`listening on ${3000}`);
+	}));

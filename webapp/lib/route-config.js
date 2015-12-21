@@ -5,19 +5,23 @@ export const routeMappings = {
 	learn: ['/learn', '/learn/:tunebook'],
 	rehearse: ['/rehearse', '/rehearse/:tunebook'],
 	tunes: ['/tunes', '/tunes/:action/:tuneId'],
-	sets: ['/sets', '/sets/:action/:tuneId']
+	sets: ['/sets', '/sets/:action/:tuneId'],
+	thesession: ['/thesession-proxy/:tuneId']
 };
 
 export function configureRoutes(router, controllers) {
 	for(let name in routeMappings) {
-		routeMappings[name].forEach(pattern => {
-			router.get(pattern, controllers[name]);
-			// router.get(pattern, function *() {
-			// 	console.log this
-			// 	this.controllerName = name;
-			// 	yield controllers[name].apply(this, arguments);
-			// });
-		});
+		if (controllers[name]) {
+			routeMappings[name].forEach(pattern => {
+
+				router.get(pattern, controllers[name]);
+				// router.get(pattern, function *() {
+				// 	console.log this
+				// 	this.controllerName = name;
+				// 	yield controllers[name].apply(this, arguments);
+				// });
+			});
+		}
 	}
 }
 

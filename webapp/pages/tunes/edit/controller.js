@@ -9,4 +9,9 @@ export default function *controller () {
 	} else {
 		this.data.arrangement = this.data.tune.arrangements[0];
 	}
+	if (this.data.tune.sessionId) {
+		fetch(`https://thesession.org/tunes/${this.data.tune.sessionId}?format=json`)
+			.then(res => res.json())
+			.then(log)
+	}
 }

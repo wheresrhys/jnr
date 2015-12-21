@@ -14,7 +14,7 @@ const indexes = {
 
 let pouch;
 
-if (isBrowser()) {
+if (isBrowser) {
   pouch = new PouchDB('jnr', {adapter: 'websql'});
   if (!pouch.adapter) { // websql not supported by this browser
     pouch = new PouchDB('jnr');
