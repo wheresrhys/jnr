@@ -3,7 +3,7 @@ rehearse
 	{% for set in sets %}
 	<li>
 	{% for tune in set %}
-	<a href="/tunes/view/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>),
+	<a href="/tunes/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>),
 	{% endfor %}
 </li>
 	{% endfor %}

@@ -33,7 +33,8 @@ import {routeMappings, configureRoutes} from '../webapp/lib/route-config';
 import pages from '../webapp/pages';
 
 app.use(function *(next) {
-	this.data.nav = routeMappings;
+	this.data.nav = Object.assign({}, routeMappings);
+	delete this.data.nav.tune;
 	yield next;
 });
 
@@ -54,8 +55,8 @@ const controllers = {
 		yield pages.tunes.call(this);
 		yield next
 	},
-	sets: function *(next) {
-		yield pages.sets.call(this);
+	tune: function *(next) {
+		yield pages.tune.call(this);
 		yield next
 	},
 	thesession: function *(next) {
@@ -75,13 +76,13 @@ import api from './api';
 import bodyParser from 'koa-bodyparser';
 
 const apiMappings = {
-	tunes: ['/tunes/:action/:tuneId'],
+	tune: ['/tunes/:tuneId'],
 };
 
 const apiControllers = {
-	tunes: function *(next) {
-		yield pages.tunes.call(this, true);
-		yield api.tunes.call(this);
+	tune: function *(next) {
+		yield pages.tune.call(this, true);
+		yield api.tune.call(this);
 	}
 };
 
@@ -104,7 +105,7 @@ nunjucks.configure('webapp', { autoescape: true });
 
 app
 	.use(function *(next) {
-		this.body = nunjucks.render(`pages/${this.controller}/${this.params.action ? this.params.action + '/' : ''}page.tpl.html`, this.data);
+		this.body = nunjucks.render(`pages/${this.controller}/${this.params && this.params.action ? this.params.action + '/' : ''}page.tpl.html`, this.data);
 		this.type = 'text/html';
 	})
 

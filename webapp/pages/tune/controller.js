@@ -1,11 +1,13 @@
-import isBrowser from '../../../lib/is-browser';
-import {decomposeABC,decomposeKey} from '../../../lib/abc';
+import {db} from '../../pouch/index';
+import isBrowser from '../../lib/is-browser';
+import {decomposeABC,decomposeKey} from '../../lib/abc';
 const sessionUrl = isBrowser ? '/thesession-proxy/' : 'https://thesession.org/tunes/';
 
 const cache = {};
 
 export default function *controller (isApiCall) {
-
+	this.controller = 'tune';
+	this.data.tune = yield db.get(this.params.tuneId);
 	this.data.arrangement = this.data.tune.arrangement;
 
 	if (this.data.tune.sessionId) {

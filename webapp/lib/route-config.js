@@ -4,8 +4,8 @@ export const routeMappings = {
 	home: ['/'],
 	learn: ['/learn', '/learn/:tunebook'],
 	rehearse: ['/rehearse', '/rehearse/:tunebook'],
-	tunes: ['/tunes', '/tunes/:action/:tuneId'],
-	sets: ['/sets', '/sets/:action/:tuneId'],
+	tunes: ['/tunes'],
+	tune: ['/tunes/:tuneId', '/tunes/:tuneId/:action'],
 	thesession: ['/thesession-proxy/:tuneId']
 };
 

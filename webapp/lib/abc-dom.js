@@ -14,7 +14,7 @@ export function render (el, str, preserveEl) {
 	if (preserveEl) {
 		targetEl = el;
 	} else {
-		const targetEl = document.createElement('div');
+		targetEl = document.createElement('div');
 		el.parentNode.insertBefore(targetEl, el);
 	}
 

@@ -7,7 +7,6 @@ window.logErr = (err) => {
 import page from 'page';
 import co from 'co';
 import nunjucks from 'nunjucks/browser/nunjucks';
-// import templates from './templates';
 import querystring from 'querystring';
 import {routeMappings, configureRoutes} from './lib/route-config';
 import pages from './pages/index';
@@ -58,9 +57,9 @@ const controllers = {
 	tunes: appify(function* (ev) {
 		yield pages.tunes.call(ev);
 	}, 'tunes'),
-	sets: appify(function* (ev) {
-		yield pages.sets.call(ev);
-	}, 'sets')
+	tune: appify(function* (ev) {
+		yield pages.tune.call(ev);
+	}, 'tune')
 };
 
 configureRoutes({

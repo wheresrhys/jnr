@@ -1,5 +1,5 @@
-import {db} from '../../../pouch/index';
-import {render} from '../../../lib/abc-dom';
+import {db} from '../../pouch/index';
+import {render} from '../../lib/abc-dom';
 
 export default function (context, del) {
 	render(document.querySelector('.tune__abc'));
