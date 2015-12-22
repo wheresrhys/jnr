@@ -12,13 +12,13 @@ const decomposeABC = require('../webapp/lib/abc').decomposeABC;
 
 
 function createCouchPractice (mongoPractice, tuneId, key, obj) {
-	const practices = mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
-		date: mongoPractice.lastPracticed.$date,
-		urgency: mongoPractice.lastPracticeQuality === -1 ? 10 : mongoPractice.lastPracticeQuality === 1 ? 1 : 5
-	}] : [];
+	// const practices = mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
+	// 	date: mongoPractice.lastPracticed.$date,
+	// 	urgency: mongoPractice.lastPracticeQuality === -1 ? 10 : mongoPractice.lastPracticeQuality === 1 ? 1 : 5
+	// }] : [];
 	obj[tuneId] = obj[tuneId] || [];
 	obj[tuneId].push({
-		practices: practices,
+		practices: [],
 		key: key,
 		tunebook: mongoPractice.tunebook.replace('wheresrhys:', '')
 	});

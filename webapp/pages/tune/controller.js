@@ -58,9 +58,24 @@ export default function *() {
 
 export function* api () {
 	Object.assign(this.data, yield getFullTune(this.params.tuneId))
-	this.data.tune.arrangement = this.data.alternateArrangements[this.request.body.arrangement];
-	yield db.put(this.data.tune)
-		.then(() => {
-			this.response.redirect(this.request.url.replace('edit', 'view').replace('/api', ''	));
+	if ('arrangement' in this.request.body) {
+		this.data.tune.arrangement = this.data.alternateArrangements[this.request.body.arrangement];
+		yield db.put(this.data.tune)
+			.then(() => {
+				this.response.redirect(this.request.header.referer);
+			})
+	} else if ('practiceQuality' in this.request.body) {
+		this.data.tune.repertoire[this.request.body.repertoireIndex].practices.unshift({
+			date: new Date().toISOString(),
+			urgency: this.request.body.practiceQuality
 		})
+		if (this.data.tune.repertoire.length > 5) {
+			this.data.tune.repertoire.pop();
+		}
+		yield db.put(this.data.tune)
+			.then(() => {
+				this.response.redirect(this.request.header.referer);
+			})
+	}
+
 };

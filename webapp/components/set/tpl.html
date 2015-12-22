@@ -1,0 +1,16 @@
+<li>
+	{% for tune in set %}
+		<div data-tune-id="{{tune._id}}">
+			<a href="/tunes/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>)
+			<form style="display: inline-block" action="/api/tunes/{{tune._id}}" method="post">
+				<input type="hidden" name="repertoireIndex" value="0">
+				<div class="concealer" style="position: relative; top: 20px; height: 20px;background: rgba(255,0,0,0.2)"></div>
+				<input type="range" max="10" min="1" value="1" step="0.5" name="practiceQuality">
+
+				<button type="submit">Rate</button>
+			</form>
+			<button class="tune__render">render</button>
+		</div>
+	{% endfor %}
+	<div class="tune__score"></div>
+</li>

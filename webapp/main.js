@@ -17,7 +17,7 @@ function updateNav (ev) {
 }
 
 // using [] as base url because a) it's truthy, so gets used b) [].toString = ''
-const templateLoader = new nunjucks.Environment(new nunjucks.WebLoader([], {async: true}))
+const templateLoader = window.templateLoader = new nunjucks.Environment(new nunjucks.WebLoader([], {async: true}))
 
 function appify (generator, controller) {
 	return co.wrap(function* (ev) {

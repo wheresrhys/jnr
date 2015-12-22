@@ -40,9 +40,9 @@ export function buildSet (set, tunes, transitions, tunesPerSet) {
 			return buildSet(set, tunes, transitions, tunesPerSet);
 		}
 	}
+	console.log(set[0]);
 	return set;
 }
-import co from 'co';
 
 export function* buildSets (tunes, setCount, tunesPerSet) {
 	const transitions = yield query('tune-derivatives', {
@@ -51,7 +51,7 @@ export function* buildSets (tunes, setCount, tunesPerSet) {
 	})
 		.then(recs => recs.filter(rec => rec.type === 'transition'))
 	const sets = [];
-	while (tunes.length && sets.length <= setCount) {
+	while (tunes.length && sets.length < setCount) {
 
 		sets.push(buildSet([tunes.shift()], tunes, transitions, tunesPerSet))
 
