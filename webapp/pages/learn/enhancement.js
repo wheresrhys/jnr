@@ -2,7 +2,7 @@ import {db} from '../../pouch/index';
 import {render} from '../../lib/abc-dom';
 import {composeABC} from '../../lib/abc';
 import {getSetCollection} from './controller';
-
+import {init as initTuneRaters} from '../../components/tune-rater/index'
 import co from 'co';
 
 const rootEl = document.querySelector('main');
@@ -22,6 +22,9 @@ function getTuneId (el) {
 }
 
 export default function (context, del) {
+
+	initTuneRaters(del);
+
 	del.on('click', '.tune__render', function (ev) {
 		ev.preventDefault();
 		db.get(getTuneId(ev.target))
@@ -36,32 +39,9 @@ export default function (context, del) {
 			})
 	});
 
-	del.on('mousedown', '.concealer', function (ev) {
-		const input = ev.target.nextElementSibling;
-		let increasing = input.value < 9;
-		ev.target.oscillator = setInterval(() => {
-			input.value = Number(input.value) + (increasing ? 0.5 : -0.5);
-			if (input.value == 1) {
-				increasing = true;
-			}
-			if (input.value == 10) {
-				increasing = false;
-			}
-		}, 30);
-	});
-
-	del.on('mouseup', '.concealer', function (ev) {
-		ev.target.oscillator && clearInterval(ev.target.oscillator);
-		getContainer(ev.target).dispatchEvent(new CustomEvent('tune.practiced', {
-			bubbles: true,
-			detail: {
-				tuneId: getTuneId(ev.target)
-			}
-		}))
-	});
-
-	del.on('tune.practiced', '*', function (ev) {
-		ev.target.parentNode.removeChild(ev.target);
+	del.on('tune.practiced', '.tune-rater', function (ev) {
+		const container = getContainer(ev.target);
+		container.parentNode.removeChild(container);
 		co.wrap(getSetCollection)(1, [ev.detail.tuneId].concat(Array.from(rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
 			.then(sets => {
 				templateLoader.render(`components/set/tpl.html`, {
@@ -71,31 +51,6 @@ export default function (context, del) {
 				});
 			});
 	})
-
-	del.on('change', '[name="practiceQuality"]', function (ev) {
-
-		const tuneId = getTuneId(ev.target);
-
-		getContainer(ev.target).dispatchEvent(new CustomEvent('tune.practiced', {
-			bubbles: true,
-			detail: {
-				tuneId: tuneId
-			}
-		}))
-
-		db.get(tuneId)
-			.then(tune => {
-				tune.repertoire[ev.target.parentNode.querySelector('[name="repertoireIndex"]').value].practices.unshift({
-					date: new Date().toISOString(),
-					urgency: ev.target.value
-				});
-				if (tune.repertoire.length > 5) {
-					tune.repertoire.pop();
-				}
-				db.put(tune);
-			});
-
-	});
 
 	del.on('clearScore', function (ev) {
 		Array.from(rootEl.querySelectorAll('.tune__score'))
