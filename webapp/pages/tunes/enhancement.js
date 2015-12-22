@@ -1,4 +1,7 @@
-
-export default function  () {
-	console.log('dress up tunes')
+export default function (ev, del) {
+	if (ev.params.action) {
+		if (ev.params.action === 'view') {
+			view(ev, del);
+		}
+	}
 }

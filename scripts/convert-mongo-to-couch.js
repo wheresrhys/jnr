@@ -1,27 +1,24 @@
 'use strict';
+
+require('babel-core/register')({
+	plugins:['transform-es2015-modules-commonjs']
+});
 require('isomorphic-fetch');
 const _ = require('lodash');
 const log = console.log.bind(console);
 const shell = require('shellpromise');
 
-function decomposeABC (abc) {
-	return {
-		meter: (abc.match(/M:(?:\s*)(.*)/) || [])[1],
-		rhythm: (abc.match(/R:(?:\s*)(.*)/) || [])[1],
-		mode: (abc.match(/K:(?:\s*)[A-Z]([A-Za-z]*)/) || [])[1],
-		root: (abc.match(/K:(?:\s*)([A-Z](?:b|#)?)/) || [])[1],
-		abc: abc.split(/(M|K|R):.*/i).pop().trim()
-	}
-}
+const decomposeABC = require('../webapp/lib/abc').decomposeABC;
+
 
 function createCouchPractice (mongoPractice, tuneId, key, obj) {
-	const practices = mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
-		date: mongoPractice.lastPracticed.$date,
-		urgency: mongoPractice.lastPracticeQuality === -1 ? 10 : mongoPractice.lastPracticeQuality === 1 ? 1 : 5
-	}] : [];
+	// const practices = mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
+	// 	date: mongoPractice.lastPracticed.$date,
+	// 	urgency: mongoPractice.lastPracticeQuality === -1 ? 10 : mongoPractice.lastPracticeQuality === 1 ? 1 : 5
+	// }] : [];
 	obj[tuneId] = obj[tuneId] || [];
 	obj[tuneId].push({
-		practices: practices,
+		practices: [],
 		key: key,
 		tunebook: mongoPractice.tunebook.replace('wheresrhys:', '')
 	});
@@ -34,14 +31,13 @@ const tunes = require('../mongo-export/tunes').map(rec => {
 		type: 'tune',
 		mongoId: rec._id.$oid,
 		abc: rec.abc,
-		arrangements: [],
 		author: rec.author,
 		keys: rec.keys,
-		meters: rec.meters,
+		meter: rec.meters[0],
 		name: rec.name,
 		oldId: rec.oldId && rec.oldId.$oid,
 		quality: rec.quality,
-		rhythms: rec.rhythms,
+		rhythm: rec.rhythms[0],
 		repertoire: [],
 		sessionId: rec.sessionId
 	};
@@ -59,20 +55,6 @@ let sets = require('../mongo-export/sets').map(s => {
 			}
 		})
 	};
-});
-
-require('../mongo-export/arrangements').forEach(rec => {
-	const tune = tunes.find(t => t.mongoId === rec.tune.$oid)
-
-	tune.arrangements.push({
-		abc: rec.abc,
-		author: rec.author,
-		meter: rec.meter,
-		mode: rec.mode,
-		rhythm: rec.rhythm,
-		root: rec.root,
-		variants: rec.variants
-	})
 });
 
 let pieces = require('../mongo-export/pieces').reduce((obj, rec) => {
@@ -95,10 +77,7 @@ Object.keys(pieces).forEach(tuneId => {
 })
 
 tunes.forEach(tune => {
-	if (tune.arrangements.length === 0) {
-		tune.arrangements.unshift(decomposeABC(tune.abc));
-	}
-	tune.arrangements = _.uniq(tune.arrangements, 'abc');
+	tune.arrangement = decomposeABC(tune.abc);
 	delete tune.abc;
 })
 
@@ -114,7 +93,6 @@ sets.map(s => s.tunes)
 transitions = Array.from(transitions)
 	.map(t => {
 		const tunes = t.split('|');
-		// TODO add meter here too
 		return {
 			_id: t,
 			type: 'transition',
@@ -139,6 +117,7 @@ shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 		},
 		body: JSON.stringify({docs: tunes.concat(transitions)})
 	}))
+		.then(log)
 		.catch(log)
 
 

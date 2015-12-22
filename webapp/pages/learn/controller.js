@@ -2,14 +2,22 @@ import {query, db} from '../../pouch/index';
 
 import {buildSets} from '../../lib/set-constructor';
 
-export default function *controller () {
+export default function *() {
 	this.controller = 'learn';
-	const tunes = yield query('learn', {
+	this.data.sets = yield getSetCollection();
+}
+
+export function* getSetCollection (number, excludedTunes) {
+	let tunes = yield query('learn', {
 		include_docs: true,
 		limit: 150,
 		descending: true,
 		startkey: ["mandolin", {}],
 		endkey: ["mandolin"]
 	})
-	this.data.sets = yield buildSets(tunes, 8, 2);
+
+	if (excludedTunes) {
+		tunes = tunes.filter(t => excludedTunes.indexOf(t._id) === -1)
+	}
+	return yield buildSets(tunes, number || 8, 2);
 }

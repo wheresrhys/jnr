@@ -1,6 +1,6 @@
 <ul>
 	{% for tune in tunes %}
-	<li><a href="/tunes/view/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>, <a href="/tunes/edit/{{tune._id}}">edit</a>)</li>
+	<li><a href="/tunes/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>, <a href="/tunes/{{tune._id}}/edit">edit</a>)</li>
 	{% endfor %}
 </ul>
 

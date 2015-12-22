@@ -7,7 +7,6 @@ window.logErr = (err) => {
 import page from 'page';
 import co from 'co';
 import nunjucks from 'nunjucks/browser/nunjucks';
-// import templates from './templates';
 import querystring from 'querystring';
 import {routeMappings, configureRoutes} from './lib/route-config';
 import pages from './pages/index';
@@ -18,7 +17,7 @@ function updateNav (ev) {
 }
 
 // using [] as base url because a) it's truthy, so gets used b) [].toString = ''
-const templateLoader = new nunjucks.Environment(new nunjucks.WebLoader([], {async: true}))
+const templateLoader = window.templateLoader = new nunjucks.Environment(new nunjucks.WebLoader([], {async: true}))
 
 function appify (generator, controller) {
 	return co.wrap(function* (ev) {
@@ -27,18 +26,21 @@ function appify (generator, controller) {
 		ev.data = {};
 		ev.query = querystring.parse(ev.querystring);
 
+		yield (co.wrap(generator))(ev);
+
 		if (justLoaded) {
 			justLoaded = false;
 			enhance(ev);
 			return;
 		}
 		updateNav(ev);
-		yield (co.wrap(generator))(ev);
+
 		console.log(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`);
 		templateLoader.render(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`, ev.data, (err, res) => {
 			document.querySelector('main').innerHTML = res;
+			enhance(ev);
 		});
-		enhance(ev);
+
 	})
 }
 
@@ -55,9 +57,9 @@ const controllers = {
 	tunes: appify(function* (ev) {
 		yield pages.tunes.call(ev);
 	}, 'tunes'),
-	sets: appify(function* (ev) {
-		yield pages.sets.call(ev);
-	}, 'sets')
+	tune: appify(function* (ev) {
+		yield pages.tune.call(ev);
+	}, 'tune')
 };
 
 configureRoutes({

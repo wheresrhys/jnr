@@ -1,17 +1,23 @@
 import tunes from './tunes/enhancement';
+import tune from './tune/enhancement';
 import rehearse from './rehearse/enhancement';
-import sets from './sets/enhancement';
 import learn from './learn/enhancement';
 import home from './home/enhancement';
 
 const map = {
 	tunes: tunes,
-	sets: sets,
+	tune: tune,
 	rehearse: rehearse,
 	learn: learn,
 	home: home
 };
 
-export default function (e) {
-	return map[e.controller](e);
+import Delegate from 'dom-delegate';
+
+const del = Delegate();
+
+export default function (ev) {
+	del.destroy();
+	del.root(document.querySelector('main'));
+	return map[ev.controller](ev, del);
 }
