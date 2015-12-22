@@ -1,13 +1,9 @@
 <p>{{tune.name}}</p>
 <pre>
-{%if arrangement.abc %}
-	K: {{arrangement.root}}{{arrangement.mode}}
-	M: {{arrangement.meter}}
-	R: {{arrangement.rhythm}}
-	{{arrangement.abc}}
-{%else%}
-	{{arrangement}}
-{%endif%}
+K: {{arrangement.root}}{{arrangement.mode}}
+M: {{arrangement.meter}}
+R: {{arrangement.rhythm}}
+{{arrangement.abc}}
 </pre>
 {%if nextArrangement %}
 <nav>

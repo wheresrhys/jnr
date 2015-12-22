@@ -5,3 +5,4 @@
 .env
 /public
 /jnr/
+couchdb.std*
