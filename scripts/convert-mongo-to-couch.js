@@ -33,11 +33,11 @@ const tunes = require('../mongo-export/tunes').map(rec => {
 		abc: rec.abc,
 		author: rec.author,
 		keys: rec.keys,
-		meters: rec.meters,
+		meter: rec.meters[0],
 		name: rec.name,
 		oldId: rec.oldId && rec.oldId.$oid,
 		quality: rec.quality,
-		rhythms: rec.rhythms,
+		rhythm: rec.rhythms[0],
 		repertoire: [],
 		sessionId: rec.sessionId
 	};

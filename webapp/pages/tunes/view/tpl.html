@@ -1,12 +1,16 @@
 <p>{{tune.name}}</p>
 <pre>
 K: {{arrangement.root}}{{arrangement.mode}}
-M: {{arrangement.meter}}
-R: {{arrangement.rhythm}}
+M: {{tune.meter}}
+R: {{tune.rhythm}}
 {{arrangement.abc}}
 </pre>
-{%if nextArrangement %}
+{%if paginate %}
 <nav>
-		<a href="/tunes/view/{{tune._id}}?arrangement={{nextArrangement}}">Next arrangement</a>
+		<a href="/tunes/view/{{tune._id}}?arrangement={{nextArrangement}}">Next</a>,
+		<a href="/tunes/view/{{tune._id}}">Reset</a>
+		{%if unsaved %}
+			<button type="submit" class="select-arrangement" data-arrangement-index="{{arrangementIndex}}">Select</button>
+		{%endif%}
 </nav>
 {%endif%}

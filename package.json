@@ -46,6 +46,7 @@
     },
     "dependencies": {
       "co": "npm:co@^4.6.0",
+      "dom-delegate": "npm:dom-delegate@^2.0.3",
       "nunjucks": "github:mozilla/nunjucks@^2.2.0",
       "page": "npm:page@^1.6.4",
       "pouchdb": "github:pouchdb/pouchdb@^5.1.0",

@@ -18,6 +18,7 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.34",
     "co": "npm:co@4.6.0",
     "core-js": "npm:core-js@1.2.6",
+    "dom-delegate": "npm:dom-delegate@2.0.3",
     "nunjucks": "github:mozilla/nunjucks@2.2.0",
     "page": "npm:page@1.6.4",
     "pouchdb": "github:pouchdb/pouchdb@5.1.0",

@@ -27,13 +27,15 @@ function appify (generator, controller) {
 		ev.data = {};
 		ev.query = querystring.parse(ev.querystring);
 
+		yield (co.wrap(generator))(ev);
+
 		if (justLoaded) {
 			justLoaded = false;
 			enhance(ev);
 			return;
 		}
 		updateNav(ev);
-		yield (co.wrap(generator))(ev);
+
 		console.log(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`);
 		templateLoader.render(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`, ev.data, (err, res) => {
 			document.querySelector('main').innerHTML = res;

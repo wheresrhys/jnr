@@ -12,6 +12,12 @@ const map = {
 	home: home
 };
 
-export default function (e) {
-	return map[e.controller](e);
+import Delegate from 'dom-delegate';
+
+const del = Delegate();
+
+export default function (ev) {
+	del.destroy();
+	del.root(document.querySelector('main'));
+	return map[ev.controller](ev, del);
 }
