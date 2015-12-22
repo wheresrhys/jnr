@@ -10,7 +10,10 @@ R: {{tune.rhythm}}
 		<a href="/tunes/view/{{tune._id}}?arrangement={{nextArrangement}}">Next</a>,
 		<a href="/tunes/view/{{tune._id}}">Reset</a>
 		{%if unsaved %}
-			<button type="submit" class="select-arrangement" data-arrangement-index="{{arrangementIndex}}">Select</button>
+			<form action="/api/tunes/edit/{{tune._id}}" method="post" class="select-arrangement">
+				<input type="hidden" name="arrangement" value="{{arrangementIndex}}">
+				<button type="submit">Select</button>
+			</form>
 		{%endif%}
 </nav>
 {%endif%}

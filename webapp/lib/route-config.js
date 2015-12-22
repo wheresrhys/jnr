@@ -13,13 +13,7 @@ export function configureRoutes(router, controllers) {
 	for(let name in routeMappings) {
 		if (controllers[name]) {
 			routeMappings[name].forEach(pattern => {
-
 				router.get(pattern, controllers[name]);
-				// router.get(pattern, function *() {
-				// 	console.log this
-				// 	this.controllerName = name;
-				// 	yield controllers[name].apply(this, arguments);
-				// });
 			});
 		}
 	}

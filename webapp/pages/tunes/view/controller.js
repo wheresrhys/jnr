@@ -4,7 +4,7 @@ const sessionUrl = isBrowser ? '/thesession-proxy/' : 'https://thesession.org/tu
 
 const cache = {};
 
-export default function *controller () {
+export default function *controller (isApiCall) {
 
 	this.data.arrangement = this.data.tune.arrangement;
 
@@ -18,7 +18,13 @@ export default function *controller () {
 				});
 		}
 		this.data.alternateArrangements = cache[this.data.tune.sessionId] || [];
+	}
 
+	if (isApiCall) {
+		return;
+	}
+
+	if (this.data.tune.sessionId) {
 		const arrangementsCount = this.data.alternateArrangements.length;
 		if (arrangementsCount) {
 			this.data.paginate = true;

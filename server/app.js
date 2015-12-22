@@ -70,6 +70,30 @@ const controllers = {
 
 configureRoutes(router, controllers);
 
+
+import api from './api';
+import bodyParser from 'koa-bodyparser';
+
+const apiMappings = {
+	tunes: ['/tunes/:action/:tuneId'],
+};
+
+const apiControllers = {
+	tunes: function *(next) {
+		yield pages.tunes.call(this, true);
+		yield api.tunes.call(this);
+	}
+};
+
+for(let name in apiMappings) {
+	if (apiControllers[name]) {
+
+		apiMappings[name].forEach(pattern => {
+			router.post('/api' + pattern, bodyParser(), apiControllers[name]);
+		});
+	}
+}
+
 app
 	.use(router.routes())
 	.use(router.allowedMethods())

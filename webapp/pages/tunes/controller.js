@@ -2,7 +2,7 @@ import {query, db} from '../../pouch/index';
 import view from './view/controller';
 import edit from './edit/controller';
 
-export default function *controller () {
+export default function *controller (isApiCall) {
 	this.controller = 'tunes';
 	if (this.params.action) {
 		this.data.tune = yield db.get(this.params.tuneId);
@@ -10,7 +10,8 @@ export default function *controller () {
 			yield view.call(this);
 		}
 		if (this.params.action === 'edit') {
-			yield edit.call(this);
+
+			yield view.call(this, isApiCall);
 		}
 	} else {
 		this.data.tunes = yield query('tunes', {
