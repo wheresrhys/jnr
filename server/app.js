@@ -70,20 +70,17 @@ const controllers = {
 };
 
 configureRoutes(router, controllers);
+import {api as tuneApi} from '../webapp/pages/tune/controller'
+const apiControllers = {
+	tune: function *(next) {
+		yield tuneApi.call(this);
+	}
+};
 
-
-import api from './api';
 import bodyParser from 'koa-bodyparser';
 
 const apiMappings = {
 	tune: ['/tunes/:tuneId'],
-};
-
-const apiControllers = {
-	tune: function *(next) {
-		yield pages.tune.call(this, true);
-		yield api.tune.call(this);
-	}
 };
 
 for(let name in apiMappings) {

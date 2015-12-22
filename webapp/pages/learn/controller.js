@@ -2,7 +2,7 @@ import {query, db} from '../../pouch/index';
 
 import {buildSets} from '../../lib/set-constructor';
 
-export default function *controller () {
+export default function *() {
 	this.controller = 'learn';
 	const tunes = yield query('learn', {
 		include_docs: true,

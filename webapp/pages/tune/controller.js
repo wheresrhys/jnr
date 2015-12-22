@@ -1,34 +1,46 @@
 import {db} from '../../pouch/index';
 import isBrowser from '../../lib/is-browser';
 import {decomposeABC,decomposeKey} from '../../lib/abc';
-const sessionUrl = isBrowser ? '/thesession-proxy/' : 'https://thesession.org/tunes/';
 
+const sessionUrl = isBrowser ? '/thesession-proxy/' : 'https://thesession.org/tunes/';
 const cache = {};
 
-export default function *controller (isApiCall) {
+function *getArrangements (tune) {
+
+	if (!tune.sessionId) {
+		return Promise.resolve([])
+	}
+
+	if (cache[tune.sessionId]) {
+		return Promise.resolve(cache[tune.sessionId]);
+	}
+
+	return fetch(`${sessionUrl}${tune.sessionId}?format=json`)
+		.then(res => res.json())
+		.then(json => {
+			cache[tune.sessionId] = json.settings.map(setting => Object.assign(decomposeABC(setting.abc), decomposeKey(setting.key)));
+			return cache[tune.sessionId];
+		});
+}
+
+function *getFullTune (tuneId) {
+	const tune = yield db.get(tuneId);
+	return {
+		tune: tune,
+		alternateArrangements: yield getArrangements(tune)
+	}
+}
+
+export default function *() {
 	this.controller = 'tune';
-	this.data.tune = yield db.get(this.params.tuneId);
+
+	Object.assign(this.data, yield getFullTune(this.params.tuneId))
+
 	this.data.arrangement = this.data.tune.arrangement;
 
 	if (this.data.tune.sessionId) {
-		if (!cache[this.data.tune.sessionId]) {
-
-			yield fetch(`${sessionUrl}${this.data.tune.sessionId}?format=json`)
-				.then(res => res.json())
-				.then(json => {
-					cache[this.data.tune.sessionId] = json.settings.map(setting => Object.assign(decomposeABC(setting.abc), decomposeKey(setting.key)));
-				});
-		}
-		this.data.alternateArrangements = cache[this.data.tune.sessionId] || [];
-	}
-
-	if (isApiCall) {
-		return;
-	}
-
-	if (this.data.tune.sessionId) {
 		const arrangementsCount = this.data.alternateArrangements.length;
-		if (arrangementsCount) {
+		if (arrangementsCount > 1) {
 			this.data.paginate = true;
 			if ('arrangement' in this.query) {
 				const arrangementIndex = this.query.arrangement % arrangementsCount;
@@ -43,3 +55,12 @@ export default function *controller (isApiCall) {
 		}
 	}
 }
+
+export function* api () {
+	Object.assign(this.data, yield getFullTune(this.params.tuneId))
+	this.data.tune.arrangement = this.data.alternateArrangements[this.request.body.arrangement];
+	yield db.put(this.data.tune)
+		.then(() => {
+			this.response.redirect(this.request.url.replace('edit', 'view').replace('/api', ''	));
+		})
+};
