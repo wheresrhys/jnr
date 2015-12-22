@@ -52,13 +52,37 @@ export default function (context, del) {
 
 	del.on('mouseup', '.concealer', function (ev) {
 		ev.target.oscillator && clearInterval(ev.target.oscillator);
-		ev.target.nextElementSibling.dispatchEvent(new Event('change', {bubbles: true}))
+		getContainer(ev.target).dispatchEvent(new CustomEvent('tune.practiced', {
+			bubbles: true,
+			detail: {
+				tuneId: getTuneId(ev.target)
+			}
+		}))
 	});
 
+	del.on('tune.practiced', '*', function (ev) {
+		ev.target.parentNode.removeChild(ev.target);
+		co.wrap(getSetCollection)(1, [ev.detail.tuneId].concat(Array.from(rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
+			.then(sets => {
+				templateLoader.render(`components/set/tpl.html`, {
+					set: sets[0]
+				}, (err, res) => {
+					document.querySelector('main ul').insertAdjacentHTML('beforeend', res);
+				});
+			});
+	})
+
 	del.on('change', '[name="practiceQuality"]', function (ev) {
-		const container = getContainer(ev.target);
-		container.parentNode.removeChild(container);
+
 		const tuneId = getTuneId(ev.target);
+
+		getContainer(ev.target).dispatchEvent(new CustomEvent('tune.practiced', {
+			bubbles: true,
+			detail: {
+				tuneId: tuneId
+			}
+		}))
+
 		db.get(tuneId)
 			.then(tune => {
 				tune.repertoire[ev.target.parentNode.querySelector('[name="repertoireIndex"]').value].practices.unshift({
@@ -70,14 +94,7 @@ export default function (context, del) {
 				}
 				db.put(tune);
 			});
-		co.wrap(getSetCollection)(1, [tuneId].concat(Array.from(rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
-			.then(sets => {
-				templateLoader.render(`components/set/tpl.html`, {
-					set: sets[0]
-				}, (err, res) => {
-					document.querySelector('main ul').insertAdjacentHTML('beforeend', res);
-				});
-			});
+
 	});
 
 	del.on('clearScore', function (ev) {
