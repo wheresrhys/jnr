@@ -6,6 +6,15 @@ export function decomposeABC (abc) {
 	}
 }
 
+export function composeABC (tune, abcObj) {
+	abcObj = abcObj || tune.arrangement;
+
+	return `K: ${abcObj.root}${abcObj.mode}
+M: ${tune.meter}
+R: ${tune.rhythm}
+${abcObj.abc}`
+}
+
 export function decomposeKey (key) {
 
 	return {

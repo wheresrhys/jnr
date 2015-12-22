@@ -8,10 +8,18 @@ const abcConf = {
 	paddingleft: 0
 }
 
-export function render (el, str) {
+export function render (el, str, preserveEl) {
 	str = str || el.innerHTML;
-	const div = document.createElement('div');
-	el.parentNode.insertBefore(div, el);
-	window.ABCJS.renderAbc(div, str, {}, abcConf, {});
-	el.parentNode.removeChild(el);
+	let targetEl;
+	if (preserveEl) {
+		targetEl = el;
+	} else {
+		const targetEl = document.createElement('div');
+		el.parentNode.insertBefore(targetEl, el);
+	}
+
+	window.ABCJS.renderAbc(targetEl, str, {}, abcConf, {});
+	if (!preserveEl) {
+		el.parentNode.removeChild(el);
+	}
 }
