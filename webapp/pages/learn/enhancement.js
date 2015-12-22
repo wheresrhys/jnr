@@ -1,8 +1,6 @@
-import {db} from '../../pouch/index';
-import {render} from '../../lib/abc-dom';
-import {composeABC} from '../../lib/abc';
 import {getSetCollection} from './controller';
-import {init as initTuneRaters} from '../../components/tune-rater/index'
+import {init as initTuneRaters} from '../../components/tune-rater/index';
+import {init as initSets} from '../../components/set/index';
 import co from 'co';
 
 const rootEl = document.querySelector('main');
@@ -24,20 +22,7 @@ function getTuneId (el) {
 export default function (context, del) {
 
 	initTuneRaters(del);
-
-	del.on('click', '.tune__render', function (ev) {
-		ev.preventDefault();
-		db.get(getTuneId(ev.target))
-			.then(tune => {
-				const scoreEl = ev.target.parentNode.querySelector('.tune__score');
-				render(ev.target.parentNode.querySelector('.tune__score'), composeABC(tune), true);
-				rootEl.dispatchEvent(new CustomEvent('clearScore', {
-					detail: {
-						ignoreEl: scoreEl
-					}
-				}))
-			})
-	});
+	initSets(del);
 
 	del.on('tune.practiced', '.tune-rater', function (ev) {
 		const container = getContainer(ev.target);
@@ -52,10 +37,10 @@ export default function (context, del) {
 			});
 	})
 
-	del.on('clearScore', function (ev) {
-		Array.from(rootEl.querySelectorAll('.tune__score'))
+	del.on('score.rendered', '.set__tune-score', function (ev) {
+		Array.from(rootEl.querySelectorAll('.set__tune-score'))
 			.forEach(el => {
-				if (el !== ev.detail.ignoreEl) {
+				if (el !== ev.detail.manuscript) {
 					el.innerHTML = '';
 					el.removeAttribute('style');
 				}

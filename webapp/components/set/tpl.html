@@ -1,10 +1,10 @@
-<li>
+<li class="set">
 	{% for tune in set %}
 		<div data-tune-id="{{tune._id}}">
 			<a href="/tunes/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>)
 			{% include "components/tune-rater/tpl.html" %}
-			<button class="tune__render">render</button>
+			<button class="set__tune-render">render</button>
 		</div>
 	{% endfor %}
-	<div class="tune__score"></div>
+	<div class="set__tune-score"></div>
 </li>

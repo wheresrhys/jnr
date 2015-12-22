@@ -1,5 +1,3 @@
-import Delegate from 'dom-delegate';
-
 function getContainer (el) {
 	while (!el.classList.contains('tune-rater')) {
 		el = el.parentNode;
@@ -12,10 +10,6 @@ function getTuneId (el) {
 }
 
 export function init (del) {
-
-	if (del instanceof HTMLElement) {
-		del = Delegate(del);
-	}
 
 	del.on('mousedown', '.tune-rater__concealer', function (ev) {
 		const input = ev.target.nextElementSibling;
