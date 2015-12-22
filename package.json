@@ -45,10 +45,12 @@
       "baseURL": "webapp"
     },
     "dependencies": {
+      "abc": "npm:abc@^0.6.1",
       "co": "npm:co@^4.6.0",
       "dom-delegate": "npm:dom-delegate@^2.0.3",
       "nunjucks": "github:mozilla/nunjucks@^2.2.0",
       "page": "npm:page@^1.6.4",
+      "paulrosen/abcjs": "github:paulrosen/abcjs@master",
       "pouchdb": "github:pouchdb/pouchdb@^5.1.0",
       "querystring": "github:jspm/nodelibs-querystring@^0.1.0"
     },

@@ -34,7 +34,7 @@ export function buildSet (set, tunes, transitions, tunesPerSet) {
 
 	if (set.length === 1) {
 		let currentTune = set[set.length -1];
-		nextTune = tunes.find(t => t.meters[0] === currentTune.meters[0]);
+		nextTune = tunes.find(t => t.meter === currentTune.meter);
 		if (nextTune) {
 			set.push(tunes.splice(tunes.indexOf(nextTune), 1)[0])
 			return buildSet(set, tunes, transitions, tunesPerSet);

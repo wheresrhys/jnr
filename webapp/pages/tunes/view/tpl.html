@@ -1,5 +1,5 @@
-<p>{{tune.name}}</p>
-<pre>
+<p>{{tune.name}}{%if unsaved %} <small>Alternative arrangment {{arrangementIndex}}</small>{%endif%}</p>
+<pre class="tune__abc">
 K: {{arrangement.root}}{{arrangement.mode}}
 M: {{tune.meter}}
 R: {{tune.rhythm}}

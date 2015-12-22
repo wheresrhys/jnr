@@ -39,8 +39,9 @@ function appify (generator, controller) {
 		console.log(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`);
 		templateLoader.render(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`, ev.data, (err, res) => {
 			document.querySelector('main').innerHTML = res;
+			enhance(ev);
 		});
-		enhance(ev);
+
 	})
 }
 
