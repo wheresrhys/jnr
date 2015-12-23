@@ -1,7 +1,3 @@
-export default function (ev, del) {
-	if (ev.params.action) {
-		if (ev.params.action === 'view') {
-			view(ev, del);
-		}
-	}
+export default function (del) {
+
 }

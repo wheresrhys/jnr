@@ -16,8 +16,8 @@ import Delegate from 'dom-delegate';
 
 const del = Delegate();
 
-export default function (ev) {
+export default function (ctx) {
 	del.destroy();
 	del.root(document.querySelector('main'));
-	return map[ev.controller](ev, del);
+	return map[ctx.controller].call(ctx, del);
 }

@@ -18,7 +18,8 @@ app.use(serve(process.env.WEB_ROOT))
 app.use(function *(next) {
 
 	this.data = {
-		user: 'wheresrhys'
+		user: 'wheresrhys',
+		renderWrapper: true
 	};
 	yield next;
 });
@@ -102,7 +103,7 @@ nunjucks.configure('webapp', { autoescape: true });
 
 app
 	.use(function *(next) {
-		this.body = nunjucks.render(`pages/${this.controller}/${this.params && this.params.action ? this.params.action + '/' : ''}page.tpl.html`, this.data);
+		this.body = nunjucks.render(`pages/${this.controller}/${this.params && this.params.action ? this.params.action + '/' : ''}tpl.html`, this.data);
 		this.type = 'text/html';
 	})
 

@@ -1,6 +1,10 @@
-learn
-<ul>
-	{% for set in sets %}
-	{% include "components/set/tpl.html" %}
-	{% endfor %}
-</ul>
+{% extends "layout.html" %}
+{% block body %}
+
+	learn
+	<ul>
+		{% for set in sets %}
+		{% include "components/set/tpl.html" %}
+		{% endfor %}
+	</ul>
+{% endblock %}

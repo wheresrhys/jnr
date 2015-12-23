@@ -40,7 +40,6 @@ export function buildSet (set, tunes, transitions, tunesPerSet) {
 			return buildSet(set, tunes, transitions, tunesPerSet);
 		}
 	}
-	console.log(set[0]);
 	return set;
 }
 

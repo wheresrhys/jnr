@@ -14,7 +14,6 @@ System.config({
   },
 
   map: {
-    "abc": "npm:abc@0.6.1",
     "babel": "npm:babel-core@5.8.34",
     "babel-runtime": "npm:babel-runtime@5.8.34",
     "co": "npm:co@4.6.0",

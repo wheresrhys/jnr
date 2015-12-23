@@ -19,12 +19,12 @@ function getTuneId (el) {
 	return el.dataset.tuneId;
 }
 
-export default function (context, del) {
+export default function (del) {
 
 	initTuneRaters(del);
 	initSets(del);
 
-	del.on('tune.practiced', '.tune-rater', function (ev) {
+	del.on('tune.practiced', '.tune-rater', ev => {
 		ev.target.setAttribute('data-practiced', '');
 
 		const container = getContainer(ev.target);
@@ -42,7 +42,7 @@ export default function (context, del) {
 			});
 	})
 
-	del.on('score.rendered', '.set__tune-score', function (ev) {
+	del.on('score.rendered', '.set__tune-score', ev => {
 		Array.from(rootEl.querySelectorAll('.set__tune-score'))
 			.forEach(el => {
 				if (el !== ev.detail.manuscript) {

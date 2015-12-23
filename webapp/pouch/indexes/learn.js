@@ -16,8 +16,6 @@ export const ddoc = {
 						}
 						emit([piece.tunebook, val]);
 					})
-
-
 				}
 			}.toString()
 		}

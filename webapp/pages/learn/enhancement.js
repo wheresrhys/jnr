@@ -19,12 +19,12 @@ function getTuneId (el) {
 	return el.dataset.tuneId;
 }
 
-export default function (context, del) {
+export default function (del) {
 
 	initTuneRaters(del);
 	initSets(del);
 
-	del.on('tune.practiced', '.tune-rater', function (ev) {
+	del.on('tune.practiced', '.tune-rater', ev => {
 		const container = getContainer(ev.target);
 		container.parentNode.removeChild(container);
 		co.wrap(getSetCollection)(1, [ev.detail.tuneId].concat(Array.from(rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
@@ -37,7 +37,7 @@ export default function (context, del) {
 			});
 	})
 
-	del.on('score.rendered', '.set__tune-score', function (ev) {
+	del.on('score.rendered', '.set__tune-score', ev => {
 		Array.from(rootEl.querySelectorAll('.set__tune-score'))
 			.forEach(el => {
 				if (el !== ev.detail.manuscript) {
