@@ -8,7 +8,7 @@ import page from 'page';
 import co from 'co';
 import nunjucks from 'nunjucks/browser/nunjucks';
 import querystring from 'querystring';
-import {routeMappings, configureRoutes} from './lib/route-config';
+import {configureRoutes} from './pages/index';
 import pages from './pages/index';
 import enhance from './pages/enhancements';
 
@@ -44,26 +44,12 @@ function appify (generator) {
 	})
 }
 
-const controllers = {
-	home: appify(function* (ev) {
-		yield pages.home.call(ev);
-	}),
-	learn: appify(function* (ev) {
-		yield pages.learn.call(ev);
-	}),
-	rehearse: appify(function* (ev) {
-		yield pages.rehearse.call(ev);
-	}),
-	tunes: appify(function* (ev) {
-		yield pages.tunes.call(ev);
-	}),
-	tune: appify(function* (ev) {
-		yield pages.tune.call(ev);
-	})
-};
-
 configureRoutes({
 	get: page
-}, controllers);
+}, func => {
+	return appify(function* (ev) {
+		yield func.call(ev);
+	})
+});
 
 page.start();

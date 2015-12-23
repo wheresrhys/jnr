@@ -30,8 +30,8 @@ import qs from 'koa-qs';
 qs(app);
 import koaRouter from 'koa-router';
 const router = koaRouter();
-import {routeMappings, configureRoutes} from '../webapp/lib/route-config';
-import pages from '../webapp/pages';
+
+import {routeMappings, configureRoutes} from '../webapp/pages';
 
 app.use(function *(next) {
 	this.data.nav = Object.assign({}, routeMappings);
@@ -39,38 +39,23 @@ app.use(function *(next) {
 	yield next;
 });
 
-const controllers = {
-	home: function *(next) {
-		yield pages.home.call(this);
+configureRoutes(router, func => {
+	return function *(next) {
+		yield func.call(this);
 		yield next
-	},
-	learn: function *(next) {
-		yield pages.learn.call(this);
-		yield next
-	},
-	rehearse: function *(next) {
-		yield pages.rehearse.call(this);
-		yield next
-	},
-	tunes: function *(next) {
-		yield pages.tunes.call(this);
-		yield next
-	},
-	tune: function *(next) {
-		yield pages.tune.call(this);
-		yield next
-	},
-	thesession: function *(next) {
-		yield fetch(`https://thesession.org/tunes/${this.params.tuneId}?format=json`)
-			.then(res => res.json())
-			.then(json => {
-				this.type = 'application/json';
-				this.body = JSON.stringify(json);
-			})
 	}
-};
+});
 
-configureRoutes(router, controllers);
+router.get('/thesession-proxy/:tuneId', function *(next) {
+	yield fetch(`https://thesession.org/tunes/${this.params.tuneId}?format=json`)
+		.then(res => res.json())
+		.then(json => {
+			this.type = 'application/json';
+			this.body = JSON.stringify(json);
+		})
+});
+
+
 import {api as tuneApi} from '../webapp/pages/tune/controller'
 const apiControllers = {
 	tune: function *(next) {
