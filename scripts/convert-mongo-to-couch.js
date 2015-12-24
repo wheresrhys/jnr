@@ -10,18 +10,28 @@ const shell = require('shellpromise');
 
 const decomposeABC = require('../webapp/lib/abc').decomposeABC;
 
+const dates = [
+	new Date().toISOString(),
+	new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+	new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+	new Date(Date.now() - 1000 * 60 * 60 * 24 * 3).toISOString(),
+	new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+	new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString()
+]
 
 function createCouchPractice (mongoPractice, tuneId, key, obj) {
-	// const practices = mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
-	// 	date: mongoPractice.lastPracticed.$date,
-	// 	urgency: mongoPractice.lastPracticeQuality === -1 ? 10 : mongoPractice.lastPracticeQuality === 1 ? 1 : 5
-	// }] : [];
+	const practices = mongoPractice.tunebook === 'mandolin' && mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
+		date: dates[Math.floor(Math.random() * 6)],
+		urgency: mongoPractice.lastPracticeQuality === -1 ? 10 : mongoPractice.lastPracticeQuality === 1 ? 1 : 5
+	}] : [];
+
 	obj[tuneId] = obj[tuneId] || [];
 	obj[tuneId].push({
-		practices: [],
+		practices: practices,
 		key: key,
 		tunebook: mongoPractice.tunebook.replace('wheresrhys:', '')
 	});
+
 }
 
 
@@ -70,6 +80,7 @@ let pieces = require('../mongo-export/pieces').reduce((obj, rec) => {
 	return obj;
 }, {});
 
+
 Object.keys(pieces).forEach(tuneId => {
 	tunes.find(t => t._id === tuneId).repertoire = _.uniq(pieces[tuneId], function(n) {
 	  return n.tunebook + n.key
@@ -117,7 +128,6 @@ shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 		},
 		body: JSON.stringify({docs: tunes.concat(transitions)})
 	}))
-		.then(log)
 		.catch(log)
 
 

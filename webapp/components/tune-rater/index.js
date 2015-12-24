@@ -1,3 +1,5 @@
+import {db} from '../../pouch/index';
+
 function getContainer (el) {
 	while (!el.classList.contains('tune-rater')) {
 		el = el.parentNode;
@@ -6,7 +8,7 @@ function getContainer (el) {
 }
 
 function getTuneId (el) {
-	getContainer(el).dataset.tuneId;
+	return getContainer(el).dataset.tuneId;
 }
 
 export function init (del) {
@@ -27,19 +29,10 @@ export function init (del) {
 
 	del.on('mouseup', '.tune-rater__concealer', function (ev) {
 		ev.target.oscillator && clearInterval(ev.target.oscillator);
-		getContainer(ev.target).dispatchEvent(new CustomEvent('tune.practiced', {
-			bubbles: true,
-			detail: {
-				tuneId: getTuneId(ev.target)
-			}
-		}))
-	});
-
-	del.on('change', '.tune-rater [name="practiceQuality"]', function (ev) {
-
+		const container = getContainer(ev.target)
 		const tuneId = getTuneId(ev.target);
 
-		getContainer(ev.target).dispatchEvent(new CustomEvent('tune.practiced', {
+		container.dispatchEvent(new CustomEvent('tune.practiced', {
 			bubbles: true,
 			detail: {
 				tuneId: tuneId
@@ -48,9 +41,9 @@ export function init (del) {
 
 		db.get(tuneId)
 			.then(tune => {
-				tune.repertoire[ev.target.parentNode.querySelector('[name="repertoireIndex"]').value].practices.unshift({
+				tune.repertoire[container.querySelector('[name="repertoireIndex"]').value].practices.unshift({
 					date: new Date().toISOString(),
-					urgency: ev.target.value
+					urgency: container.querySelector('[name="practiceQuality"]').value
 				});
 				if (tune.repertoire.length > 5) {
 					tune.repertoire.pop();

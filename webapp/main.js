@@ -15,7 +15,7 @@ import enhance from './pages/enhancements';
 let initialLoad = true;
 
 function updateNav (ev) {
-	console.log(ev);
+	// console.log(ev);
 }
 
 // using [] as base url because a) it's truthy, so gets used b) [].toString = ''
