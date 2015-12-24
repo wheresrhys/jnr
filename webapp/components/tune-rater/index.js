@@ -41,12 +41,13 @@ export function init (del) {
 
 		db.get(tuneId)
 			.then(tune => {
-				tune.repertoire[container.querySelector('[name="repertoireIndex"]').value].practices.unshift({
+				const practices = tune.repertoire[container.querySelector('[name="repertoireIndex"]').value].practices;
+				practices.unshift({
 					date: new Date().toISOString(),
 					urgency: container.querySelector('[name="practiceQuality"]').value
 				});
-				if (tune.repertoire.length > 5) {
-					tune.repertoire.pop();
+				if (practices.length > 5) {
+					practices.pop();
 				}
 				db.put(tune);
 			});

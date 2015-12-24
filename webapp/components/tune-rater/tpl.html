@@ -1,9 +1,10 @@
 <form class="tune-rater" style="display: inline-block" action="/api/tunes/{{tune._id}}" data-tune-id="{{tune._id}}" method="post">
-	<input type="hidden" name="repertoireIndex" value="0">
+	<input type="hidden" name="repertoireIndex" value="{{tuneContainer.repertoireIndex}}">
 	<div style="position: relative;display: inline-block;">
 		<div class="tune-rater__concealer" style="position: absolute; top: 0;left:0;right:0;bottom:0;background: rgba(255,0,0,0.2);"></div>
 		<input type="range" max="10" min="1" value="1" step="0.5" name="practiceQuality">
 	</div>
+	<!-- {{tuneContainer.repertoireIndex}} -->
 	<button type="submit">Rate</button>
-	<p>{{tune.repertoire[0].practices[0].date}}, {{tune.repertoire[0].practices[0].urgency}}</p>
+	<!-- <p>{{tune.repertoire[0].practices[0].date}}, {{tune.repertoire[0].practices[0].urgency}}</p> -->
 </form>

@@ -1,31 +1,78 @@
 import {query, db} from '../pouch/index';
 
+function getRepertoire (tune, key) {
+	for(let i = 0; i < tune.repertoire.length; i++) {
+		if (tune.repertoire[i].key === key) {
+			return i
+		}
+	}
+}
+
+function findAdjacentTune (direction, tuneContainer, transitions, tunes) {
+	let transition;
+	const toInspect = direction === 'next' ? 'from' : 'to';
+	const toReturn = direction === 'next' ? 'to' : 'from';
+	if (tuneContainer.key) {
+		transition = transitions.find(tr => tr[toInspect].id === tuneContainer.tune._id && tr[toInspect].key === tuneContainer.key);
+	} else {
+		transition = transitions.find(tr => tr[toInspect].id === tuneContainer.tune._id);
+	}
+
+	if (transition) {
+		const tune = tunes.find(t => t._id === transition[toReturn].id);
+		if (tune) {
+			tunes.splice(tunes.indexOf(tune), 1);
+			if (!tuneContainer.key) {
+				tuneContainer.key = transition[toInspect].key
+				tuneContainer.repertoireIndex = getRepertoire(tuneContainer.tune, transition[toInspect].key)
+			}
+			return {
+				tune: tune,
+				key: transition[toReturn].key,
+				repertoireIndex: getRepertoire(tune, transition[toReturn].key)
+			}
+		}
+	}
+};
+
+function rescueSet (set, tunes, transitions, tunesPerSet) {
+	const currentTune = set[set.length -1];
+
+	currentTune.repertoireIndex = 0;
+	currentTune.key = currentTune.tune.repertoire[0].key;
+
+	const tune = tunes.find(t => t.meter === currentTune.tune.meter && t.repertoire.length);
+	tunes.splice(tunes.indexOf(tune), 1);
+
+	set.push({
+		tune: tune,
+		key: tune.repertoire[0].key,
+		repertoireIndex: 0
+	})
+
+	return buildSet(set, tunes, transitions, tunesPerSet);
+
+}
+
 export function buildSet (set, tunes, transitions, tunesPerSet) {
-	// console.log(set.length, tunes.length, tunesPerSet)
-	// console.log(transitions[0], set[0])
 	if (set.length >= tunesPerSet) {
 		return set;
 	}
 
-	let nextTune = transitions.find(tr => tr.from.id === set[set.length -1]._id)
+	let nextTune = findAdjacentTune('next', set[set.length -1], transitions, tunes);
 
 	if (nextTune) {
-		nextTune = tunes.find(t => t._id === nextTune.to.id);
-		if (nextTune) {
-			set.push(tunes.splice(tunes.indexOf(nextTune), 1)[0]	)
-		}
+		set.push(nextTune);
 	}
 
 	if (set.length >= tunesPerSet) {
 		return set;
 	}
 
-	let prevTune = transitions.find(tr => tr.to.id === set[0]._id)
+	let prevTune = findAdjacentTune('prev', set[0], transitions, tunes);
+
 	if (prevTune) {
-		prevTune = tunes.find(t => t._id === prevTune.from.id);
-		if (prevTune) {
-			set.unshift(tunes.splice(tunes.indexOf(prevTune), 1)[0])
-		}
+		set.unshift(prevTune)
 	}
 
 	if (nextTune || prevTune) {
@@ -33,13 +80,9 @@ export function buildSet (set, tunes, transitions, tunesPerSet) {
 	}
 
 	if (set.length === 1) {
-		let currentTune = set[set.length -1];
-		nextTune = tunes.find(t => t.meter === currentTune.meter);
-		if (nextTune) {
-			set.push(tunes.splice(tunes.indexOf(nextTune), 1)[0])
-			return buildSet(set, tunes, transitions, tunesPerSet);
-		}
+		return rescueSet(set, tunes, transitions, tunesPerSet);
 	}
+
 	return set;
 }
 
@@ -52,7 +95,10 @@ export function* buildSets (tunes, setCount, tunesPerSet) {
 	const sets = [];
 	while (tunes.length && sets.length < setCount) {
 
-		sets.push(buildSet([tunes.shift()], tunes, transitions, tunesPerSet))
+		sets.push(buildSet([{
+			tune: tunes.shift(),
+			key: null
+		}], tunes, transitions, tunesPerSet))
 
 	}
 	return sets;
