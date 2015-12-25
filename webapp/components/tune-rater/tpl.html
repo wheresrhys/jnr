@@ -6,5 +6,7 @@
 	</div>
 	<!-- {{tuneContainer.repertoireIndex}} -->
 	<button type="submit">Rate</button>
-	<!-- <p>{{tune.repertoire[0].practices[0].date}}, {{tune.repertoire[0].practices[0].urgency}}</p> -->
+	<span>{%for prac in tune.repertoire[tuneContainer.repertoireIndex].practices %}
+		{{prac.urgency}}
+		{%endfor%}</span>
 </form>

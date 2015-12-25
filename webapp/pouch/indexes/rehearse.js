@@ -10,11 +10,9 @@ export const ddoc = {
 						if (piece.practices.length) {
 							val = piece.practices.reduce(function (total, practice) {
 								return total + practice.urgency;
-							}, 0)/piece.practices.length
-						} else {
-							val = 1;
+							}, 0)/piece.practices.length;
+							emit([piece.tunebook, val]);
 						}
-						emit([piece.tunebook, val]);
 					})
 				}
 			}.toString()

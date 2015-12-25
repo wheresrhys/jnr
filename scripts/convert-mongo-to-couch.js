@@ -20,7 +20,11 @@ const dates = [
 ]
 
 function createCouchPractice (mongoPractice, tuneId, key, obj) {
-	const practices = mongoPractice.tunebook === 'mandolin' && mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
+	if (mongoPractice.tunebook !== 'wheresrhys:mandolin') {
+		return;
+	}
+
+	const practices = mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
 		date: dates[Math.floor(Math.random() * 6)],
 		urgency: mongoPractice.lastPracticeQuality === -1 ? 10 : mongoPractice.lastPracticeQuality === 1 ? 1 : 5
 	}] : [];
@@ -35,7 +39,7 @@ function createCouchPractice (mongoPractice, tuneId, key, obj) {
 }
 
 
-const tunes = require('../mongo-export/tunes').map(rec => {
+let tunes = require('../mongo-export/tunes').map(rec => {
 	return {
 		_id: rec.sessionId ? `session:${rec.sessionId}` : `wheresrhys:${rec._id.$oid}`,
 		type: 'tune',
@@ -70,7 +74,9 @@ let sets = require('../mongo-export/sets').map(s => {
 let pieces = require('../mongo-export/pieces').reduce((obj, rec) => {
 	if (rec.type === 'tune') {
 		const tune = tunes.find(t => t.mongoId === rec.srcId.$oid)
+
 		createCouchPractice(rec, tune._id, tune.keys[0], obj);
+
 	} else {
 		const set = sets.find(s => s.mongoId === rec.srcId.$oid)
 		set.tunes.map(tune => {
@@ -87,10 +93,13 @@ Object.keys(pieces).forEach(tuneId => {
 	})
 })
 
-tunes.forEach(tune => {
-	tune.arrangement = decomposeABC(tune.abc);
-	delete tune.abc;
-})
+tunes = tunes.filter(tune => {
+	if (tune.repertoire.length) {
+		tune.arrangement = decomposeABC(tune.abc);
+		delete tune.abc;
+		return true;
+	}
+});
 
 let transitions = new Set();
 

@@ -42,6 +42,7 @@ export function init (del) {
 		db.get(tuneId)
 			.then(tune => {
 				const practices = tune.repertoire[container.querySelector('[name="repertoireIndex"]').value].practices;
+
 				practices.unshift({
 					date: new Date().toISOString(),
 					urgency: container.querySelector('[name="practiceQuality"]').value
