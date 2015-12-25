@@ -1,6 +1,6 @@
 'use strict';
 export const ddoc = {
-	_id: '_design/tune-derivatives',
+	_id: '_design/transitions',
 	views: {
 		index: {
 			map: function (doc) {

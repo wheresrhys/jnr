@@ -8,9 +8,9 @@ export default function *() {
 }
 
 export function* getSetCollection (number, excludedTunes) {
-	let tunes = yield query('learn', {
+	let tunes = yield query('rehearse', {
 		include_docs: true,
-		limit: 200,
+		limit: 120,
 		descending: false,
 		startkey: ["mandolin"],
 		endkey: ["mandolin", {}]
@@ -19,5 +19,5 @@ export function* getSetCollection (number, excludedTunes) {
 	if (excludedTunes) {
 		tunes = tunes.filter(t => excludedTunes.indexOf(t._id) === -1)
 	}
-	return yield buildSets(tunes, number || 20, 4);
+	return yield buildSets(tunes, number || 10, 4);
 }

@@ -1,13 +1,15 @@
 import PouchDB from 'pouchdb';
 import * as t from './indexes/tunes';
-import * as td from './indexes/tune-derivatives';
+import * as td from './indexes/transitions';
 import * as l from './indexes/learn';
+import * as r from './indexes/rehearse';
 import isBrowser from '../lib/is-browser';
 
 const indexes = {
-  'tune-derivatives': td,
+  'transitions': td,
   'tunes': t,
-  'learn': l
+  'learn': l,
+  'rehearse': r
 };
 
 let pouch;

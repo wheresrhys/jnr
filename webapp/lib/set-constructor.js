@@ -87,11 +87,13 @@ export function buildSet (set, tunes, transitions, tunesPerSet) {
 }
 
 export function* buildSets (tunes, setCount, tunesPerSet) {
-	const transitions = yield query('tune-derivatives', {
+	let transitions = yield query('transitions', {
 		include_docs: true,
-		keys: tunes.map(t => t._id)
+		// Don't bother filtering by tune key here
+		// In the browser performance is about half as good compared to just getting all transitions and
+		// running Array.find against the whole set
+		// keys: tunes.map(t => t._id)
 	})
-		.then(recs => recs.filter(rec => rec.type === 'transition'))
 	const sets = [];
 	while (tunes.length && sets.length < setCount) {
 
@@ -99,7 +101,6 @@ export function* buildSets (tunes, setCount, tunesPerSet) {
 			tune: tunes.shift(),
 			key: null
 		}], tunes, transitions, tunesPerSet))
-
 	}
 	return sets;
 }

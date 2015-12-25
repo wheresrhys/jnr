@@ -1,6 +1,6 @@
 'use strict';
 export const ddoc = {
-	_id: '_design/learn',
+	_id: '_design/rehearse',
 	views: {
 		index: {
 			map: function (doc) {

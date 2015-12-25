@@ -19,11 +19,15 @@ function updateNav (ev) {
 }
 
 // using [] as base url because a) it's truthy, so gets used b) [].toString = ''
-const templateLoader = window.templateLoader = new nunjucks.Environment(new nunjucks.WebLoader([], {async: true}))
+const templateLoader = window.templateLoader = new nunjucks.Environment(new nunjucks.WebLoader([], {
+	async: true,
+	useCache: true
+}))
 
 function appify (generator) {
 	return co.wrap(function* (ev) {
 		ev.data = {};
+		ev.start = Date.now();
 		ev.query = querystring.parse(ev.querystring);
 
 		yield (co.wrap(generator))(ev);
