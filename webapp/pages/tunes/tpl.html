@@ -2,7 +2,10 @@
 {% block body %}
 	<ol class="tune-list list">
 		{% for tune in tunes %}
-		<li><a href="/tunes/{{tune._id}}">{{tune.name}}</a> <a href="/tunes/{{tune._id}}/edit">edit</a></li>
+		<li>
+			<a class="tune-list__tune-link" href="/tunes/{{tune._id}}">{{tune.name}}</a>
+			<a class="tune-list__edit-link" href="/tunes/{{tune._id}}/edit">edit</a>
+		</li>
 		{% endfor %}
 	</ol>
 

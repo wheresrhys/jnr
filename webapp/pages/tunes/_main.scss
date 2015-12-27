@@ -1,0 +1,19 @@
+.tune-list > li {
+	display: flex;
+}
+
+.tune-list__tune-link {
+	padding: 5px;
+	width: 90%;
+	flex: 1 1 auto;
+	text-decoration: none;
+	&:hover {
+		background: $strong-bg;
+	}
+}
+
+.tune-list__edit-link {
+	width: 30px;
+	flex: 0 0 auto;
+	padding: 5px;
+}

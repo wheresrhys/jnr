@@ -19,7 +19,8 @@ function *getArrangements (tune) {
 		.then(json => {
 			cache[tune.sessionId] = json.settings.map(setting => Object.assign(decomposeABC(setting.abc), decomposeKey(setting.key)));
 			return cache[tune.sessionId];
-		});
+		})
+		.catch(() => []);
 }
 
 function *getFullTune (tuneId) {

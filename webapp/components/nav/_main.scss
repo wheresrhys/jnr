@@ -2,6 +2,10 @@
 	background: #0a0;
 	display: flex;
 	justify-content: stretch;
+	box-shadow: 0 0 3px 3px rgba(0,0,0,0.3);
+	position: fixed;
+	width: 100%;
+	top: 0;
 }
 
 .nav__link {
