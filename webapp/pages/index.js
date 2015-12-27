@@ -2,18 +2,15 @@ import tunes from './tunes/controller';
 import tune from './tune/controller';
 import rehearse from './rehearse/controller';
 import learn from './learn/controller';
-import home from './home/controller';
 
 const pages = {
 	tunes: tunes,
 	tune: tune,
 	rehearse: rehearse,
 	learn: learn,
-	home: home
 };
 
 export const routeMappings = {
-	home: ['/'],
 	learn: ['/learn', '/learn/:tunebook'],
 	rehearse: ['/rehearse', '/rehearse/:tunebook'],
 	tunes: ['/tunes'],

@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
-	<ul>
+	<ol class="tune-list list">
 		{% for tune in tunes %}
-		<li><a href="/tunes/{{tune._id}}">{{tune.name}}</a> (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>, <a href="/tunes/{{tune._id}}/edit">edit</a>)</li>
+		<li><a href="/tunes/{{tune._id}}">{{tune.name}}</a> <a href="/tunes/{{tune._id}}/edit">edit</a></li>
 		{% endfor %}
-	</ul>
+	</ol>
 
 	<nav>
 		{% if pagination.prev %}

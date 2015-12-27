@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
 
-	learn
-	<ul>
+	<h1>Tunes to learn</h1>
+	<ol class="set-list list">
 		{% for set in sets %}
 		{% include "components/set/tpl.html" %}
 		{% endfor %}
-	</ul>
+	</ol>
 {% endblock %}

@@ -19,8 +19,8 @@ build:
 	node-sass webapp/main.scss -o webapp
 	# nunjucks-precompile webapp > webapp/templates.js
 
-watch: build
-
+watch:
+	node-sass webapp/main.scss -o webapp -w webapp
 
 
 
