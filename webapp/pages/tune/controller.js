@@ -2,7 +2,6 @@ import {db} from '../../pouch/index';
 import isBrowser from '../../lib/is-browser';
 import {decomposeABC,decomposeKey} from '../../lib/abc';
 
-const sessionUrl = isBrowser ? '/thesession-proxy/' : 'https://thesession.org/tunes/';
 const cache = {};
 
 function *getArrangements (tune) {
@@ -15,7 +14,7 @@ function *getArrangements (tune) {
 		return Promise.resolve(cache[tune.sessionId]);
 	}
 
-	return fetch(`${sessionUrl}${tune.sessionId}?format=json`)
+	return fetch(`https://thesession.org/tunes/${tune.sessionId}?format=json`)
 		.then(res => res.json())
 		.then(json => {
 			cache[tune.sessionId] = json.settings.map(setting => Object.assign(decomposeABC(setting.abc), decomposeKey(setting.key)));

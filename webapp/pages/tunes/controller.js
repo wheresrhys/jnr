@@ -1,6 +1,6 @@
-import {query} from '../../pouch/index';
+import {query, updateTunes} from '../../pouch/index';
 
-export default function *controller (isApiCall) {
+export default function *controller () {
 	this.controller = 'tunes';
 
 	const limit = this.query.limit ? Number(this.query.limit) : 20;
@@ -14,5 +14,9 @@ export default function *controller (isApiCall) {
 		next: Number(this.query.page || 1) + 1,
 		prev: Number(this.query.page || 1) - 1,
 		perPage: limit
+	}
+	if (!this.initialLoad) {
+		console.log('asjdgjah')
+		updateTunes();
 	}
 }

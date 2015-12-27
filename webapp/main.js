@@ -25,24 +25,26 @@ const templateLoader = window.templateLoader = new nunjucks.Environment(new nunj
 }))
 
 function appify (generator) {
-	return co.wrap(function* (ev) {
-		ev.data = {};
-		ev.start = Date.now();
-		ev.query = querystring.parse(ev.querystring);
-
-		yield (co.wrap(generator))(ev);
+	return co.wrap(function* (ctx) {
+		ctx.data = {};
+		ctx.start = Date.now();
+		ctx.query = querystring.parse(ctx.querystring);
+		if (initialLoad) {
+			ctx.initialLoad = true;
+		}
+		yield (co.wrap(generator))(ctx);
 
 		if (initialLoad) {
 			initialLoad = false;
-			enhance(ev);
+			enhance(ctx);
 			return;
 		}
-		updateNav(ev);
+		updateNav(ctx);
 
-		console.log(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`);
-		templateLoader.render(`pages/${ev.controller}${ev.action ? '/' + ev.action : ''}/tpl.html`, ev.data, (err, res) => {
+		console.log(`pages/${ctx.controller}${ctx.action ? '/' + ctx.action : ''}/tpl.html`);
+		templateLoader.render(`pages/${ctx.controller}${ctx.action ? '/' + ctx.action : ''}/tpl.html`, ctx.data, (err, res) => {
 			document.querySelector('main').innerHTML = res;
-			enhance(ev);
+			enhance(ctx);
 		});
 
 	})
@@ -51,8 +53,8 @@ function appify (generator) {
 configureRoutes({
 	get: page
 }, func => {
-	return appify(function* (ev) {
-		yield func.call(ev);
+	return appify(function* (ctx) {
+		yield func.call(ctx);
 	})
 });
 

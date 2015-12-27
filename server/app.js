@@ -46,16 +46,6 @@ configureRoutes(router, func => {
 	}
 });
 
-router.get('/thesession-proxy/:tuneId', function *(next) {
-	yield fetch(`https://thesession.org/tunes/${this.params.tuneId}?format=json`)
-		.then(res => res.json())
-		.then(json => {
-			this.type = 'application/json';
-			this.body = JSON.stringify(json);
-		})
-});
-
-
 import {api as tuneApi} from '../webapp/pages/tune/controller'
 const apiControllers = {
 	tune: function *(next) {
