@@ -20,7 +20,7 @@ ${abcObj.abc}`
 export function decomposeKey (key) {
 
 	return {
-		mode: (key.match(/^[A-G](?:b|#)?(.*)/) || [,	''])[1].substr(0,3),
+		mode: (key.match(/^[A-G](?:b|#)?(.*)/) || [, ''])[1].substr(0,3),
 		root: (key.match(/^[A-G](?:b|#)?/) || [])[0]
 	}
 }
@@ -42,7 +42,6 @@ export function limitLength (abcStr, length) {
 		const abcChars = abcLines.map(line => {
 			return line + (/\|$/.test(line) ? '' : '|');
 		}).join('').split('');
-
 		let compressedAbc = [];
 		let newLine = '';
 		let bar = '';
@@ -67,6 +66,7 @@ export function limitLength (abcStr, length) {
 
 			if (newLine.length + bar.length === length) {
 				compressedAbc.push(newLine + bar);
+				newLine = '';
 				handleOrphans(abcChars)
 			} else {
 				compressedAbc.push(newLine);
@@ -75,11 +75,10 @@ export function limitLength (abcStr, length) {
 			bar = '';
 		}
 		if (newLine) {
-			compressedAbc.push(handleOrphans(newLine.split('')).join(''));
+			compressedAbc.push(newLine);
 		}
 
-
-		return compressedAbc.join('\n');
+		return compressedAbc.join('\n').replace(/\|{3,}/g, '||');
 	}
 	return abcLines.join('\n');
 }
