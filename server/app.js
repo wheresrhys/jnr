@@ -82,7 +82,7 @@ app
 		this.type = 'text/html';
 	})
 
-import {init} from '../webapp/pouch';
+import {init} from '../webapp/data';
 
 init()
 	.then(() => app.listen(3000, function () {

@@ -1,4 +1,4 @@
-import {query, updateTunes} from '../../pouch/index';
+import {query} from '../../data/index';
 
 export default function *controller () {
 	this.controller = 'tunes';
@@ -14,8 +14,5 @@ export default function *controller () {
 		next: Number(this.query.page || 1) + 1,
 		prev: Number(this.query.page || 1) - 1,
 		perPage: limit
-	}
-	if (!this.initialLoad) {
-		updateTunes();
 	}
 }

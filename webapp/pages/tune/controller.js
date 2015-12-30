@@ -1,4 +1,4 @@
-import {db} from '../../pouch/index';
+import {db} from '../../data/index';
 import isBrowser from '../../lib/is-browser';
 import {decomposeABC,decomposeKey} from '../../lib/abc';
 

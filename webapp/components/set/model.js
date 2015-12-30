@@ -1,4 +1,4 @@
-import {query, db} from '../../pouch/index';
+import {query, db} from '../../data/index';
 
 const orderingConfigs = {
 	rehearse: {

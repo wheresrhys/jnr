@@ -1,4 +1,4 @@
-import {db} from '../../pouch/index';
+import {db} from '../../data/index';
 import {render} from '../../lib/abc-dom';
 import {composeABC} from '../../lib/abc';
 

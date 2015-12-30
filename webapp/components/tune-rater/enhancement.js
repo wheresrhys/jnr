@@ -1,4 +1,4 @@
-import {db} from '../../pouch/index';
+import {db} from '../../data/index';
 
 function getContainer (el) {
 	while (!el.classList.contains('tune-rater')) {

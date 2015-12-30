@@ -62,11 +62,21 @@ export function query (indexName, options) {
 		})
 }
 
+let allTunes;
+// TODO - should maintain an in memory cache of tunes,
+// tunes last updated should be stateless on server but stateful in the browser
+let tunesLastUpdated;
+
 export function updateTunes () {
+	if (allTunes && Date.now() - tunesLastUpdated < 1000 * 60 * 10) {
+		return Promise.resolve(allTunes);
+	}
+
+	tunesLastUpdated = Date.now();
 	const firstPage = fetch('https://thesession.org/members/61738/tunebook?format=json')
 		.then(res => res.json())
 
-	firstPage
+	return firstPage
 		.then(json => {
 			if (json.pages > 100) {
 				return Promise.all(
@@ -86,24 +96,35 @@ export function updateTunes () {
 				return json.tunes;
 			}
 		})
-		.then(newTunes => {
-			query('tunes')
+		.then(tunes => {
+			return query('tunes')
 				.then(existingTunes => existingTunes.reduce((obj, tune) => {
 					obj[tune.id] = true;
 					return obj;
 				}, {}))
 				.then(existingTunesMap => {
-					newTunes
+					return tunes
 						.filter(t => {
 							return !existingTunesMap['session:' + t.id]
 						})
-						.forEach(t => {
-							// get from session
-							// put in pot
-						})
 				})
 		})
+		.then(tunes => Promise.all(tunes.map(tune => {
+			return fetch(`https://thesession.org/tunes/1?format=json${tune.id}`)
+				.then(res => res.json());
+		})))
+		.then(tunes => {
+			allTunes = tunes;
+			console.log(tunes[0])
+			return tunes
+		})
 }
+
+export function getTunes () {
+	return updateTunes();
+}
+
+getTunes();
 // import textSearch from '../lib/search';
 // export function search (docType, field) {
 //   return createIndex(indexName)
@@ -112,22 +133,3 @@ export function updateTunes () {
 //     }))
 //     .then()
 // }
-
-
-// // save the design doc
-// db.put(ddoc).catch(function (err) {
-//   if (err.status !== 409) {
-//     throw err;
-//   }
-//   // ignore if doc already exists
-// }).then(function () {
-//   // find docs where title === 'Lisa Says'
-//   return db.query('index', {
-//     key: 'Lisa Says',
-//     include_docs: true
-//   });
-// }).then(function (result) {
-//   // handle result
-// }).catch(function (err) {
-//   console.log(err);
-// });
