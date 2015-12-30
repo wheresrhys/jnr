@@ -1,4 +1,25 @@
-import {query, db} from '../pouch/index';
+import {query, db} from '../../pouch/index';
+
+const orderingConfigs = {
+	rehearse: {
+		tunesToFetch: 120,
+		descending: false,
+		setsToReturn: 10,
+		tunesPerSet: 4
+	},
+	learn: {
+		tunesToFetch: 8,
+		descending: true,
+		setsToReturn: 8,
+		tunesPerSet: 1
+	},
+	improve: {
+		tunesToFetch: 100,
+		descending: false,
+		setsToReturn: 8,
+		tunesPerSet: 3
+	}
+}
 
 function getRepertoire (tune, key) {
 	for(let i = 0; i < tune.repertoire.length; i++) {
@@ -116,4 +137,18 @@ export function* buildSets (tunes, setCount, tunesPerSet) {
 		}], tunes, transitions, tunesPerSet))
 	}
 	return sets;
+}
+
+export function* getSetCollection (ordering, number, excludedTunes) {
+	const config = orderingConfigs[ordering];
+	let tunes = yield query(ordering, {
+		include_docs: true,
+		limit: config.tunesToFetch,
+		descending: config.descending
+	});
+
+	if (excludedTunes) {
+		tunes = tunes.filter(t => excludedTunes.indexOf(t._id) === -1)
+	}
+	return yield buildSets(tunes, number || config.setsToReturn, config.tunesPerSet);
 }

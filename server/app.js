@@ -39,10 +39,6 @@ app.use(function *(next) {
 	yield next;
 });
 
-router.get('/', function *(next) {
-	this.response.redirect('/learn');
-});
-
 configureRoutes(router, func => {
 	return function *(next) {
 		yield func.call(this);

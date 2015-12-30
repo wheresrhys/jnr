@@ -1,4 +1,9 @@
 export const model = {
+	home: {
+		label: 'Home',
+		url: '/',
+		pattern: /^\/$/
+	},
 	learn: {
 		label: 'Learn',
 		url: '/scheduler?order=learn',
