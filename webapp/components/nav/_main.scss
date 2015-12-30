@@ -22,6 +22,10 @@
 
 	&:first-child {
 		border-left: 0;
+		display: none;
+		@media screen and (min-width: 365px) {
+			display: block;
+		}
 	}
 
 	&:hover {

@@ -110,7 +110,7 @@ export function updateTunes () {
 				})
 		})
 		.then(tunes => Promise.all(tunes.map(tune => {
-			return fetch(`https://thesession.org/tunes/1?format=json${tune.id}`)
+			return fetch(`https://thesession.org/tunes/${tune.id}?format=json`)
 				.then(res => res.json());
 		})))
 		.then(tunes => {
@@ -124,7 +124,6 @@ export function getTunes () {
 	return updateTunes();
 }
 
-getTunes();
 // import textSearch from '../lib/search';
 // export function search (docType, field) {
 //   return createIndex(indexName)

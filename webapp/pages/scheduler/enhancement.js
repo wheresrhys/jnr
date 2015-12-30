@@ -1,4 +1,4 @@
-import {getSetCollection} from './controller';
+import {getSetCollection} from '../../components/set/model';
 import {init as initTuneRaters} from '../../components/tune-rater/enhancement';
 import {init as initSets} from '../../components/set/enhancement';
 import co from 'co';
@@ -6,17 +6,10 @@ import co from 'co';
 const rootEl = document.querySelector('main');
 
 function getContainer (el) {
-	while (el.nodeName.toUpperCase() !== 'LI') {
+	while (!el.classList.contains('set')) {
 		el = el.parentNode;
 	}
 	return el;
-}
-
-function getTuneId (el) {
-	while (!el.dataset.tuneId) {
-		el = el.parentNode;
-	}
-	return el.dataset.tuneId;
 }
 
 export default function (del) {
@@ -36,6 +29,7 @@ export default function (del) {
 		}
 
 		container.parentNode.removeChild(container);
+
 		co.wrap(getSetCollection)(this.data.orderBy, 1, [ev.detail.tuneId].concat(Array.from(rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
 			.then(sets => {
 				templateLoader.render(`components/set/tpl.html`, {
