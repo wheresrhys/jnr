@@ -25,7 +25,7 @@ const orderingConfigs = {
 		tunesToFetch: 100,
 		descending: false,
 		setsToReturn: 8,
-		tunesPerSet: 2
+		tunesPerSet: 3
 	}
 }
 

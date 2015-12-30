@@ -1,6 +1,6 @@
 import {getSetCollection} from './controller';
-import {init as initTuneRaters} from '../../components/tune-rater/index';
-import {init as initSets} from '../../components/set/index';
+import {init as initTuneRaters} from '../../components/tune-rater/enhancement';
+import {init as initSets} from '../../components/set/enhancement';
 import co from 'co';
 
 const rootEl = document.querySelector('main');
@@ -41,7 +41,7 @@ export default function (del) {
 				templateLoader.render(`components/set/tpl.html`, {
 					set: sets[0]
 				}, (err, res) => {
-					document.querySelector('main ul').insertAdjacentHTML('beforeend', res);
+					document.querySelector('.set-list').insertAdjacentHTML('beforeend', res);
 				});
 			});
 	})

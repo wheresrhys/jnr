@@ -11,12 +11,10 @@ import querystring from 'querystring';
 import {configureRoutes} from './pages/index';
 import pages from './pages/index';
 import enhance from './pages/enhancements';
+import {updateNav} from './components/nav/enhancement';
+
 
 let initialLoad = true;
-
-function updateNav (ev) {
-	// console.log(ev);
-}
 
 // using [] as base url because a) it's truthy, so gets used b) [].toString = ''
 const templateLoader = window.templateLoader = new nunjucks.Environment(new nunjucks.WebLoader([], {

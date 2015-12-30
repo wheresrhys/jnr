@@ -16,10 +16,10 @@ app.use(serve(process.env.WEB_ROOT))
 
 // dump out useful global config
 app.use(function *(next) {
-
 	this.data = {
 		user: 'wheresrhys',
-		renderWrapper: true
+		renderWrapper: true,
+		currentUrl: this.request.url
 	};
 	yield next;
 });
@@ -31,7 +31,8 @@ qs(app);
 import koaRouter from 'koa-router';
 const router = koaRouter();
 
-import {configureRoutes, nav} from '../webapp/pages';
+import {configureRoutes} from '../webapp/pages';
+import {model as nav} from '../webapp/components/nav/model';
 
 app.use(function *(next) {
 	this.data.nav = nav;

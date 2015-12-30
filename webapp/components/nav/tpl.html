@@ -1,5 +1,5 @@
 <nav class="nav">
-	{% for name, urls in nav %}
-		<a class="nav__link" href="{{urls[0]}}">{{ name }}</a>
+	{% for name, conf in nav %}
+		<a data-nav-link="{{name}}" class="nav__link" href="{{conf.url}}" {%if conf.pattern.test(currentUrl)%}data-current{%endif%}>{{conf.label}}</a>
 	{% endfor %}
 </nav>
