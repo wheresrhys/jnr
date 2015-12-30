@@ -6,9 +6,9 @@ Name for app - speed the plough, trad tutor
 
 3 lists
 
-- Learning: tunes that have never been above the threshold score - sorted by last practiced date and score. Arranged as single tunes
-- Refining: tunes that aren't consistently above the threshold - sorted by last practiced date and avg score. Arranged as small sets
-- Rehearsing: tues that are consistently above the threshold, sorted by last practiced date. Arranged as full sets
+- learn: tunes that have never been above the threshold score - sorted by last practiced date and score. Arranged as single tunes
+- perfect: tunes that aren't consistently above the threshold - sorted by last practiced date and avg score. Arranged as small sets
+- rehearse: tues that are consistently above the threshold, sorted by last practiced date. Arranged as full sets
 threshold = 7/10 ?
 
 Home page is top item(s) from each, + suggestion of new tune + suggestion of new transition

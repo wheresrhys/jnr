@@ -11,7 +11,9 @@ export const ddoc = {
 							val = piece.practices.reduce(function (total, practice) {
 								return total + practice.urgency;
 							}, 0)/piece.practices.length;
-							emit([piece.tunebook, val]);
+							if (val < 4) {
+								emit(new Date(piece.practices[0].date).getTime() / (24 * 60 * 60 * 1000 * 5));
+							}
 						}
 					})
 				}

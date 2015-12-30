@@ -1,26 +1,30 @@
 import tunes from './tunes/controller';
 import tune from './tune/controller';
-import rehearse from './rehearse/controller';
-import learn from './learn/controller';
+import scheduler from './scheduler/controller';
 
-const pages = {
+const controllers = {
+	scheduler: scheduler,
 	tunes: tunes,
-	tune: tune,
-	rehearse: rehearse,
-	learn: learn,
+	tune: tune
 };
 
-export const routeMappings = {
-	learn: ['/learn', '/learn/:tunebook'],
-	rehearse: ['/rehearse', '/rehearse/:tunebook'],
+const routeMappings = {
+	scheduler: ['/scheduler'],
 	tunes: ['/tunes'],
 	tune: ['/tunes/:tuneId', '/tunes/:tuneId/:action']
 };
 
+export const nav = {
+	learn: ['/scheduler?order=learn'],
+	improve: ['/scheduler?order=improve'],
+	rehearse: ['/scheduler?order=rehearse'],
+	tunes: ['/tunes']
+}
+
 export function configureRoutes(router, wrapper) {
 	for(let name in routeMappings) {
-		if (pages[name]) {
-			const controller = wrapper(pages[name]);
+		if (controllers[name]) {
+			const controller = wrapper(controllers[name]);
 			routeMappings[name].forEach(pattern => {
 				router.get(pattern, controller);
 			});

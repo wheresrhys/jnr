@@ -1,13 +1,12 @@
-import tunes from './tunes/enhancement';
-import tune from './tune/enhancement';
-import rehearse from './rehearse/enhancement';
-import learn from './learn/enhancement';
 
-const map = {
-	tunes: tunes,
-	tune: tune,
-	rehearse: rehearse,
-	learn: learn,
+import tunesEnhancement from './tunes/enhancement';
+import tuneEnhancement from './tune/enhancement';
+import schedulerEnhancement from './scheduler/enhancement';
+
+const enhancements = {
+	tunes: tunesEnhancement,
+	tune: tuneEnhancement,
+	scheduler: schedulerEnhancement
 };
 
 import Delegate from 'dom-delegate';
@@ -17,5 +16,5 @@ const del = Delegate();
 export default function (ctx) {
 	del.destroy();
 	del.root(document.querySelector('main'));
-	return map[ctx.controller].call(ctx, del);
+	return enhancements[ctx.controller].call(ctx, del);
 }

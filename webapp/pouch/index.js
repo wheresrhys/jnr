@@ -1,15 +1,17 @@
 import PouchDB from 'pouchdb';
-import * as t from './indexes/tunes';
-import * as tr from './indexes/transitions';
-import * as l from './indexes/learn';
-import * as r from './indexes/rehearse';
+import * as tunes from './indexes/tunes';
+import * as transitions from './indexes/transitions';
+import * as learn from './indexes/learn';
+import * as rehearse from './indexes/rehearse';
+import * as improve from './indexes/improve';
 import isBrowser from '../lib/is-browser';
 
 const indexes = {
-	'transitions': tr,
-	'tunes': t,
-	'learn': l,
-	'rehearse': r
+	'transitions': transitions,
+	'tunes': tunes,
+	'learn': learn,
+	'rehearse': rehearse,
+	'improve': improve
 };
 
 let pouch;
@@ -85,7 +87,6 @@ export function updateTunes () {
 			}
 		})
 		.then(newTunes => {
-			console.log(newTunes);
 			query('tunes')
 				.then(existingTunes => existingTunes.reduce((obj, tune) => {
 					obj[tune.id] = true;

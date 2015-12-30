@@ -16,7 +16,6 @@ export default function *controller () {
 		perPage: limit
 	}
 	if (!this.initialLoad) {
-		console.log('asjdgjah')
 		updateTunes();
 	}
 }

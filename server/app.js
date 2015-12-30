@@ -31,11 +31,10 @@ qs(app);
 import koaRouter from 'koa-router';
 const router = koaRouter();
 
-import {routeMappings, configureRoutes} from '../webapp/pages';
+import {configureRoutes, nav} from '../webapp/pages';
 
 app.use(function *(next) {
-	this.data.nav = Object.assign({}, routeMappings);
-	delete this.data.nav.tune;
+	this.data.nav = nav;
 	yield next;
 });
 

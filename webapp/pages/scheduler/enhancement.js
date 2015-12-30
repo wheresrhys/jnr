@@ -26,8 +26,17 @@ export default function (del) {
 
 	del.on('tune.practiced', '.tune-rater', ev => {
 		const container = getContainer(ev.target);
+
+		if (this.data.orderBy === 'rehearse') {
+			ev.target.setAttribute('data-practiced', '');
+
+			if (container.querySelector('.tune-rater:not([data-practiced])')) {
+				return;
+			}
+		}
+
 		container.parentNode.removeChild(container);
-		co.wrap(getSetCollection)(1, [ev.detail.tuneId].concat(Array.from(rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
+		co.wrap(getSetCollection)(this.data.orderBy, 1, [ev.detail.tuneId].concat(Array.from(rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
 			.then(sets => {
 				templateLoader.render(`components/set/tpl.html`, {
 					set: sets[0]

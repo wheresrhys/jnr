@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-
-	<h1>Tunes to learn</h1>
+	<h1>Tunes to {{orderBy}}</h1>
 	<ol class="set-list list">
 		{% for set in sets %}
 		{% include "components/set/tpl.html" %}

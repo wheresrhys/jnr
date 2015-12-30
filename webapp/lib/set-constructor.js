@@ -90,11 +90,24 @@ export function* buildSets (tunes, setCount, tunesPerSet) {
 	let transitions = yield query('transitions', {
 		include_docs: true,
 		// Don't bother filtering by tune key here
-		// In the browser performance is about half as good compared to just getting all transitions and
-		// running Array.find against the whole set
+		// In the browser performance is about half as good compared to just getting all transitions
+		// and running Array.find against the whole set
 		// keys: tunes.map(t => t._id)
 	})
+
+	// simplest case - just return tunes wrapped in set container
+	if (tunesPerSet === 1) {
+		return tunes.slice(0, setCount).map(tune => {
+			return [{
+				tune,
+				key: tune.repertoire[0].key,
+				repertoireIndex: 0
+			}]
+		})
+	}
+
 	const sets = [];
+
 	while (tunes.length && sets.length < setCount) {
 
 		sets.push(buildSet([{
