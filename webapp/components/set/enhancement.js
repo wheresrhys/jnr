@@ -25,7 +25,7 @@ export function init (del) {
 			.then(tune => {
 				const container = getContainer(ev.target);
 				const manuscript = container.querySelector('.set__tune-score')
-				render(manuscript, composeABC(tune), true);
+				render(manuscript, composeABC(tune.arrangement, tune), true);
 				container.dispatchEvent(new CustomEvent('score.rendered', {
 					bubbles: true,
 					detail: {
