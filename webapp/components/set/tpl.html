@@ -3,10 +3,11 @@
 		{% for tuneContainer in set.tunes %}
 			{% set tune = tuneContainer.tune %}
 			<li class="set__tune" data-tune-id="{{tune._id}}">
-				<a href="/tunes/{{tune._id}}?key={{tuneContainer.key}}">{{tune.name}} <small>(in {{tuneContainer.key}})</small></a>
-				<!-- (<a href="http://thesession.org/tunes/{{tune.sessionId}}" target="_blank">session</a>) -->
+				<h2 class="set__tune__title">
+					<a href="/tunes/{{tune._id}}?key={{tuneContainer.key}}">{{tune.name}} <small>(in {{tuneContainer.key}})</small></a>
+					<button class="set__tune-render js">render</button>
+				</h2>
 				{% include "components/tune-rater/tpl.html" %}
-				<button class="set__tune-render">render</button>
 			</li>
 		{% endfor %}
 	</ol>

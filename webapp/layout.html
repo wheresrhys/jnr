@@ -1,6 +1,6 @@
 {%if renderWrapper %}
 <!DOCTYPE html>
-<html class="no-js" data-environment="{{env}}">
+<html class="hasnt-js" data-environment="{{env}}">
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -9,6 +9,9 @@
 		<meta name="author" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="/main.css">
+		<script>
+			document.documentElement.className = 'has-js';
+		</script>
 	</head>
 	<body>
 		{% include "components/nav/tpl.html" %}
@@ -17,9 +20,6 @@
 			{% block body %}{% endblock %}
 {%if renderWrapper %}
 		</main>
-	  <script>
-			//xwindow.user = $data.user;
-		</script>
 		<script src="/jspm_packages/system.js"></script>
 		<script src="/config.js"></script>
 		<script>

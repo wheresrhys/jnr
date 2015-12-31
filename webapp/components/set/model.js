@@ -18,7 +18,8 @@ const configs = {
 		tunesToFetch: 100,
 		descending: false,
 		setsToReturn: 8,
-		tunesPerSet: 3
+		tunesPerSet: 3,
+		dismissable: true
 	}
 }
 

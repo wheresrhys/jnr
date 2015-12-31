@@ -7,7 +7,6 @@
 .set__tune {
 	padding: 5px;
 	flex: 1 1 180px;
-	/*max-width: 300px;*/
 	border-left: 1px solid $lines;
 
 	&:nth-child(1) {
@@ -30,5 +29,12 @@
 	}
 	&:nth-child(7) {
 		background-color: rgba(46, 66, 114, 0.4);
+	}
+}
+
+.set__tune__title {
+	display: flex;
+	* {
+		display: block;
 	}
 }

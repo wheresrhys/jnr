@@ -33,6 +33,14 @@ ul, li, ol {
 	padding: 0;
 }
 
+.has-js .no-js {
+	display: none !important;
+}
+
+.hasnt-js .js {
+	display: none !important;
+}
+
 .list {
 
 	> li {
@@ -47,4 +55,5 @@ ul, li, ol {
 
 @import "components/nav/main";
 @import "components/set/main";
+@import "components/tune-rater/main";
 @import "pages/tunes/main";
