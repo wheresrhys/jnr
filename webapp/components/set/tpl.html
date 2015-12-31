@@ -1,6 +1,6 @@
 <li class="set">
 	<ol class="set__tunes">
-		{% for tuneContainer in set %}
+		{% for tuneContainer in set.tunes %}
 			{% set tune = tuneContainer.tune %}
 			<li class="set__tune" data-tune-id="{{tune._id}}">
 				<a href="/tunes/{{tune._id}}?key={{tuneContainer.key}}">{{tune.name}} <small>(in {{tuneContainer.key}})</small></a>
@@ -10,5 +10,8 @@
 			</li>
 		{% endfor %}
 	</ol>
+	{%if set.dismissable %}
+	<button class="set__dismiss">dismiss</button>
+	{%endif%}
 	<div class="set__tune-score"></div>
 </li>
