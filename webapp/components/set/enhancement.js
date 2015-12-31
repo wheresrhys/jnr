@@ -1,4 +1,5 @@
 import {db} from '../../data/index';
+import {practice} from '../../data/models/tune';
 import {render} from '../../lib/abc-dom';
 import {composeABC} from '../../lib/abc';
 
@@ -18,6 +19,15 @@ function getTuneId (el) {
 
 
 export function init (del) {
+
+	del.on('click', '.set__dismiss', function (ev) {
+		ev.preventDefault();
+		const container = getContainer(ev.target)
+		Array.from(container.querySelectorAll('.tune-rater')).map(el => {
+			practice(getTuneId(el), el.querySelector('[name="repertoireIndex"]').value, 3);
+		});
+		container.parentNode.removeChild(container);
+	});
 
 	del.on('click', '.set__tune-render', function (ev) {
 		ev.preventDefault();

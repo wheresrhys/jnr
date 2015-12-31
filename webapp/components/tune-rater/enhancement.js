@@ -1,4 +1,4 @@
-import {db} from '../../data/index';
+import {practice} from '../../data/models/tune';
 
 function getContainer (el) {
 	while (!el.classList.contains('tune-rater')) {
@@ -39,19 +39,7 @@ export function init (del) {
 			}
 		}))
 
-		db.get(tuneId)
-			.then(tune => {
-				const practices = tune.repertoire[container.querySelector('[name="repertoireIndex"]').value].practices;
-
-				practices.unshift({
-					date: new Date().toISOString(),
-					urgency: container.querySelector('[name="practiceQuality"]').value
-				});
-				if (practices.length > 5) {
-					practices.pop();
-				}
-				db.put(tune);
-			});
+		practice(tuneId, container.querySelector('[name="repertoireIndex"]').value, container.querySelector('[name="practiceQuality"]').value)
 
 	});
 
