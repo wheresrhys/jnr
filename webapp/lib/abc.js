@@ -33,6 +33,10 @@ function handleOrphans (abcArray) {
 	return abcArray;
 }
 
+function measureEffectiveLength (str) {
+	return str.replace(/"[A-G](?:b|#)?m?"/g, '').length
+}
+
 export function limitLength (abcStr, length) {
 	const abcLines = abcStr.split('\n');
 	if (length < 15) {
@@ -58,13 +62,14 @@ export function limitLength (abcStr, length) {
 				bar += abcChars.shift();
 			}
 
-			if (newLine.length + bar.length < length) {
+			let effectiveLength = measureEffectiveLength(newLine + bar)
+			if (effectiveLength < length) {
 				newLine += bar;
 				bar = '';
 				continue;
 			}
 
-			if (newLine.length + bar.length === length) {
+			if (effectiveLength === length) {
 				compressedAbc.push(newLine + bar);
 				newLine = '';
 				handleOrphans(abcChars)

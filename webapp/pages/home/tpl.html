@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 {%for list in lists%}
-	<h1>Tunes to {{list.orderBy}}</h1>
+	<h1>Tunes to {{list.orderBy}} <a href="/scheduler?order={{list.orderBy}}">more</a></h1>
 	<ol class="set-list list">
 		{% for set in list.sets %}
 		{% include "components/set/tpl.html" %}
