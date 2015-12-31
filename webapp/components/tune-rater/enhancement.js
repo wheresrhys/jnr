@@ -39,7 +39,7 @@ export function init (del) {
 			}
 		}))
 
-		practice(tuneId, container.querySelector('[name="repertoireIndex"]').value, container.querySelector('[name="practiceQuality"]').value)
+		practice(tuneId, container.querySelector('[name="settingIndex"]').value, container.querySelector('[name="practiceQuality"]').value)
 
 	});
 

@@ -7,7 +7,7 @@ export const ddoc = {
 		index: {
 			map: function (doc) {
 				if (doc.type === 'tune') {
-					doc.repertoire.forEach(function (piece) {
+					doc.settings.forEach(function (piece) {
 						var val;
 						if (piece.practices.length) {
 							var avg = piece.practices.reduce(function (total, practice) {

@@ -33,8 +33,8 @@ function handleOrphans (abcArray) {
 	return abcArray;
 }
 
-function measureEffectiveLength (str) {
-	return str.replace(/"[A-G](?:b|#)?m?"/g, '').length
+function measureEffectiveLength (abcStr) {
+	return abcStr.replace(/"[A-G](?:b|#)?m?"/g, '').length
 }
 
 export function limitLength (abcStr, length) {

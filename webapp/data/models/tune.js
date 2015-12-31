@@ -1,10 +1,10 @@
 import {db} from '../index';
 
-export function practice (tuneId, repertoireIndex, urgency) {
+export function practice (tuneId, settingIndex, urgency) {
 
 	return db.get(tuneId)
 		.then(tune => {
-			const practices = tune.repertoire[repertoireIndex].practices;
+			const practices = tune.settings[settingIndex].practices;
 
 			practices.unshift({
 				date: new Date().toISOString(),

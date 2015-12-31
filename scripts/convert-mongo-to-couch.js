@@ -52,7 +52,7 @@ let tunes = require('../mongo-export/tunes').map(rec => {
 		oldId: rec.oldId && rec.oldId.$oid,
 		quality: rec.quality,
 		rhythm: rec.rhythms[0],
-		repertoire: [],
+		settings: [],
 		sessionId: rec.sessionId
 	};
 });
@@ -88,13 +88,13 @@ let pieces = require('../mongo-export/pieces').reduce((obj, rec) => {
 
 
 Object.keys(pieces).forEach(tuneId => {
-	tunes.find(t => t._id === tuneId).repertoire = _.uniq(pieces[tuneId], function(n) {
+	tunes.find(t => t._id === tuneId).settings = _.uniq(pieces[tuneId], function(n) {
 	  return n.tunebook + n.key
 	})
 })
 
 tunes = tunes.filter(tune => {
-	if (tune.repertoire.length) {
+	if (tune.settings.length) {
 		tune.arrangement = decomposeABC(tune.abc);
 		delete tune.abc;
 		return true;

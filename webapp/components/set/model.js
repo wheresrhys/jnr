@@ -22,9 +22,9 @@ const configs = {
 	}
 }
 
-function getRepertoire (tune, key) {
-	for(let i = 0; i < tune.repertoire.length; i++) {
-		if (tune.repertoire[i].key === key) {
+function getSetting (tune, key) {
+	for(let i = 0; i < tune.settings.length; i++) {
+		if (tune.settings[i].key === key) {
 			return i
 		}
 	}
@@ -46,12 +46,12 @@ function findAdjacentTune (direction, tuneContainer, opts) {
 			opts.tunes.splice(opts.tunes.indexOf(tune), 1);
 			if (!tuneContainer.key) {
 				tuneContainer.key = transition[toInspect].key
-				tuneContainer.repertoireIndex = getRepertoire(tuneContainer.tune, transition[toInspect].key)
+				tuneContainer.settingIndex = getSetting(tuneContainer.tune, transition[toInspect].key)
 			}
 			return {
 				tune: tune,
 				key: transition[toReturn].key,
-				repertoireIndex: getRepertoire(tune, transition[toReturn].key),
+				settingIndex: getSetting(tune, transition[toReturn].key),
 				dismissable: opts.dismissable
 			}
 		}
@@ -61,16 +61,16 @@ function findAdjacentTune (direction, tuneContainer, opts) {
 function rescueSet (set, opts) {
 	const currentTune = set[set.length -1];
 
-	currentTune.repertoireIndex = 0;
-	currentTune.key = currentTune.tune.repertoire[0].key;
+	currentTune.settingIndex = 0;
+	currentTune.key = currentTune.tune.settings[0].key;
 
-	const tune = opts.tunes.find(t => t.meter === currentTune.tune.meter && t.repertoire.length);
+	const tune = opts.tunes.find(t => t.meter === currentTune.tune.meter && t.settings.length);
 	opts.tunes.splice(opts.tunes.indexOf(tune), 1);
 
 	set.push({
 		tune: tune,
-		key: tune.repertoire[0].key,
-		repertoireIndex: 0,
+		key: tune.settings[0].key,
+		settingIndex: 0,
 		dismissable: opts.dismissable
 	})
 
@@ -126,8 +126,8 @@ export function* buildSets (opts) {
 				dismissable: opts.dismissable,
 				tunes: [{
 					tune,
-					key: tune.repertoire[0].key,
-					repertoireIndex: 0,
+					key: tune.settings[0].key,
+					settingIndex: 0,
 				}]
 			};
 		})

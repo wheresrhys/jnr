@@ -65,12 +65,12 @@ export function* api () {
 				this.response.redirect(this.request.header.referer);
 			})
 	} else if ('practiceQuality' in this.request.body) {
-		this.data.tune.repertoire[this.request.body.repertoireIndex].practices.unshift({
+		this.data.tune.settings[this.request.body.settingIndex].practices.unshift({
 			date: new Date().toISOString(),
 			urgency: this.request.body.practiceQuality
 		})
-		if (this.data.tune.repertoire.length > 5) {
-			this.data.tune.repertoire.pop();
+		if (this.data.tune.settings.length > 5) {
+			this.data.tune.settings.pop();
 		}
 		yield db.put(this.data.tune)
 			.then(() => {
