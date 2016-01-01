@@ -32,8 +32,7 @@ function createCouchPractice (mongoPractice, tuneId, key, obj) {
 	obj[tuneId] = obj[tuneId] || [];
 	obj[tuneId].push({
 		practices: practices,
-		key: key,
-		tunebook: mongoPractice.tunebook.replace('wheresrhys:', '')
+		key: key
 	});
 
 }

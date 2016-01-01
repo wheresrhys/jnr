@@ -5,12 +5,12 @@ Name for app - speed the plough, trad tutor
 # Pages
 
 ## TODO
-- start practicing new tune
 - suggest new tune
-- search tunes
 - create tune
 - delete tune
 - save custom transition
+- make practices more intelligent with regard to keys
+- ... in fact handle keys more intelligently full stop
 
 3 lists
 

@@ -1,7 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
 	<p>{{tune.name}}{%if unsaved %} <small>Alternative arrangment {{arrangementIndex}}</small>{%endif%}</p>
-	<p>{%if not tune._rev%}new{%endif%}</p>
+{%if not tune._rev%}
+<form action="/api/tunes/{{tune._id}}" method="post" class="tune__start-learning">
+	<input type="hidden" name="learn" value="true">
+	<input type="hidden" name="key" value="{{arrangement.root}}{{arrangement.mode}}">
+	<button type="submit">Start learning</button>
+</form>
+
+{%endif%}
 	<pre class="tune__abc">
 K: {{arrangement.root}}{{arrangement.mode}}
 M: {{tune.meter}}
@@ -13,7 +20,7 @@ R: {{tune.rhythm}}
 			<a href="/tunes/{{tune._id}}?arrangement={{nextArrangement}}">Next</a>,
 			<a href="/tunes/{{tune._id}}">Reset</a>
 			{%if unsaved %}
-				<form action="/api/tunes/{{tune._id}}" method="post" class="select-arrangement">
+				<form action="/api/tunes/{{tune._id}}" method="post" class="tune__select-arrangement">
 					<input type="hidden" name="arrangement" value="{{arrangementIndex}}">
 					<button type="submit">Select</button>
 				</form>

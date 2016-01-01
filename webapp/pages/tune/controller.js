@@ -36,13 +36,26 @@ export function* api () {
 				this.response.redirect(this.request.header.referer);
 			})
 	} else if ('urgency' in this.request.body) {
-		this.data.tune.settings[this.request.body.settingIndex].practices.unshift({
+		const practices = this.data.tune.settings[this.request.body.settingIndex].practices;
+		practices.unshift({
 			date: new Date().toISOString(),
 			urgency: this.request.body.urgency
 		})
-		if (this.data.tune.settings.length > 5) {
-			this.data.tune.settings.pop();
+		if (practices.length > 5) {
+			practices.pop();
 		}
+		yield db.put(this.data.tune)
+			.then(() => {
+				this.response.redirect(this.request.header.referer);
+			})
+	} else if ('learn' in this.request.body) {
+		this.data.tune.settings.push({
+			key: this.request.body.key,
+			practices: [{
+				date: new Date().toISOString(),
+				urgency: 10
+			}]
+		});
 		yield db.put(this.data.tune)
 			.then(() => {
 				this.response.redirect(this.request.header.referer);
