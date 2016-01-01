@@ -72,7 +72,8 @@ function rescueSet (set, opts) {
 		tune: tune,
 		key: tune.settings[0].key,
 		settingIndex: 0,
-		dismissable: opts.dismissable
+		dismissable: opts.dismissable,
+		newTransition: true
 	})
 
 	return buildSet(set, opts);

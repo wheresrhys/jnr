@@ -10,11 +10,37 @@ function getContainer (el) {
 	return el;
 }
 
+
+function getTuneContainer (el) {
+	while (!el.classList.contains('set__tune')) {
+		el = el.parentNode;
+	}
+	return el;
+}
+
 function getTuneId (el) {
 	while (!el.dataset.tuneId) {
 		el = el.parentNode;
 	}
 	return el.dataset.tuneId;
+}
+
+function constructTransition (el) {
+	const container = getTuneContainer(el);
+	const prevContainer = container.previousElementSibling;
+	const doc = {
+		from: {
+			id: prevContainer.dataset.tuneId,
+			key: prevContainer.dataset.tuneKey
+		},
+		to: {
+			id: container.dataset.tuneId,
+			key: container.dataset.tuneKey
+		},
+		type: 'transition'
+	};
+	doc._id = `${doc.from.id}|${doc.from.key}|${doc.to.id}|${doc.to.key}`;
+	return doc;
 }
 
 
@@ -46,4 +72,24 @@ export function init (del) {
 				}))
 			})
 	});
+
+
+
+	del.on('click', '.set__save-transition', function (ev) {
+		ev.preventDefault();
+		const container = getTuneContainer(ev.target);
+		const doc = constructTransition(container);
+		db.put(doc)
+			.then(() =>	container.classList.remove('set__tune--new-transition'))
+	});
+
+	del.on('click', '.set__remove-transition', function (ev) {
+		ev.preventDefault();
+		const container = getTuneContainer(ev.target);
+		const doc = constructTransition(container);
+		db.get(doc._id)
+			.then(doc => db.remove(doc))
+			.then(() => container.classList.add('set__tune--new-transition'))
+	});
+
 }

@@ -4,6 +4,15 @@ Name for app - speed the plough, trad tutor
 
 # Pages
 
+## TODO
+- start practicing new tune
+- suggest new tune
+- save suggested transition
+- search tunes
+- create tune
+- delete tune
+- save custom transition
+
 3 lists
 
 - learn: tunes that have never been above the threshold score - sorted by last practiced date and score. Arranged as single tunes

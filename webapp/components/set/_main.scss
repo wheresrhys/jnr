@@ -34,7 +34,31 @@
 
 .set__tune__title {
 	display: flex;
-	* {
+	> * {
+
+		display: block;
+	}
+	a {
+		flex: 1;
+	}
+}
+
+.set__save-transition,
+.set__remove-transition {
+	position: relative;
+	left: -25px;
+}
+
+.set__save-transition {
+	display: none;
+}
+
+.set__tune--new-transition {
+	border-left: 3px dashed black;
+	.set__remove-transition {
+		display: none;
+	}
+	.set__save-transition {
 		display: block;
 	}
 }
