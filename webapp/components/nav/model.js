@@ -14,10 +14,10 @@ export const model = {
 		url: '/scheduler?order=improve',
 		pattern: /^\/scheduler\?order=improve/
 	},
-	rehearse: {
-		label: 'Rehearse',
-		url: '/scheduler?order=rehearse',
-		pattern: /^\/scheduler\?order=rehearse/
+	remind: {
+		label: 'Remind',
+		url: '/scheduler?order=remind',
+		pattern: /^\/scheduler\?order=remind/
 	},
 	tunes: {
 		label: 'Tunes',

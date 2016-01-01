@@ -14,9 +14,10 @@ function getTuneId (el) {
 export function init (del) {
 
 	del.on('mousedown', '.tune-rater__wrapper', function (ev) {
-		const input = ev.target.nextElementSibling;
-		const bar = ev.target.firstElementChild;
 		const container = getContainer(ev.target);
+		const input = container.querySelector('[name="urgency"]');
+		const bar = container.querySelector('.tune-rater__bar');
+
 		let increasing = input.value < 9;
 
 		container.oscillator = setInterval(function () {
@@ -41,7 +42,7 @@ export function init (del) {
 		const container = getContainer(ev.target);
 		container.oscillator && clearInterval(container.oscillator);
 		const tuneId = getTuneId(ev.target);
-
+		container.setAttribute('data-practiced', '');
 		container.dispatchEvent(new CustomEvent('tune.practiced', {
 			bubbles: true,
 			detail: {
@@ -49,7 +50,7 @@ export function init (del) {
 			}
 		}))
 
-		practice(tuneId, container.querySelector('[name="settingIndex"]').value, container.querySelector('[name="practiceQuality"]').value)
+		practice(tuneId, container.querySelector('[name="settingIndex"]').value, container.querySelector('[name="urgency"]').value)
 
 	});
 

@@ -27,7 +27,7 @@ export default function (del) {
 	// del.on('tune.practiced', '.tune-rater', ev => {
 	// 	const container = getContainer(ev.target);
 
-	// 	if (this.data.orderBy === 'rehearse') {
+	// 	if (this.data.orderBy === 'remind') {
 	// 		ev.target.setAttribute('data-practiced', '');
 
 	// 		if (container.querySelector('.tune-rater:not([data-practiced])')) {

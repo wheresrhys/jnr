@@ -64,10 +64,10 @@ export function* api () {
 			.then(() => {
 				this.response.redirect(this.request.header.referer);
 			})
-	} else if ('practiceQuality' in this.request.body) {
+	} else if ('urgency' in this.request.body) {
 		this.data.tune.settings[this.request.body.settingIndex].practices.unshift({
 			date: new Date().toISOString(),
-			urgency: this.request.body.practiceQuality
+			urgency: this.request.body.urgency
 		})
 		if (this.data.tune.settings.length > 5) {
 			this.data.tune.settings.pop();

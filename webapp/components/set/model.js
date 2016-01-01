@@ -1,7 +1,7 @@
 import {query, db} from '../../data/index';
 
 const configs = {
-	rehearse: {
+	remind: {
 		tunesToFetch: 120,
 		descending: false,
 		setsToReturn: 10,

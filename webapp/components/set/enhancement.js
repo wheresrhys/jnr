@@ -24,7 +24,9 @@ export function init (del) {
 		ev.preventDefault();
 		const container = getContainer(ev.target)
 		Array.from(container.querySelectorAll('.tune-rater')).map(el => {
-			practice(getTuneId(el), el.querySelector('[name="settingIndex"]').value, 3);
+			if (!el.hasAttribute('data-practiced')) {
+				practice(getTuneId(el), el.querySelector('[name="settingIndex"]').value, 3);
+			}
 		});
 		container.parentNode.removeChild(container);
 	});

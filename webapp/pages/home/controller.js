@@ -4,8 +4,8 @@ import {getSetCollection} from '../../components/set/model';
 
 export default function *() {
 	this.controller = 'home';
-	this.data.orderBy = this.query.order || 'rehearse';
-	const listTypes = ['learn', 'improve', 'rehearse'];
+	this.data.orderBy = this.query.order || 'remind';
+	const listTypes = ['learn', 'improve', 'remind'];
 	const lists = yield listTypes.map(function *(type) {
 		return yield getSetCollection(type, 2)
 	});

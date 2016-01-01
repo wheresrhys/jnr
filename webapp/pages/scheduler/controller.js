@@ -4,7 +4,7 @@ import {getSetCollection} from '../../components/set/model';
 
 export default function *() {
 	this.controller = 'scheduler';
-	this.data.orderBy = this.query.order || 'rehearse';
+	this.data.orderBy = this.query.order || 'remind';
 	this.data.sets = yield getSetCollection(this.data.orderBy);
 }
 
