@@ -1,40 +1,11 @@
 import {db} from '../../data/index';
+import {getTune} from '../../data/models/tune';
 import isBrowser from '../../lib/is-browser';
-import {decomposeABC,decomposeKey} from '../../lib/abc';
-
-const cache = {};
-
-function *getArrangements (tune) {
-
-	if (!tune.sessionId) {
-		return Promise.resolve([])
-	}
-
-	if (cache[tune.sessionId]) {
-		return Promise.resolve(cache[tune.sessionId]);
-	}
-
-	return fetch(`https://thesession.org/tunes/${tune.sessionId}?format=json`)
-		.then(res => res.json())
-		.then(json => {
-			cache[tune.sessionId] = json.settings.map(setting => Object.assign(decomposeABC(setting.abc), decomposeKey(setting.key)));
-			return cache[tune.sessionId];
-		})
-		.catch(() => []);
-}
-
-function *getFullTune (tuneId) {
-	const tune = yield db.get(tuneId);
-	return {
-		tune: tune,
-		alternateArrangements: yield getArrangements(tune)
-	}
-}
 
 export default function *() {
 	this.controller = 'tune';
 
-	Object.assign(this.data, yield getFullTune(this.params.tuneId))
+	Object.assign(this.data, yield getTune(this.params.tuneId))
 
 	this.data.arrangement = this.data.tune.arrangement;
 
@@ -57,7 +28,7 @@ export default function *() {
 }
 
 export function* api () {
-	Object.assign(this.data, yield getFullTune(this.params.tuneId))
+	Object.assign(this.data, yield getTune(this.params.tuneId))
 	if ('arrangement' in this.request.body) {
 		this.data.tune.arrangement = this.data.alternateArrangements[this.request.body.arrangement];
 		yield db.put(this.data.tune)

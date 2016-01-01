@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 	<p>{{tune.name}}{%if unsaved %} <small>Alternative arrangment {{arrangementIndex}}</small>{%endif%}</p>
+	<p>{%if not tune._rev%}new{%endif%}</p>
 	<pre class="tune__abc">
 K: {{arrangement.root}}{{arrangement.mode}}
 M: {{tune.meter}}

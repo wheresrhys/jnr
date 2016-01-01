@@ -1,4 +1,5 @@
 import {db, query} from '../index';
+import {decomposeABC,decomposeKey} from '../../lib/abc';
 
 let activeTunes = {};
 let tunesFetch;
@@ -7,6 +8,8 @@ let allTunes = {
 	inactive: [],
 	all: []
 };
+
+const cache = {};
 
 // TODO - should maintain an in memory cache of tunes,
 // tunes last updated should be stateless on server but stateful in the browser
@@ -79,13 +82,14 @@ export function updateTunes () {
 				})
 		})
 		.then(tunes => {
+			tunes.forEach(t => {
+				if (activeTunes[t.id]) {
+					t.active = true;
+				}
+			})
 			allTunes.all = tunes;
-			allTunes.inactive = tunes.filter(t => {
-				return !activeTunes[t.id]
-			})
-			allTunes.active = tunes.filter(t => {
-				return activeTunes[t.id]
-			})
+			allTunes.inactive = tunes.filter(t => !t.active)
+			allTunes.active = tunes.filter(t => t.active)
 			tunesFetch = null;
 		})
 }
@@ -113,4 +117,61 @@ export function practice (tuneId, settingIndex, urgency) {
 			}
 			db.put(tune);
 		});
+}
+const meterMap = {
+	jig: '6/8',
+	'slip jig': '9/8',
+	slide: '12/8',
+	polka: '2/4',
+	waltz: '3/4'
+};
+
+export function create (data) {
+	return {
+		_id: 'session:' + data.id,
+	  type: 'tune',
+	  author: 'trad arr.',
+	  keys: Object.keys(data.settings.reduce((obj, setting) => {
+	  	obj[decomposeKey(setting.key)] = true;
+	  	return obj;
+	  }, {})),
+	  meter: meterMap[data.type] || '4/4',
+	  name: data.name,
+ 	  rhythm: data.type,
+	  settings: [],
+	  sessionId: data.id,
+	  arrangement: getArrangement(data.settings[0])
+	};
+}
+
+function getArrangement (setting) {
+	return Object.assign(decomposeABC(setting.abc), decomposeKey(setting.key));
+}
+
+function getSessionTune (tuneId) {
+	if (/^session/.test(tuneId)) {
+		if (cache[tuneId]) {
+			return Promise.resolve(cache[tuneId])
+		}
+		return fetch(`https://thesession.org/tunes/${tuneId.replace(/^session\:/, '')}?format=json`)
+		.then(res => res.json())
+		.then(json => {
+			cache[tuneId] = json;
+			return json;
+		})
+	} else {
+		return Promise.reject();
+	}
+}
+
+export function *getTune (tuneId) {
+
+	const sessionTune = getSessionTune(tuneId);
+
+	const tune = yield db.get(tuneId)
+		.catch(() => sessionTune.then(create))
+	return {
+		tune: tune,
+		alternateArrangements: yield sessionTune.then(tune => tune.settings.map(getArrangement), e => [])
+	}
 }
