@@ -49,6 +49,13 @@
 	left: -25px;
 }
 
+.set__tune:first-child {
+	.set__save-transition,
+	.set__remove-transition {
+		display: none !important;
+	}
+}
+
 .set__save-transition {
 	display: none;
 }

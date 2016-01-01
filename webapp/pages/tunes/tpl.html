@@ -1,14 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
-	<ol class="tune-list list">
-		{% for tune in tunes %}
-		<li>
-			<a class="tune-list__tune-link" href="/tunes/{{tune.id}}">{{tune.name}} (<small>{{tune.type}}{%if not tune.active %} new{%endif%}</small>)</a>
-			<a class="tune-list__edit-link" href="/tunes/{{tune.id}}/edit">edit</a>
-		</li>
-		{% endfor %}
-	</ol>
-
+	<form class="tune-search">
+		<input type="search" name="q" placeholder="Search for a tune" value="{{q}}">
+		<button class="no-js" type="submit">search</button>
+	</form>
+	{% include "pages/tunes/list.html" %}
 	<nav>
 		{% if pagination.prev %}
 			<a href="/tunes/?limit={{pagination.perPage}}&amp;page={{pagination.prev}}">Previous</a>

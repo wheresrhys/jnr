@@ -7,7 +7,6 @@ Name for app - speed the plough, trad tutor
 ## TODO
 - start practicing new tune
 - suggest new tune
-- save suggested transition
 - search tunes
 - create tune
 - delete tune

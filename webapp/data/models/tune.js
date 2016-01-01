@@ -94,11 +94,51 @@ export function updateTunes () {
 		})
 }
 
+
+import * as liquidMetal from 'liquidmetal';
+
+function search (term, tunes) {
+
+	if (term.length < 3)  {
+		return tunes;
+	} else {
+
+		return tunes
+			.filter(function (tune) {
+				tune.score = liquidMetal.score(tune.name, term) > 0
+				return tune.score > 0;
+			})
+			.sort(function(t1, t2) {
+				return t1.score === t2.score ? 0 : t1.score > t2.score ? -1: 1
+			});
+	}
+
+
+	return tunes;
+
+}
+
 export function getAll (opts) {
 	opts = opts || {};
+	const limit = opts.limit ? Number(opts.limit) : 15;
+	const start = ((opts.page || 1) - 1) * limit;
+
 	return updateTunes()
 		.then(() => {
-			return opts.status ? allTunes[opts.status] : allTunes.all
+			let tunes = opts.status ? allTunes[opts.status] : allTunes.all;
+			if (opts.q) {
+				tunes = search(opts.q, tunes).slice(0, limit);
+			} else {
+				tunes = tunes.slice(start, start + limit);
+			}
+			return {
+				tunes: tunes,
+				pagination: {
+					next: Number(opts.page || 1) + 1,
+					prev: Number(opts.page || 1) - 1,
+					perPage: limit
+				}
+			}
 		});
 }
 
