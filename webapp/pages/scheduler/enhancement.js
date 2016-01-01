@@ -38,7 +38,8 @@ export default function (del) {
 			});
 	})
 
-	del.on('score.rendered', '.set__tune-score', ev => {
+	del.on('score.rendered', '.set', ev => {
+		const manuscript = ev.target.querySelector('.set__tune-score');
 		Array.from(rootEl.querySelectorAll('.set__tune-score'))
 			.forEach(el => {
 				if (el !== ev.detail.manuscript) {
