@@ -1,11 +1,8 @@
 import {db, query} from '../index';
-import {decomposeABC,decomposeKey} from '../../lib/abc';
 
 let activeTunes = {};
 let tunesFetch;
 let allTunes = {
-	active: [],
-	inactive: [],
 	all: []
 };
 
@@ -52,8 +49,8 @@ export function updateTunes () {
 				t.id = 'session:' + t.id
 			});
 			return query('tunes', {include_docs: true})
-				.then(existingTunes => existingTunes.reduce((obj, tune) => {
-					if (!/^session:/.test(tune._id)) {
+				.then(existingTunes => {
+					existingTunes.forEach(tune => {
 						const reducedTune = {
 							id: tune._id,
 							name: tune.name,
@@ -67,29 +64,12 @@ export function updateTunes () {
 						})) {
 							tunes.push(reducedTune)
 						}
-
-						if (tune.settings.length) {
-							obj[tune._id] = true;
-						}
-					} else {
-						obj[tune._id] = true;
-					}
-					return obj;
-				}, {}))
-				.then(existingTunesMap => {
-					activeTunes = existingTunesMap;
-					return tunes
-				})
+					});
+					return tunes;
+				});
 		})
 		.then(tunes => {
-			tunes.forEach(t => {
-				if (activeTunes[t.id]) {
-					t.active = true;
-				}
-			})
 			allTunes.all = tunes;
-			allTunes.inactive = tunes.filter(t => !t.active)
-			allTunes.active = tunes.filter(t => t.active)
 			tunesFetch = null;
 		})
 }
@@ -142,50 +122,8 @@ export function getAll (opts) {
 		});
 }
 
-export function practice (tuneId, settingIndex, urgency) {
-
-	return db.get(tuneId)
-		.then(tune => {
-			const practices = tune.settings[settingIndex].practices;
-
-			practices.unshift({
-				date: new Date().toISOString(),
-				urgency: urgency
-			});
-			if (practices.length > 5) {
-				practices.pop();
-			}
-			db.put(tune);
-		});
-}
-const meterMap = {
-	jig: '6/8',
-	'slip jig': '9/8',
-	slide: '12/8',
-	polka: '2/4',
-	waltz: '3/4'
-};
-
 export function create (data) {
-	return {
-		_id: 'session:' + data.id,
-	  type: 'tune',
-	  author: 'trad arr.',
-	  keys: Object.keys(data.settings.reduce((obj, setting) => {
-	  	obj[decomposeKey(setting.key)] = true;
-	  	return obj;
-	  }, {})),
-	  meter: meterMap[data.type] || '4/4',
-	  name: data.name,
- 	  rhythm: data.type,
-	  settings: [],
-	  sessionId: data.id,
-	  arrangement: getArrangement(data.settings[0])
-	};
-}
-
-function getArrangement (setting) {
-	return Object.assign(decomposeABC(setting.abc), decomposeKey(setting.key));
+	data._id = 'thesession:' + data.id;
 }
 
 function getSessionTune (tuneId) {
@@ -208,10 +146,6 @@ export function *getTune (tuneId) {
 
 	const sessionTune = getSessionTune(tuneId);
 
-	const tune = yield db.get(tuneId)
+	return yield db.get(tuneId)
 		.catch(() => sessionTune.then(create))
-	return {
-		tune: tune,
-		alternateArrangements: yield sessionTune.then(tune => tune.settings.map(getArrangement), e => [])
-	}
 }

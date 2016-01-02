@@ -14,7 +14,7 @@ export const ddoc = {
 							emit(new Date(doc.practices[0].date).getTime() / (24 * 60 * 60 * 1000 * 5));
 						}
 					}
-				})
+				}
 			}.toString()
 		}
 	}

@@ -1,3 +1,11 @@
+const meterMap = {
+	jig: '6/8',
+	'slip jig': '9/8',
+	slide: '12/8',
+	polka: '2/4',
+	waltz: '3/4'
+};
+
 export function decomposeABC (abc) {
 	return {
 		mode: (abc.match(/K:(?:\s*)[A-Z]([A-Za-z]*)/) || [])[1],
