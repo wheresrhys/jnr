@@ -4,7 +4,7 @@ export const ddoc = {
 	views: {
 		index: {
 			map: function (doc) {
-				if (doc.type === 'tune') {
+				if (doc.docType === 'tune') {
 					emit(doc.name.replace(/^(The|Y) /, ''));
 				}
 			}.toString()

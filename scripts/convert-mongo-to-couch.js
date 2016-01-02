@@ -119,6 +119,7 @@ settings = Object.keys(settings).reduce((arr, tuneId) => {
 
 settings.forEach(s => {
 	s._id = `${s.tuneId}|${s.key}`;
+	s.docType = 'setting';
 });
 
 settings = _.uniq(settings, '_id');
@@ -137,7 +138,7 @@ transitions = Array.from(transitions)
 		const tunes = t.split('|');
 		return {
 			_id: t,
-			type: 'transition',
+			docType: 'transition',
 			from: {
 				id: tunes[0],
 				key: tunes[1]

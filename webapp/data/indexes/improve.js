@@ -6,21 +6,19 @@ export const ddoc = {
 	views: {
 		index: {
 			map: function (doc) {
-				if (doc.type === 'tune') {
-					doc.settings.forEach(function (piece) {
-						var val;
-						if (piece.practices.length) {
-							val = (piece.practices.reduce(function (total, practice) {
-								return total + practice.urgency;
-							}, 0)/piece.practices.length)
-							if (val > 3.5) {
-								val = val - (new Date(piece.practices[0].date).getTime() / (24 * 60 * 60 * 1000 * 5))
-							}
-						} else {
-							val = 0;
+				if (doc.docType === 'setting') {
+					var val;
+					if (doc.practices.length) {
+						val = (doc.practices.reduce(function (total, practice) {
+							return total + practice.urgency;
+						}, 0)/doc.practices.length)
+						if (val > 3.5) {
+							val = val - (new Date(doc.practices[0].date).getTime() / (24 * 60 * 60 * 1000 * 5))
 						}
-						emit(val);
-					})
+					} else {
+						val = 0;
+					}
+					emit(val);
 				}
 			}.toString()
 		}
