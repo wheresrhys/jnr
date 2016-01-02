@@ -23,4 +23,18 @@ export default function (del) {
 				});
 			})
 	}));
+
+	// del.on('click', '.tune-list__tune__delete', debounceCallback(ev => {
+	// 	const term = ev.target.value;
+	// 	Object.assign(this.query, {q: term})
+	// 	window.history.pushState({}, 'Search: ' + term, '/tunes?' + querystring.stringify(this.query));
+	// 	getAll(this.query)
+	// 		.then(tunes => {
+	// 			templateLoader.render(`pages/tunes/list.html`, {
+	// 				tunes: tunes.tunes
+	// 			}, (err, res) => {
+	// 				document.querySelector('.tune-list').innerHTML = res;
+	// 			});
+	// 		})
+	// }));
 }
