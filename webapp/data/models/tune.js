@@ -204,14 +204,20 @@ function getSessionTune (tuneId) {
 	}
 }
 
-export function *getTune (tuneId) {
+export function getTune (tuneId) {
 
 	const sessionTune = getSessionTune(tuneId);
 
-	const tune = yield db.get(tuneId)
+	return db.get(tuneId)
 		.catch(() => sessionTune.then(create))
-	return {
-		tune: tune,
-		alternateArrangements: yield sessionTune.then(tune => tune.settings.map(getArrangement), e => [])
-	}
+		.then(tune => {
+			return Promise.all([Promise.resolve(tune), sessionTune.then(tune => tune.settings.map(getArrangement), e => [])])
+		})
+		.then(res => {
+			return {
+				tune: res[0],
+				alternateArrangements: res[1]
+			};
+		})
+
 }

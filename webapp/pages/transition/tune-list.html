@@ -1,0 +1,5 @@
+	{% for tune in tunes %}
+	<li class="setting-picker__tune" data-tune-id="{{tune.id}}">
+		{{tune.name}} <button class="select-tune">select</button>
+	</li>
+	{% endfor %}

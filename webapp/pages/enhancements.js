@@ -1,13 +1,15 @@
-import tunesEnhancement from './tunes/enhancement';
-import tuneEnhancement from './tune/enhancement';
-import schedulerEnhancement from './scheduler/enhancement';
-import homeEnhancement from './home/enhancement';
+import tunes from './tunes/enhancement';
+import tune from './tune/enhancement';
+import scheduler from './scheduler/enhancement';
+import home from './home/enhancement';
+import transition from './transition/enhancement';
 
 const enhancements = {
-	tunes: tunesEnhancement,
-	tune: tuneEnhancement,
-	scheduler: schedulerEnhancement,
-	home: homeEnhancement
+	tunes: tunes,
+	tune: tune,
+	scheduler: scheduler,
+	home: home,
+	transition: transition
 };
 
 import Delegate from 'dom-delegate';

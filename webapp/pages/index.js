@@ -2,19 +2,22 @@ import tunes from './tunes/controller';
 import tune from './tune/controller';
 import scheduler from './scheduler/controller';
 import home from './home/controller';
+import transition from './transition/controller';
 
 const controllers = {
 	scheduler: scheduler,
 	tunes: tunes,
 	tune: tune,
-	home: home
+	home: home,
+	transition: transition
 };
 
 const routeMappings = {
 	scheduler: ['/scheduler'],
 	tunes: ['/tunes'],
 	tune: ['/tunes/:tuneId', '/tunes/:tuneId/:action'],
-	home: ['/']
+	home: ['/'],
+	transition: ['/transition']
 };
 
 export function configureRoutes(router, wrapper) {

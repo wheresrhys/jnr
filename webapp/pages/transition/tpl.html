@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+	<form style="width: 50%" class="setting-picker first-tune">
+		<input type="search" name="q" placeholder="Search for a tune" value="{{q}}">
+		<button class="no-js" type="submit">search</button>
+		<ol class="tune-list"></ol>
+	</form>
+	<form style="width: 50%" class="setting-picker second-tune">
+		<input type="search" name="q" placeholder="Search for a tune" value="{{q}}">
+		<button class="no-js" type="submit">search</button>
+		<ol class="tune-list"></ol>
+	</form>
+
+{% endblock %}
