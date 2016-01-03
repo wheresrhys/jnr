@@ -16,6 +16,7 @@ const del = Delegate();
 
 export default function (ctx) {
 	del.destroy();
-	del.root(document.querySelector('main'));
+	del.rootEl = document.querySelector('main');
+	del.root(del.rootEl);
 	return enhancements[ctx.controller] && enhancements[ctx.controller].call(ctx, del);
 }

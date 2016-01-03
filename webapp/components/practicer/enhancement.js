@@ -1,22 +1,22 @@
-import {practice} from '../../data/models/tune';
+import {practice} from '../../data/models/setting';
 
 function getContainer (el) {
-	while (!el.classList.contains('tune-rater')) {
+	while (!el.classList.contains('practicer')) {
 		el = el.parentNode;
 	}
 	return el;
 }
 
-function getTuneId (el) {
-	return getContainer(el).dataset.tuneId;
+function getSettingId (el) {
+	return getContainer(el).dataset.settingId;
 }
 
 export function init (del) {
 
-	del.on('mousedown', '.tune-rater__wrapper', function (ev) {
+	del.on('mousedown', '.practicer__wrapper', function (ev) {
 		const container = getContainer(ev.target);
 		const input = container.querySelector('[name="urgency"]');
-		const bar = container.querySelector('.tune-rater__bar');
+		const bar = container.querySelector('.practicer__bar');
 
 		let increasing = input.value < 9;
 
@@ -38,19 +38,19 @@ export function init (del) {
 		}, 30);
 	});
 
-	del.on('mouseup', '.tune-rater__wrapper', function (ev) {
+	del.on('mouseup', '.practicer__wrapper', function (ev) {
 		const container = getContainer(ev.target);
 		container.oscillator && clearInterval(container.oscillator);
-		const tuneId = getTuneId(ev.target);
+		const settingId = getSettingId(ev.target);
 		container.setAttribute('data-practiced', '');
 		container.dispatchEvent(new CustomEvent('tune.practiced', {
 			bubbles: true,
 			detail: {
-				tuneId: tuneId
+				settingId: settingId
 			}
 		}))
 
-		practice(tuneId, container.querySelector('[name="settingIndex"]').value, container.querySelector('[name="urgency"]').value)
+		practice(settingId, container.querySelector('[name="urgency"]').value)
 
 	});
 

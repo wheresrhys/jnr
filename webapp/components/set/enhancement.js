@@ -1,7 +1,6 @@
 import {db} from '../../data/index';
-import {practice} from '../../data/models/tune';
+import {practice, getAbc} from '../../data/models/setting';
 import {render} from '../../lib/abc-dom';
-import {composeABC} from '../../lib/abc';
 
 function getContainer (el) {
 	while (!el.classList.contains('set')) {
@@ -10,7 +9,6 @@ function getContainer (el) {
 	return el;
 }
 
-
 function getTuneContainer (el) {
 	while (!el.classList.contains('set__tune')) {
 		el = el.parentNode;
@@ -18,11 +16,11 @@ function getTuneContainer (el) {
 	return el;
 }
 
-function getTuneId (el) {
-	while (!el.dataset.tuneId) {
+function getSettingId (el) {
+	while (!el.dataset.settingId) {
 		el = el.parentNode;
 	}
-	return el.dataset.tuneId;
+	return el.dataset.settingId;
 }
 
 function constructTransition (el) {
@@ -49,9 +47,9 @@ export function init (del) {
 	del.on('click', '.set__dismiss', function (ev) {
 		ev.preventDefault();
 		const container = getContainer(ev.target)
-		Array.from(container.querySelectorAll('.tune-rater')).map(el => {
+		Array.from(container.querySelectorAll('.practicer')).map(el => {
 			if (!el.hasAttribute('data-practiced')) {
-				practice(getTuneId(el), el.querySelector('[name="settingIndex"]').value, 3);
+				practice(getSettingId(el), 3);
 			}
 		});
 		container.parentNode.removeChild(container);
@@ -59,11 +57,11 @@ export function init (del) {
 
 	del.on('click', '.set__tune-render', function (ev) {
 		ev.preventDefault();
-		db.get(getTuneId(ev.target))
-			.then(tune => {
+		getAbc(getSettingId(ev.target))
+			.then(abc => {
 				const container = getContainer(ev.target);
 				const manuscript = container.querySelector('.set__tune-score')
-				render(manuscript, composeABC(tune.arrangement, tune), true);
+				render(manuscript, abc, true);
 				container.dispatchEvent(new CustomEvent('score.rendered', {
 					bubbles: true,
 					detail: {
@@ -73,7 +71,16 @@ export function init (del) {
 			})
 	});
 
-
+	del.on('score.rendered', '.set', ev => {
+		const manuscript = ev.target.querySelector('.set__tune-score');
+		Array.from(del.rootEl.querySelectorAll('.set__tune-score'))
+			.forEach(el => {
+				if (el !== ev.detail.manuscript) {
+					el.innerHTML = '';
+					el.removeAttribute('style');
+				}
+			})
+	});
 
 	del.on('click', '.set__save-transition', function (ev) {
 		ev.preventDefault();

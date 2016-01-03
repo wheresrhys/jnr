@@ -47,9 +47,13 @@ configureRoutes(router, func => {
 });
 
 import {api as tuneApi} from '../webapp/pages/tune/controller'
+import {api as settingApi} from '../webapp/pages/setting/controller'
 const apiControllers = {
 	tune: function *(next) {
 		yield tuneApi.call(this);
+	},
+	setting: function *(next) {
+		yield settingApi.call(this);
 	}
 };
 
@@ -57,6 +61,7 @@ import bodyParser from 'koa-bodyparser';
 
 const apiMappings = {
 	tune: ['/tunes/:tuneId'],
+	setting: ['/settings/:settingId']
 };
 
 for(let name in apiMappings) {

@@ -1,9 +1,9 @@
-.tune-rater {
+.practicer {
 	position: relative;
 	max-width: 200px;
 }
 
-.tune-rater__wrapper {
+.practicer__wrapper {
 	position: absolute;
 	top: 0;
 	left:0;
@@ -13,7 +13,7 @@
 	overflow: hidden;
 }
 
-.tune-rater__bar {
+.practicer__bar {
 	position: absolute;
 	top: 0;
 	left:0;

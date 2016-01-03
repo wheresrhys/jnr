@@ -1,4 +1,4 @@
-import {getAll} from '../../data/models/tune';
+import {getAll} from '../../data/models/tunes';
 import querystring from 'querystring';
 
 const debounceCallback = func => {

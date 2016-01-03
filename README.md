@@ -2,6 +2,12 @@
 Offline first jigsnreels webapp
 Name for app - speed the plough, trad tutor
 
+## TO REINSTATE
+- indicating whether tune is actively being practiced or not
+- start learning
+- rescue set with tune of same meter ??
+- store setting index on setting to enable linking to tune page on given setting
+
 # Pages
 
 ## TODO

@@ -4,11 +4,12 @@ export const ddoc = {
 	views: {
 		index: {
 			map: function (doc) {
-				var keys = doc.type === 'transition' ? [doc.from.id, doc.to.id] : [];
-
-				keys.forEach(function (key) {
-					emit(key);
-				})
+				if (doc.docType === 'transition') {
+					emit(doc.from.id);
+					emit(doc.to.id);
+					emit(doc.from.id + '|' + doc.from.key);
+					emit(doc.to.id + '|' + doc.to.key);
+				}
 			}.toString()
 		}
 	}

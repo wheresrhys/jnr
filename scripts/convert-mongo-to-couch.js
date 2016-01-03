@@ -8,7 +8,15 @@ const _ = require('lodash');
 const log = console.log.bind(console);
 const shell = require('shellpromise');
 
-const decomposeABC = require('../webapp/lib/abc').decomposeABC;
+function decomposeABC (abc) {
+	return {
+		mode: (abc.match(/K:(?:\s*)[A-Z]([A-Za-z]*)/) || [])[1],
+		root: (abc.match(/K:(?:\s*)([A-Z](?:b|#)?)/) || [])[1],
+		meter: (abc.match(/M:(?:\s*)(\d+\/\d+)/) || [])[1],
+		rhythm: (abc.match(/R:(?:\s*)([a-z]+)/i) || [])[1],
+		abc: abc.split(/(M|K|R):.*/i).pop().trim().replace(/\! ?/g, '\n')
+	}
+}
 
 const dates = [
 	new Date().toISOString(),
@@ -19,86 +27,111 @@ const dates = [
 	new Date(Date.now() - 1000 * 60 * 60 * 24 * 10).toISOString()
 ]
 
-function createCouchPractice (mongoPractice, tuneId, key, obj) {
-	if (mongoPractice.tunebook !== 'wheresrhys:mandolin') {
+function createCouchPractice (opts) {
+	if (opts.practice.tunebook !== 'wheresrhys:mandolin') {
 		return;
 	}
 
-	const practices = mongoPractice.lastPracticed && mongoPractice.lastPracticed.$date ? [{
+	const practices = opts.practice.lastPracticed && opts.practice.lastPracticed.$date ? [{
 		date: dates[Math.floor(Math.random() * 6)],
-		urgency: mongoPractice.lastPracticeQuality === -1 ? 10 : mongoPractice.lastPracticeQuality === 1 ? 1 : 5
+		urgency: opts.practice.lastPracticeQuality === -1 ? 10 : opts.practice.lastPracticeQuality === 1 ? 1 : 5
 	}] : [];
 
-	obj[tuneId] = obj[tuneId] || [];
-	obj[tuneId].push({
+	opts.obj[opts.tuneId] = opts.obj[opts.tuneId] || [];
+	opts.obj[opts.tuneId].push({
 		practices: practices,
-		key: key
+		key: opts.key,
+		abc: opts.abc,
+		name: opts.name,
+		rhythm: decomposeABC(opts.abc).rhythm,
+		tuneId: opts.tuneId
 	});
 
 }
 
 
-let tunes = require('../mongo-export/tunes').map(rec => {
-	return {
-		_id: rec.sessionId ? `session:${rec.sessionId}` : `wheresrhys:${rec._id.$oid}`,
-		type: 'tune',
-		mongoId: rec._id.$oid,
-		abc: rec.abc,
-		author: rec.author,
-		keys: rec.keys,
-		meter: rec.meters[0],
-		name: rec.name,
-		oldId: rec.oldId && rec.oldId.$oid,
-		quality: rec.quality,
-		rhythm: rec.rhythms[0],
-		settings: [],
-		sessionId: rec.sessionId
-	};
-});
+// only create tunes for non session
+// mirror structure of thesession
+
+const mongoTunes = require('../mongo-export/tunes')
+
+let tunes = mongoTunes
+	.filter(rec => !rec.sessionId)
+	.map(rec => {
+
+		return {
+			_id: `user-61738:${rec._id.$oid}`,
+			name: rec.name,
+			docType: 'tune',
+			type: rec.rhythms[0],
+			tunebooks: 1,
+			aliases: [],
+			settings: [
+				{
+					key: rec.keys[0],
+					abc: decomposeABC(rec.abc).abc
+				}
+			],
+			mongoId: rec._id.$oid
+		};
+	});
 
 let sets = require('../mongo-export/sets').map(s => {
 	return {
-		type: 'set',
+		docType: 'set',
 		mongoId: s._id.$oid,
 		name: s.name,
 		tunes: s.tunes.map((t, i) => {
+			const tune = mongoTunes.find(rec => rec._id.$oid === t.$oid);
 			return {
-				id: tunes.find(tune => tune.mongoId === t.$oid)._id,
+				id: tune.sessionId ? `thesession:${tune.sessionId}`: `user-61738:${tune._id.$oid}`,
+				$oid: t.$oid,
 				key: s.keys[i]
 			}
 		})
 	};
 });
 
-let pieces = require('../mongo-export/pieces').reduce((obj, rec) => {
+let settings = require('../mongo-export/pieces').reduce((obj, rec) => {
 	if (rec.type === 'tune') {
-		const tune = tunes.find(t => t.mongoId === rec.srcId.$oid)
-
-		createCouchPractice(rec, tune._id, tune.keys[0], obj);
+		const tune = mongoTunes.find(tune => tune._id.$oid === rec.srcId.$oid)
+		createCouchPractice({
+			practice: rec,
+			tuneId: tune.sessionId ? `thesession:${tune.sessionId}`: `user-61738:${tune._id.$oid}`,
+			key: tune.keys[0],
+			abc: tune.abc,
+			name: tune.name,
+			obj: obj
+		});
 
 	} else {
 		const set = sets.find(s => s.mongoId === rec.srcId.$oid)
 		set.tunes.map(tune => {
-			createCouchPractice(rec, tune.id, tune.key, obj);
+			const mongoTune = mongoTunes.find(rec => rec._id.$oid === tune.$oid)
+			createCouchPractice({
+				practice: rec,
+				tuneId: tune.id,
+				key: tune.key,
+				abc: mongoTune.abc,
+				name: mongoTune.name,
+				obj: obj
+			});
 		})
 	}
 	return obj;
 }, {});
 
 
-Object.keys(pieces).forEach(tuneId => {
-	tunes.find(t => t._id === tuneId).settings = _.uniq(pieces[tuneId], function(n) {
-	  return n.tunebook + n.key
-	})
-})
+settings = Object.keys(settings).reduce((arr, tuneId) => {
+	return arr.concat(settings[tuneId])
+}, [])
 
-tunes = tunes.filter(tune => {
-	if (tune.settings.length) {
-		tune.arrangement = decomposeABC(tune.abc);
-		delete tune.abc;
-		return true;
-	}
+settings.forEach(s => {
+	s._id = `${s.tuneId}|${s.key}`;
+	s.docType = 'setting';
 });
+
+settings = _.uniq(settings, '_id');
 
 let transitions = new Set();
 
@@ -114,7 +147,7 @@ transitions = Array.from(transitions)
 		const tunes = t.split('|');
 		return {
 			_id: t,
-			type: 'transition',
+			docType: 'transition',
 			from: {
 				id: tunes[0],
 				key: tunes[1]
@@ -134,7 +167,7 @@ shell(`curl -X DELETE ${process.env.POUCHDB_HOST}`)
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify({docs: tunes.concat(transitions)})
+		body: JSON.stringify({docs: tunes.concat(transitions, settings)})
 	}))
 		.catch(log)
 

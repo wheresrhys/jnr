@@ -1,29 +1,10 @@
-export function decomposeABC (abc) {
-	return {
-		mode: (abc.match(/K:(?:\s*)[A-Z]([A-Za-z]*)/) || [])[1],
-		root: (abc.match(/K:(?:\s*)([A-Z](?:b|#)?)/) || [])[1],
-		meter: (abc.match(/M:(?:\s*)(\d+\/\d+)/) || [])[1],
-		rhythm: (abc.match(/R:(?:\s*)([a-z]+)/i) || [])[1],
-		abc: abc.split(/(M|K|R):.*/i).pop().trim().replace(/\! ?/g, '\n')
-	}
-}
-
-export function composeABC (abcObj, tune) {
-	abcObj = abcObj || tune.arrangement;
-
-	return `K: ${abcObj.root}${abcObj.mode}
-M: ${abcObj.meter || tune.meter}
-R: ${abcObj.rhythm || tune.rhythm}
-${abcObj.abc}`
-}
-
-export function decomposeKey (key) {
-
-	return {
-		mode: (key.match(/^[A-G](?:b|#)?(.*)/) || [, ''])[1].substr(0,3),
-		root: (key.match(/^[A-G](?:b|#)?/) || [])[0]
-	}
-}
+const meterMap = {
+	jig: '6/8',
+	'slip jig': '9/8',
+	slide: '12/8',
+	polka: '2/4',
+	waltz: '3/4'
+};
 
 function handleOrphans (abcArray) {
 	// handle orphan 1st/second time bars
@@ -37,53 +18,71 @@ function measureEffectiveLength (abcStr) {
 	return abcStr.replace(/"[A-G](?:b|#)?m?"/g, '').length
 }
 
-export function limitLength (abcStr, length) {
-	const abcLines = abcStr.split('\n');
-	if (length < 15) {
-		throw new Error('Ridiculous length constraint for an ABC');
+export class ABC {
+	constructor (obj) {
+		this.mode = (obj.key.match(/^[A-G](?:b|#)?(.*)/) || [, ''])[1].substr(0,3);
+		this.root = (obj.key.match(/^[A-G](?:b|#)?/) || [])[0];
+		this.abc = obj.abc.replace(/\!/g, '\n');
+		this.rhythm = obj.rhythm;
+		this.meter = meterMap[obj.rhythm] || '4/4';
 	}
-	if (abcLines.some(l => l.length > length)) {
-		const abcChars = abcLines.map(line => {
-			return line + (/\|$/.test(line) ? '' : '|');
-		}).join('').split('');
-		let compressedAbc = [];
-		let newLine = '';
-		let bar = '';
-		let char;
 
-		while (abcChars.length) {
+	toString (length) {
+		return `K: ${this.root}${this.mode}
+M: ${this.meter}
+R: ${this.rhythm}
+${this.wrap(length)}`
+	}
 
-			while ((char = abcChars.shift()) !== '|') {
+	wrap (length) {
+		let abcStr = this.abc;
+		const abcLines = abcStr.split('\n');
+		if (length < 15) {
+			throw new Error('Ridiculous length constraint for an ABC');
+		}
+		if (abcLines.some(l => l.length > length)) {
+			const abcChars = abcLines.map(line => {
+				return line + (/\|$/.test(line) ? '' : '|');
+			}).join('').split('');
+			let compressedAbc = [];
+			let newLine = '';
+			let bar = '';
+			let char;
+
+			while (abcChars.length) {
+
+				while ((char = abcChars.shift()) !== '|') {
+					bar += char;
+				}
 				bar += char;
-			}
-			bar += char;
 
-			if (abcChars[0] === '|') {
-				bar += abcChars.shift();
-			}
+				if (abcChars[0] === '|') {
+					bar += abcChars.shift();
+				}
 
-			let effectiveLength = measureEffectiveLength(newLine + bar)
-			if (effectiveLength < length) {
-				newLine += bar;
+				let effectiveLength = measureEffectiveLength(newLine + bar)
+				if (effectiveLength < length) {
+					newLine += bar;
+					bar = '';
+					continue;
+				}
+
+				if (effectiveLength === length) {
+					compressedAbc.push(newLine + bar);
+					newLine = '';
+					handleOrphans(abcChars)
+				} else {
+					compressedAbc.push(newLine);
+					newLine = handleOrphans(bar.split('')).join('');
+				}
 				bar = '';
-				continue;
 			}
-
-			if (effectiveLength === length) {
-				compressedAbc.push(newLine + bar);
-				newLine = '';
-				handleOrphans(abcChars)
-			} else {
+			if (newLine) {
 				compressedAbc.push(newLine);
-				newLine = handleOrphans(bar.split('')).join('');
 			}
-			bar = '';
-		}
-		if (newLine) {
-			compressedAbc.push(newLine);
-		}
 
-		return compressedAbc.join('\n').replace(/\|{3,}/g, '||');
+			return compressedAbc.join('\n').replace(/\|{3,}/g, '||');
+		}
+		return abcLines.join('\n');
 	}
-	return abcLines.join('\n');
 }

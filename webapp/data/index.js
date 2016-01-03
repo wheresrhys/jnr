@@ -4,14 +4,16 @@ import * as transitions from './indexes/transitions';
 import * as learn from './indexes/learn';
 import * as remind from './indexes/remind';
 import * as improve from './indexes/improve';
+import * as settings from './indexes/settings';
 import isBrowser from '../lib/is-browser';
 
 const indexes = {
-	'transitions': transitions,
-	'tunes': tunes,
-	'learn': learn,
-	'remind': remind,
-	'improve': improve
+	transitions: transitions,
+	tunes: tunes,
+	learn: learn,
+	remind: remind,
+	improve: improve,
+	settings: settings
 };
 
 let pouch;
@@ -61,13 +63,3 @@ export function query (indexName, options) {
 			}
 		})
 }
-
-
-// import textSearch from '../lib/search';
-// export function search (docType, field) {
-//   return createIndex(indexName)
-//     .then(() => db.query(`${docType}/index`, {
-//       include_docs: true
-//     }))
-//     .then()
-// }

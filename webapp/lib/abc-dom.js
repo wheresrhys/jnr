@@ -1,4 +1,4 @@
-import {decomposeABC, composeABC, limitLength} from './abc';
+import {composeABC, limitLength} from './abc';
 
 const abcConf = {
 	scale: 0.6,
@@ -8,16 +8,12 @@ const abcConf = {
 	paddingleft: 0
 };
 
-export function render (el, str, preserveEl) {
-	str = str || el.innerHTML;
+export function render (el, abcObj, preserveEl) {
 
-	const abcObj = decomposeABC(str);
 	// roughly 10 characters per symbol, roughly one to one correspondence between characters and symbols
 	const availableWidth = el.parentNode.clientWidth;
 	const availableCharacters = availableWidth / 10;
-	abcObj.abc = limitLength(abcObj.abc, availableCharacters)
 
-	str = composeABC(abcObj);
 	let targetEl;
 	if (preserveEl) {
 		targetEl = el;
@@ -26,7 +22,7 @@ export function render (el, str, preserveEl) {
 		el.parentNode.insertBefore(targetEl, el);
 	}
 
-	window.ABCJS.renderAbc(targetEl, str, {}, Object.assign(abcConf, {
+	window.ABCJS.renderAbc(targetEl, abcObj.toString(availableCharacters), {}, Object.assign(abcConf, {
 		staffwidth: availableWidth
 	}), {});
 	if (!preserveEl) {
