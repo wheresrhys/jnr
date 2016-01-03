@@ -43,6 +43,7 @@ function createCouchPractice (opts) {
 		key: opts.key,
 		abc: opts.abc,
 		name: opts.name,
+		rhythm: decomposeABC(opts.abc).rhythm,
 		tuneId: opts.tuneId
 	});
 

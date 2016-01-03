@@ -6,7 +6,7 @@ export const ddoc = {
 	views: {
 		index: {
 			map: function (doc) {
-				if (doc.docType === 'tune') {
+				if (doc.docType === 'setting') {
 					var val;
 					if (doc.practices.length) {
 						var avg = doc.practices.reduce(function (total, practice) {

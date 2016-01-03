@@ -2,20 +2,20 @@ import {query, db} from '../../data/index';
 
 const configs = {
 	remind: {
-		tunesToFetch: 120,
+		tunePoolSize: 120,
 		descending: false,
 		setsToReturn: 10,
 		tunesPerSet: 4,
 		dismissable: true
 	},
 	learn: {
-		tunesToFetch: 8,
+		tunePoolSize: 8,
 		descending: true,
 		setsToReturn: 8,
 		tunesPerSet: 1
 	},
 	improve: {
-		tunesToFetch: 100,
+		tunePoolSize: 100,
 		descending: false,
 		setsToReturn: 8,
 		tunesPerSet: 3,
@@ -23,61 +23,37 @@ const configs = {
 	}
 }
 
-function getSetting (tune, key) {
-	for(let i = 0; i < tune.settings.length; i++) {
-		if (tune.settings[i].key === key) {
+function getSetting (setting, key) {
+	for(let i = 0; i < setting.settings.length; i++) {
+		if (setting.settings[i].key === key) {
 			return i
 		}
 	}
 }
 
-function findAdjacentTune (direction, tuneContainer, opts) {
+function findAdjacentTune (direction, setting, opts) {
 	let transition;
 	const toInspect = direction === 'next' ? 'from' : 'to';
 	const toReturn = direction === 'next' ? 'to' : 'from';
-	if (tuneContainer.key) {
-		transition = opts.transitions.find(tr => tr[toInspect].id === tuneContainer.tune._id && tr[toInspect].key === tuneContainer.key);
-	} else {
-		transition = opts.transitions.find(tr => tr[toInspect].id === tuneContainer.tune._id);
-	}
+	// if (key) {
+	transition = opts.transitions.find(tr => tr[toInspect].id === setting.tuneId && tr[toInspect].key === setting.key);
+	// } else {
+		// transition = opts.transitions.find(tr => tr[toInspect].id === setting._id);
+	// }
 
 	if (transition) {
-		const tune = opts.tunes.find(t => t._id === transition[toReturn].id);
-		if (tune) {
-			opts.tunes.splice(opts.tunes.indexOf(tune), 1);
-			if (!tuneContainer.key) {
-				tuneContainer.key = transition[toInspect].key
-				tuneContainer.settingIndex = getSetting(tuneContainer.tune, transition[toInspect].key)
-			}
-			return {
-				tune: tune,
-				key: transition[toReturn].key,
-				settingIndex: getSetting(tune, transition[toReturn].key),
-				dismissable: opts.dismissable
-			}
+		const setting = opts.settings.find(setting => setting.tuneId === transition[toReturn].id && transition[toReturn].key === setting.key);
+		if (setting) {
+			return setting;
 		}
 	}
 };
 
 function rescueSet (set, opts) {
-	const currentTune = set[set.length -1];
-
-	currentTune.settingIndex = 0;
-	currentTune.key = currentTune.tune.settings[0].key;
-
-	const tune = opts.tunes.find(t => t.meter === currentTune.tune.meter && t.settings.length);
-	opts.tunes.splice(opts.tunes.indexOf(tune), 1);
-
-	set.push({
-		tune: tune,
-		key: tune.settings[0].key,
-		settingIndex: 0,
-		dismissable: opts.dismissable,
-		newTransition: true
-	})
-
+	const setting = opts.settings.shift();
+	setting.isNewTransition = true;
+	set.push(setting)
 	return buildSet(set, opts);
-
 }
 
 export function buildSet (set, opts) {
@@ -85,7 +61,7 @@ export function buildSet (set, opts) {
 		return set;
 	}
 
-	let nextTune = findAdjacentTune('next', set[set.length -1], opts);
+	let nextTune = findAdjacentTune('next', set[set.length - 1], opts);
 
 	if (nextTune) {
 		set.push(nextTune);
@@ -115,36 +91,29 @@ export function buildSet (set, opts) {
 export function* buildSets (opts) {
 	opts.transitions = yield query('transitions', {
 		include_docs: true,
-		// Don't bother filtering by tune key here
+		// Don't bother filtering by setting key here
 		// In the browser performance is about half as good compared to just getting all transitions
 		// and running Array.find against the whole set
-		// keys: tunes.map(t => t._id)
+		// keys: settings.map(t => t._id)
 	})
 
-	// simplest case - just return tunes wrapped in set container
+	// simplest case - just return settings wrapped in set container
 	if (opts.tunesPerSet === 1) {
-		return opts.tunes.slice(0, opts.setCount).map(tune => {
+		return opts.settings.slice(0, opts.setCount).map(setting => {
 			return {
 				dismissable: opts.dismissable,
-				tunes: [{
-					tune,
-					key: tune.settings[0].key,
-					settingIndex: 0,
-				}]
+				tunes: [setting]
 			};
 		})
 	}
 
 	const sets = [];
 
-	while (opts.tunes.length && sets.length < opts.setCount) {
+	while (opts.settings.length && sets.length < opts.setCount) {
 
 		sets.push({
 			dismissable: opts.dismissable,
-			tunes: buildSet([{
-				tune: opts.tunes.shift(),
-				key: null
-			}], opts)
+			tunes: buildSet([opts.settings.shift()], opts)
 		})
 	}
 	return sets;
@@ -152,17 +121,16 @@ export function* buildSets (opts) {
 
 export function* getSetCollection (ordering, number, excludedTunes) {
 	const config = configs[ordering];
-	let tunes = yield query(ordering, {
+	let settings = yield query(ordering, {
 		include_docs: true,
-		limit: config.tunesToFetch,
+		limit: config.tunePoolSize,
 		descending: config.descending
 	});
-
 	if (excludedTunes) {
-		tunes = tunes.filter(t => excludedTunes.indexOf(t._id) === -1)
+		settings = settings.filter(setting => excludedTunes.indexOf(setting.tuneId) === -1)
 	}
 	return yield buildSets({
-		tunes,
+		settings,
 		setCount: number || config.setsToReturn,
 		tunesPerSet: config.tunesPerSet,
 		dismissable: config.dismissable
