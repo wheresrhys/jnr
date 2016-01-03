@@ -1,4 +1,5 @@
 import {db} from '../../data/index';
+import {create} from '../../data/models/setting';
 import {render} from '../../lib/abc-dom';
 
 export default function (del) {
@@ -14,14 +15,7 @@ export default function (del) {
 
 	del.on('submit', '.tune__start-learning', ev => {
 		ev.preventDefault();
-		this.data.tune.settings.push({
-			key: ev.target.querySelector('input[name="key"]').value,
-			practices: [{
-				date: new Date().toISOString(),
-				urgency: 10
-			}]
-		});
 		ev.target.parentNode.removeChild(ev.target);
-		db.put(this.data.tune)
+		create(this.data.tune, ev.target.querySelector('input[name="key"]').value, ev.target.querySelector('input[name="settingIndex"]').value)
 	});
 }

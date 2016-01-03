@@ -18,11 +18,19 @@ function getSessionTune (tuneId) {
 	});
 }
 
-function getAbc (settingIndex) {
+function getAbc (settingIndex, key) {
+	if (key) {
+		this.settings = this.settings.filter(s => {
+			return s.key.indexOf(key) === 0;
+		});
+	}
+
+	const setting = this.settings[settingIndex || 0];
+
 	return new ABC({
-		key: this.settings[settingIndex || 0].key,
+		key: setting.key,
 		rhythm: this.type,
-		abc: this.settings[settingIndex || 0].abc
+		abc: setting.abc
 	});
 }
 

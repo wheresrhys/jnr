@@ -67,8 +67,7 @@ export function update () {
 
 	const activeTunes = query('settings', {include_docs: true})
 		.then(settings => settings.length ? settings.reduce((obj, setting) => {
-			obj[setting.tuneId] = obj[setting.tuneId] || [];
-			obj[setting.tuneId].push(setting.key);
+			_addSetting(obj, setting.tuneId, setting.key);
 			return obj;
 		}) : {})
 
@@ -96,6 +95,15 @@ export function update () {
 		})
 }
 
+function _addSetting (obj, tuneId, key) {
+	obj[tuneId] = obj[tuneId] || [];
+	obj[tuneId].push(key);
+}
+
+export function addSetting(tuneId, key) {
+	_addSetting(allTunes.activeIds, tuneId, key)
+	allTunes.all.find(t => t._id === tuneId).isActive = true;
+}
 
 import * as liquidMetal from 'liquidmetal';
 

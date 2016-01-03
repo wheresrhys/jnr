@@ -4,7 +4,8 @@
 {%if not isActive%}
 <form action="/api/tunes/{{tune._id}}" method="post" class="tune__start-learning">
 	<input type="hidden" name="learn" value="true">
-	<input type="hidden" name="key" value="{{abc.root}}{{abc.mode}}">
+	<input type="hidden" name="key" value="{{abc.key}}">
+	<input type="hidden" name="settingIndex" value="{{settingIndex - 1}}">
 	<button type="submit">Start learning in {{abc.key}}</button>
 </form>
 
