@@ -2,6 +2,11 @@
 Offline first jigsnreels webapp
 Name for app - speed the plough, trad tutor
 
+## TO REINSTATE
+- indicating whether tune is actively being practiced or not
+- start learning
+- 
+
 # Pages
 
 ## TODO

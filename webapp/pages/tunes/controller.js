@@ -1,4 +1,4 @@
-import {getAll} from '../../data/models/tune';
+import {getAll} from '../../data/models/tunes';
 
 export default function *controller () {
 	this.controller = 'tunes';

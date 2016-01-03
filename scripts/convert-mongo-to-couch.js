@@ -8,7 +8,15 @@ const _ = require('lodash');
 const log = console.log.bind(console);
 const shell = require('shellpromise');
 
-const decomposeABC = require('../webapp/lib/abc').decomposeABC;
+function decomposeABC (abc) {
+	return {
+		mode: (abc.match(/K:(?:\s*)[A-Z]([A-Za-z]*)/) || [])[1],
+		root: (abc.match(/K:(?:\s*)([A-Z](?:b|#)?)/) || [])[1],
+		meter: (abc.match(/M:(?:\s*)(\d+\/\d+)/) || [])[1],
+		rhythm: (abc.match(/R:(?:\s*)([a-z]+)/i) || [])[1],
+		abc: abc.split(/(M|K|R):.*/i).pop().trim().replace(/\! ?/g, '\n')
+	}
+}
 
 const dates = [
 	new Date().toISOString(),

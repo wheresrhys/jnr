@@ -1,36 +1,38 @@
 import {db} from '../../data/index';
 import {getTune} from '../../data/models/tune';
+import {abcFromTune} from '../../lib/abc';
 import isBrowser from '../../lib/is-browser';
 
 export default function *() {
 	this.controller = 'tune';
 
-	Object.assign(this.data, yield getTune(this.params.tuneId))
+	this.data.tune = yield getTune(this.params.tuneId);
 
-	this.data.arrangement = this.data.tune.arrangement;
-
-	if (this.data.tune.sessionId) {
-		const arrangementsCount = this.data.alternateArrangements.length;
-		if (arrangementsCount > 1) {
+	if (this.data.tune.isFromTheSession) {
+		const settingsCount = this.data.tune.settings.length;
+		if (settingsCount > 1) {
 			this.data.paginate = true;
-			if ('arrangement' in this.query) {
-				const arrangementIndex = this.query.arrangement % arrangementsCount;
-				this.data.arrangement = this.data.alternateArrangements[arrangementIndex];
-				this.data.nextArrangement = (arrangementIndex + 1) % arrangementsCount;
-				this.data.arrangementIndex = arrangementIndex;
-				this.data.unsaved = true;
+			if ('setting' in this.query) {
+				const settingIndex = this.query.setting % settingsCount;
+				this.data.nextSetting = (settingIndex + 1) % settingsCount;
+				this.data.settingIndex = settingIndex;
+				this.data.abc = this.data.tune.getAbc(settingIndex);
 			} else {
-				this.data.nextArrangement = 0;
+				this.data.abc = this.data.tune.getAbc();
+				this.data.nextSetting = 0;
 			}
-
+		} else {
+			this.data.abc = this.data.tune.getAbc();
 		}
+	} else {
+		this.data.abc = this.data.tune.getAbc();
 	}
 }
 
 export function* api () {
-	Object.assign(this.data, yield getTune(this.params.tuneId))
-	if ('arrangement' in this.request.body) {
-		this.data.tune.arrangement = this.data.alternateArrangements[this.request.body.arrangement];
+	this.data.tune = yield getTune(this.params.tuneId);
+	if ('setting' in this.request.body) {
+		this.data.tune.setting = this.data.tune.settings[this.request.body.settingIndex];
 		yield db.put(this.data.tune)
 			.then(() => {
 				this.response.redirect(this.request.header.referer);
