@@ -1,5 +1,5 @@
 import {getSetCollection} from './controller';
-import {init as initTuneRaters} from '../../components/tune-rater/enhancement';
+import {init as initPracticers} from '../../components/practicer/enhancement';
 import {init as initSets} from '../../components/set/enhancement';
 import co from 'co';
 
@@ -21,7 +21,7 @@ function getTuneId (el) {
 
 export default function (del) {
 
-	initTuneRaters(del);
+	initPracticers(del);
 	initSets(del);
 
 	// del.on('tune.practiced', '.tune-rater', ev => {

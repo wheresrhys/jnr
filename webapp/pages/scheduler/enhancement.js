@@ -1,5 +1,5 @@
 import {getSetCollection} from '../../components/set/model';
-import {init as initTuneRaters} from '../../components/tune-rater/enhancement';
+import {init as initPracticers} from '../../components/practicer/enhancement';
 import {init as initSets} from '../../components/set/enhancement';
 import co from 'co';
 
@@ -14,14 +14,14 @@ function getContainer (el) {
 
 export default function (del) {
 
-	initTuneRaters(del);
+	initPracticers(del);
 	initSets(del);
 
-	del.on('tune.practiced', '.tune-rater', ev => {
+	del.on('tune.practiced', '.practicer', ev => {
 		const container = getContainer(ev.target);
 
 		if (this.data.orderBy !== 'learn') {
-			if (container.querySelector('.tune-rater:not([data-practiced])')) {
+			if (container.querySelector('.practicer:not([data-practiced])')) {
 				return;
 			}
 		}
@@ -37,15 +37,4 @@ export default function (del) {
 				});
 			});
 	})
-
-	del.on('score.rendered', '.set', ev => {
-		const manuscript = ev.target.querySelector('.set__tune-score');
-		Array.from(rootEl.querySelectorAll('.set__tune-score'))
-			.forEach(el => {
-				if (el !== ev.detail.manuscript) {
-					el.innerHTML = '';
-					el.removeAttribute('style');
-				}
-			})
-	});
 }

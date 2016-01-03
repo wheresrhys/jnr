@@ -26,19 +26,6 @@ export function* api () {
 			.then(() => {
 				this.response.redirect(this.request.header.referer);
 			})
-	} else if ('urgency' in this.request.body) {
-		const practices = this.data.tune.settings[this.request.body.settingIndex].practices;
-		practices.unshift({
-			date: new Date().toISOString(),
-			urgency: this.request.body.urgency
-		})
-		if (practices.length > 5) {
-			practices.pop();
-		}
-		yield db.put(this.data.tune)
-			.then(() => {
-				this.response.redirect(this.request.header.referer);
-			})
 	} else if ('learn' in this.request.body) {
 		this.data.tune.settings.push({
 			key: this.request.body.key,

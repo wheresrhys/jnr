@@ -1,14 +1,14 @@
 <li class="set">
 	<ol class="set__tunes">
 		{% for setting in set.tunes %}
-			<li class="set__tune{%if setting.isNewTransition%} set__tune--new-transition{%endif%}" data-tune-id="{{setting.tuneId}}" data-tune-key="{{setting.key}}">
+			<li class="set__tune{%if setting.isNewTransition%} set__tune--new-transition{%endif%}" data-tune-id="{{setting.tuneId}}" data-setting-id="{{setting._id}}" data-tune-key="{{setting.key}}">
 				<button class="set__save-transition">save</button>
 				<button class="set__remove-transition">remove</button>
 				<h2 class="set__tune__title">
 					<a href="/tunes/{{setting.tuneId}}?setting={{setting.settingIndex}}">{{setting.name}} <small>({{setting.rhythm}} in {{setting.key}})</small></a>
 					<button class="set__tune-render js">render</button>
 				</h2>
-				{% include "components/tune-rater/tpl.html" %}
+				{% include "components/practicer/tpl.html" %}
 			</li>
 		{% endfor %}
 	</ol>
