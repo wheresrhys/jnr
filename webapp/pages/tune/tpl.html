@@ -1,18 +1,18 @@
 {% extends "layout.html" %}
 {% block body %}
 	<p>{{tune.name}}{%if unsaved %} <small>Alternative setting {{settingIndex}}</small>{%endif%}</p>
-{%if not tune.isActive%}
+{%if not isActive%}
 <form action="/api/tunes/{{tune._id}}" method="post" class="tune__start-learning">
 	<input type="hidden" name="learn" value="true">
 	<input type="hidden" name="key" value="{{abc.root}}{{abc.mode}}">
-	<button type="submit">Start learning</button>
+	<button type="submit">Start learning in {{abc.key}}</button>
 </form>
 
 {%endif%}
 	<pre class="tune__abc">{{abc}}</pre>
 	{%if paginate %}
 	<nav>
-			<a href="/tunes/{{tune._id}}?setting={{nextSetting}}">Next</a>,
+			<a href="/tunes/{{tune._id}}{{nextSettingQuery}}">Next</a>,
 			<a href="/tunes/{{tune._id}}">Reset</a>
 	</nav>
 	{%endif%}

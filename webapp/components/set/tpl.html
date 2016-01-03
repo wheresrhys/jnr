@@ -5,7 +5,7 @@
 				<button class="set__save-transition">save</button>
 				<button class="set__remove-transition">remove</button>
 				<h2 class="set__tune__title">
-					<a href="/tunes/{{setting.tuneId}}?setting={{setting.settingIndex}}">{{setting.name}} <small>({{setting.rhythm}} in {{setting.key}})</small></a>
+					<a href="/tunes/{{setting.tuneId}}?key={{setting.key}}">{{setting.name}} <small>({{setting.rhythm}} in {{setting.key}})</small></a>
 					<button class="set__tune-render js">render</button>
 				</h2>
 				{% include "components/practicer/tpl.html" %}

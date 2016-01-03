@@ -66,10 +66,11 @@ export function update () {
 		});
 
 	const activeTunes = query('settings', {include_docs: true})
-		.then(settings => settings.reduce((obj, setting) => {
-			obj[setting.tuneId] = true;
+		.then(settings => settings.length ? settings.reduce((obj, setting) => {
+			obj[setting.tuneId] = obj[setting.tuneId] || [];
+			obj[setting.tuneId].push(setting.key);
 			return obj;
-		}))
+		}) : {})
 
 	return updatePromise = Promise.all([fetchTunes(), personalTunes, activeTunes])
 		.then(res => {
@@ -87,10 +88,8 @@ export function update () {
 				}
 			});
 			tunes.forEach(t => {
-				if (activeTunes[t.id]) {
-					t.isActive = true;
-				}
-			})
+				t.isActive = !!activeTunes[t.id];
+			});
 			allTunes.all = tunes;
 			allTunes.activeIds = activeTunes;
 			updatePromise = null;

@@ -27,10 +27,9 @@ function getAbc (settingIndex) {
 }
 
 function tuneModel () {
-	console.log(allTunes.active)
 	return Object.assign(this, {
 		getAbc: getAbc,
-		isActive: !!allTunes.activeIds[this._id]
+		isActiveInKeys: allTunes.activeIds[this._id]
 	});
 }
 

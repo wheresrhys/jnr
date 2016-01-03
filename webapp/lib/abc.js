@@ -25,6 +25,7 @@ export class ABC {
 		this.abc = obj.abc.replace(/\!/g, '\n');
 		this.rhythm = obj.rhythm;
 		this.meter = meterMap[obj.rhythm] || '4/4';
+		this.key = this.root + this.mode;
 	}
 
 	toString (length) {
