@@ -52,7 +52,7 @@ export function updateTunes () {
 						const reducedTune = {
 							id: tune._id,
 							name: tune.name,
-							type: tune.rhythm
+							type: tune.type
 						};
 						if (!tunes.some((t, i) => {
 							if (t.name.replace(/^(The|Y) /, '') > reducedTune.name.replace(/^(The|Y) /, '')) {

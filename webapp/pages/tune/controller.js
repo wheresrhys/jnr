@@ -8,22 +8,11 @@ export default function *() {
 
 	this.data.tune = yield getTune(this.params.tuneId);
 
-	if (this.data.tune.isFromTheSession) {
-		const settingsCount = this.data.tune.settings.length;
-		if (settingsCount > 1) {
-			this.data.paginate = true;
-			if ('setting' in this.query) {
-				const settingIndex = this.query.setting % settingsCount;
-				this.data.nextSetting = (settingIndex + 1) % settingsCount;
-				this.data.settingIndex = settingIndex;
-				this.data.abc = this.data.tune.getAbc(settingIndex);
-			} else {
-				this.data.abc = this.data.tune.getAbc();
-				this.data.nextSetting = 0;
-			}
-		} else {
-			this.data.abc = this.data.tune.getAbc();
-		}
+	if (this.data.tune.settings.length > 1) {
+		this.data.paginate = true;
+		this.data.settingIndex = this.query.setting || 1 ;
+		this.data.nextSetting = (this.data.settingIndex % this.data.tune.settings.length) + 1;
+		this.data.abc = this.data.tune.getAbc(this.data.settingIndex - 1);
 	} else {
 		this.data.abc = this.data.tune.getAbc();
 	}

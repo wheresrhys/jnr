@@ -6,7 +6,7 @@ Name for app - speed the plough, trad tutor
 - indicating whether tune is actively being practiced or not
 - start learning
 - rescue set with tune of same meter ??
-- setting rhythm
+- store setting index on setting to enable linking to tune page on given setting
 
 # Pages
 
