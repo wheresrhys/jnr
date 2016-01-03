@@ -1,5 +1,6 @@
 import {db} from '../index';
 import {ABC} from '../../lib/abc';
+import {allTunes, update as updateTunes} from './tunes';
 
 const cache = {};
 
@@ -26,12 +27,15 @@ function getAbc (settingIndex) {
 }
 
 function tuneModel () {
+	console.log(allTunes.active)
 	return Object.assign(this, {
-		getAbc: getAbc
+		getAbc: getAbc,
+		isActive: !!allTunes.activeIds[this._id]
 	});
 }
 
 export function getTune (tuneId) {
 	const tunePromise = /^thesession/.test(tuneId) ? getSessionTune(tuneId) : db.get(tuneId);
-	return tunePromise.then(tune => tuneModel.apply(tune))
+	return Promise.all([tunePromise, updateTunes()])
+		.then(res => tuneModel.apply(res[0]))
 }

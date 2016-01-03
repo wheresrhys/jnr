@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 	<p>{{tune.name}}{%if unsaved %} <small>Alternative setting {{settingIndex}}</small>{%endif%}</p>
-{%if not tune._rev%}
+{%if not tune.isActive%}
 <form action="/api/tunes/{{tune._id}}" method="post" class="tune__start-learning">
 	<input type="hidden" name="learn" value="true">
 	<input type="hidden" name="key" value="{{abc.root}}{{abc.mode}}">

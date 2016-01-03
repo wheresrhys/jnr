@@ -1,28 +1,17 @@
 import {query} from '../index';
 
-let tunesFetch;
-let allTunes = {
-	all: []
+let updatePromise;
+export const allTunes = {
+	all: [],
+	activeIds: {}
 };
 
 
-// TODO - should maintain an in memory cache of tunes,
-// tunes last updated should be stateless on server but stateful in the browser
-let tunesLastUpdated = 0;
-export function updateTunes () {
-	if (tunesFetch) {
-		return tunesFetch;
-	}
-
-	if (allTunes.all.length && Date.now() - tunesLastUpdated < 1000 * 60 * 10) {
-		return Promise.resolve();
-	}
-
-	tunesLastUpdated = Date.now();
+function fetchTunes () {
 	const firstPage = fetch('https://thesession.org/members/61738/tunebook?format=json')
 		.then(res => res.json())
 
-	return tunesFetch = firstPage
+	return firstPage
 		.then(json => {
 			if (json.pages > 1) {
 				return Promise.all(
@@ -46,29 +35,65 @@ export function updateTunes () {
 			tunes.forEach(t => {
 				t.id = 'thesession:' + t.id
 			});
-			return query('tunes', {include_docs: true})
-				.then(existingTunes => {
-					existingTunes.forEach(tune => {
-						const reducedTune = {
-							id: tune._id,
-							name: tune.name,
-							type: tune.type
-						};
-						if (!tunes.some((t, i) => {
-							if (t.name.replace(/^(The|Y) /, '') > reducedTune.name.replace(/^(The|Y) /, '')) {
-								tunes.splice(i, 0, reducedTune);
-								return true;
-							}
-						})) {
-							tunes.push(reducedTune)
-						}
-					});
-					return tunes;
-				});
+			return tunes;
 		})
-		.then(tunes => {
+}
+
+// TODO - should maintain an in memory cache of tunes,
+// tunes last updated should be stateless on server but stateful in the browser
+let tunesLastUpdated = 0;
+
+export function update () {
+	if (updatePromise) {
+		return updatePromise;
+	}
+
+	if (allTunes.all.length && Date.now() - tunesLastUpdated < 1000 * 60 * 10) {
+		return Promise.resolve();
+	}
+
+	tunesLastUpdated = Date.now();
+
+	const personalTunes = query('tunes', {include_docs: true})
+		.then(existingTunes => {
+			return existingTunes.map(tune => {
+				return {
+					id: tune._id,
+					name: tune.name,
+					type: tune.type
+				};
+			})
+		});
+
+	const activeTunes = query('settings', {include_docs: true})
+		.then(settings => settings.reduce((obj, setting) => {
+			obj[setting.tuneId] = true;
+			return obj;
+		}))
+
+	return updatePromise = Promise.all([fetchTunes(), personalTunes, activeTunes])
+		.then(res => {
+			const tunes = res[0];
+			const personalTunes = res[1];
+			const activeTunes = res[2];
+			personalTunes.forEach(pt => {
+				if (!tunes.some((t, i) => {
+					if (t.name.replace(/^(The|Y) /, '') > pt.name.replace(/^(The|Y) /, '')) {
+						tunes.splice(i, 0, pt);
+						return true;
+					}
+				})) {
+					tunes.push(pt)
+				}
+			});
+			tunes.forEach(t => {
+				if (activeTunes[t.id]) {
+					t.isActive = true;
+				}
+			})
 			allTunes.all = tunes;
-			tunesFetch = null;
+			allTunes.activeIds = activeTunes;
+			updatePromise = null;
 		})
 }
 
@@ -101,7 +126,7 @@ export function getAll (opts) {
 	const limit = opts.limit ? Number(opts.limit) : 15;
 	const start = ((opts.page || 1) - 1) * limit;
 
-	return updateTunes()
+	return update()
 		.then(() => {
 			let tunes = opts.status ? allTunes[opts.status] : allTunes.all;
 			if (opts.q) {

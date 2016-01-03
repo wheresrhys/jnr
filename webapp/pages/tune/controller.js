@@ -7,7 +7,6 @@ export default function *() {
 	this.controller = 'tune';
 
 	this.data.tune = yield getTune(this.params.tuneId);
-
 	if (this.data.tune.settings.length > 1) {
 		this.data.paginate = true;
 		this.data.settingIndex = this.query.setting || 1 ;
