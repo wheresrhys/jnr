@@ -11,6 +11,13 @@
 	bottom:0;
 	background: white;
 	overflow: hidden;
+	text-align: center;
+	&:after {
+		content: 'rate';
+		text-transform: uppercase;
+		position: relative;
+		z-index: 1;
+	}
 }
 
 .practicer__bar {

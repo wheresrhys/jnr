@@ -101,8 +101,12 @@ function _addSetting (obj, tuneId, key) {
 }
 
 export function addSetting(tuneId, key) {
-	_addSetting(allTunes.activeIds, tuneId, key)
-	allTunes.all.find(t => t._id === tuneId).isActive = true;
+	update()
+		.then(() => {
+			_addSetting(allTunes.activeIds, tuneId, key)
+			allTunes.all.find(t => t._id === tuneId).isActive = true;
+		})
+
 }
 
 import * as liquidMetal from 'liquidmetal';

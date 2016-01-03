@@ -13,7 +13,9 @@ export function render (el, abcObj, preserveEl) {
 	// roughly 10 characters per symbol, roughly one to one correspondence between characters and symbols
 	const availableWidth = el.parentNode.clientWidth;
 	const availableCharacters = availableWidth / 10;
-
+	const deEntitifier = document.createElement('div');
+	deEntitifier.innerHTML = abcObj.abc;
+	abcObj.abc = deEntitifier.textContent;
 	let targetEl;
 	if (preserveEl) {
 		targetEl = el;

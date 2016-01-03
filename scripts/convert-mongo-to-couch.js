@@ -50,10 +50,15 @@ function createCouchPractice (opts) {
 }
 
 
-// only create tunes for non session
-// mirror structure of thesession
+const idsMap = {
+	12033: 891
+};
 
 const mongoTunes = require('../mongo-export/tunes')
+
+mongoTunes.forEach(tune => {
+	tune.sessionId = idsMap[tune.sessionId] || tune.sessionId;
+})
 
 let tunes = mongoTunes
 	.filter(rec => !rec.sessionId)

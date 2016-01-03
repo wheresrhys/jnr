@@ -14,7 +14,6 @@ export default function *() {
 		});
 	}
 	this.data.settingIndex = this.query.setting || 1 ;
-
 	if (this.data.tune.settings.length > 1) {
 		this.data.paginate = true;
 		this.data.nextSettingQuery = '?setting=' + ((this.data.settingIndex % this.data.tune.settings.length) + 1);

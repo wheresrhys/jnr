@@ -1,3 +1,5 @@
+import isBrowser from './is-browser';
+
 const meterMap = {
 	jig: '6/8',
 	'slip jig': '9/8',
@@ -15,21 +17,21 @@ function handleOrphans (abcArray) {
 }
 
 function measureEffectiveLength (abcStr) {
-	return abcStr.replace(/"[A-G](?:b|#)?m?"/g, '').length
+	return abcStr.replace(/("[A-G](?:b|#)?m?"|&gt;)/g, '').length
 }
 
 export class ABC {
 	constructor (obj) {
 		this.mode = (obj.key.match(/^[A-G](?:b|#)?(.*)/) || [, ''])[1].substr(0,3);
 		this.root = (obj.key.match(/^[A-G](?:b|#)?/) || [])[0];
-		this.abc = obj.abc.replace(/\!/g, '\n');
+		this.abc = obj.abc.replace(/\!/g, '\n').split(/(R|M|K)\:.*/g).pop();
 		this.rhythm = obj.rhythm;
 		this.meter = meterMap[obj.rhythm] || '4/4';
 		this.key = this.root + this.mode;
 	}
 
 	toString (length) {
-		return `K: ${this.root}${this.mode}
+		return `K: ${this.key}
 M: ${this.meter}
 R: ${this.rhythm}
 ${this.wrap(length)}`

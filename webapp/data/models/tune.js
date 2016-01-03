@@ -24,7 +24,6 @@ function getAbc (settingIndex, key) {
 			return s.key.indexOf(key) === 0;
 		});
 	}
-
 	const setting = this.settings[settingIndex || 0];
 
 	return new ABC({
