@@ -20,13 +20,7 @@ export default function *() {
 
 export function* api () {
 	this.data.tune = yield getTune(this.params.tuneId);
-	if ('setting' in this.request.body) {
-		this.data.tune.setting = this.data.tune.settings[this.request.body.settingIndex];
-		yield db.put(this.data.tune)
-			.then(() => {
-				this.response.redirect(this.request.header.referer);
-			})
-	} else if ('learn' in this.request.body) {
+	if ('learn' in this.request.body) {
 		this.data.tune.settings.push({
 			key: this.request.body.key,
 			practices: [{

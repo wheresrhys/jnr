@@ -3,8 +3,6 @@ import {init as initPracticers} from '../../components/practicer/enhancement';
 import {init as initSets} from '../../components/set/enhancement';
 import co from 'co';
 
-const rootEl = document.querySelector('main');
-
 function getContainer (el) {
 	while (!el.classList.contains('set')) {
 		el = el.parentNode;
@@ -28,7 +26,7 @@ export default function (del) {
 
 		container.parentNode.removeChild(container);
 
-		co.wrap(getSetCollection)(this.data.orderBy, 1, [ev.detail.tuneId].concat(Array.from(rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
+		co.wrap(getSetCollection)(this.data.orderBy, 1, [ev.detail.tuneId].concat(Array.from(del.rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
 			.then(sets => {
 				templateLoader.render(`components/set/tpl.html`, {
 					set: sets[0]

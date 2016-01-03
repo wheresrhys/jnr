@@ -23,23 +23,10 @@ const configs = {
 	}
 }
 
-function getSetting (setting, key) {
-	for(let i = 0; i < setting.settings.length; i++) {
-		if (setting.settings[i].key === key) {
-			return i
-		}
-	}
-}
-
 function findAdjacentTune (direction, setting, opts) {
-	let transition;
 	const toInspect = direction === 'next' ? 'from' : 'to';
 	const toReturn = direction === 'next' ? 'to' : 'from';
-	// if (key) {
-	transition = opts.transitions.find(tr => tr[toInspect].id === setting.tuneId && tr[toInspect].key === setting.key);
-	// } else {
-		// transition = opts.transitions.find(tr => tr[toInspect].id === setting._id);
-	// }
+	const transition = opts.transitions.find(tr => tr[toInspect].id === setting.tuneId && tr[toInspect].key === setting.key);
 
 	if (transition) {
 		const setting = opts.settings.find(setting => setting.tuneId === transition[toReturn].id && transition[toReturn].key === setting.key);

@@ -1,7 +1,7 @@
 <li class="set">
 	<ol class="set__tunes">
 		{% for setting in set.tunes %}
-			<li class="set__tune{%if setting.isNewTransition%} set__tune--new-transition{%endif%}" data-tune-id="{{setting.tuneId}}" data-setting-id="{{setting._id}}" data-tune-key="{{setting.key}}">
+			<li class="set__tune{%if setting.isNewTransition%} set__tune--new-transition{%endif%}" data-setting-id="{{setting._id}}" data-tune-id="{{setting.tuneId}}" data-tune-key="{{setting.key}}">
 				<button class="set__save-transition">save</button>
 				<button class="set__remove-transition">remove</button>
 				<h2 class="set__tune__title">

@@ -24,6 +24,6 @@ export function practice (settingId, urgency) {
 			if (setting.practices.length > 5) {
 				setting.practices.pop();
 			}
-			db.put(setting);
+			return db.put(setting);
 		});
 }

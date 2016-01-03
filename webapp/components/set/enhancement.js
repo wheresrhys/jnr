@@ -2,8 +2,6 @@ import {db} from '../../data/index';
 import {practice, getAbc} from '../../data/models/setting';
 import {render} from '../../lib/abc-dom';
 
-const rootEl = document.querySelector('main');
-
 function getContainer (el) {
 	while (!el.classList.contains('set')) {
 		el = el.parentNode;
@@ -11,19 +9,11 @@ function getContainer (el) {
 	return el;
 }
 
-
 function getTuneContainer (el) {
 	while (!el.classList.contains('set__tune')) {
 		el = el.parentNode;
 	}
 	return el;
-}
-
-function getTuneId (el) {
-	while (!el.dataset.tuneId) {
-		el = el.parentNode;
-	}
-	return el.dataset.tuneId;
 }
 
 function getSettingId (el) {
@@ -83,7 +73,7 @@ export function init (del) {
 
 	del.on('score.rendered', '.set', ev => {
 		const manuscript = ev.target.querySelector('.set__tune-score');
-		Array.from(rootEl.querySelectorAll('.set__tune-score'))
+		Array.from(del.rootEl.querySelectorAll('.set__tune-score'))
 			.forEach(el => {
 				if (el !== ev.detail.manuscript) {
 					el.innerHTML = '';
