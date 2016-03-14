@@ -4,23 +4,18 @@ window.logErr = (err) => {
 	log(err);
 	throw err;
 };
+
 import page from 'page';
 import co from 'co';
-import nunjucks from 'nunjucks/browser/nunjucks';
 import querystring from 'querystring';
 import {configureRoutes} from './pages/index';
 import pages from './pages/index';
 import enhance from './pages/enhancements';
 import {updateNav} from './components/nav/enhancement';
 
+import {loader as templateLoader} from 'templates';
 
 let initialLoad = true;
-
-// using [] as base url because a) it's truthy, so gets used b) [].toString = ''
-const templateLoader = window.templateLoader = new nunjucks.Environment(new nunjucks.WebLoader('/templates', {
-	async: true,
-	useCache: true
-}))
 
 function appify (generator) {
 	return co.wrap(function* (ctx) {

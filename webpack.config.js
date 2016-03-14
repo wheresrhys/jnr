@@ -1,5 +1,5 @@
 // TODO include abcjs in the bundle
-module.exports = {
+const conf = {
 	context: __dirname,
 	entry: "./webapp/main.js",
 	output: {
@@ -23,5 +23,19 @@ module.exports = {
         loader: 'exports?nunjucks'
       }
 		]
+	},
+	resolve: {
+		alias: {
+			nunjucks: 'nunjucks/browser/nunjucks.js',
+			templates: __dirname + '/webapp/dev-templates.js'
+		}
 	}
 };
+
+if (process.env.PRODUCTION_BUILD) {
+	conf.resolve.alias.nunjucks = 'nunjucks/browser/nunjucks-slim.js';
+	conf.resolve.alias.templates = __dirname + '/webapp/prod-templates.js'
+	conf.resolve.alias['compiled-templates'] = __dirname + '/public/templates.js'
+}
+
+module.exports = conf;

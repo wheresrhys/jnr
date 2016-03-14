@@ -19,14 +19,14 @@ build:
 	node-sass webapp/main.scss -o public
 	webpack
 	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
-	# nunjucks-precompile webapp > webapp/templates.js
 
 watch:
 	node-sass webapp/main.scss -o public -w webapp
 	webpack --watch
 
-
-
-
-
+build-prod:
+	nunjucks-precompile webapp > public/templates.js
+	export PRODUCTION_BUILD=true; webpack;
+	node-sass webapp/main.scss -o public
+	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
 
