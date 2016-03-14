@@ -2,7 +2,7 @@
 
 install:
 	npm install
-	jspm install
+	git clone -b master --depth=1 --single-branch https://github.com/paulrosen/abcjs.git abcjs
 
 mongo-export:
 	bash scripts/mongo-export.sh
@@ -16,11 +16,14 @@ run:
 	source ./.env; nodemon -e js,html server
 
 build:
-	node-sass webapp/main.scss -o webapp
+	node-sass webapp/main.scss -o public
+	webpack
+	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
 	# nunjucks-precompile webapp > webapp/templates.js
 
 watch:
-	node-sass webapp/main.scss -o webapp -w webapp
+	node-sass webapp/main.scss -o public -w webapp
+	webpack --watch
 
 
 

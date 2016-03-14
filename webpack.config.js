@@ -1,3 +1,4 @@
+// TODO include abcjs in the bundle
 module.exports = {
 	context: __dirname,
 	entry: "./webapp/main.js",

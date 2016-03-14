@@ -20,12 +20,8 @@
 			{% block body %}{% endblock %}
 {%if renderWrapper %}
 		</main>
-		<script src="/jspm_packages/system.js"></script>
-		<script src="/config.js"></script>
-		<script>
-		  System.import('main.js');
-		</script>
-		<script src="/jspm_packages/github/paulrosen/abcjs@master/bin/abcjs_basic_2.3-min.js"></script>
+		<script src="/abc.js"></script>
+		<script src="/main.js"></script>
 	</body>
 </html>
 {%endif%}

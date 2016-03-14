@@ -17,7 +17,7 @@ import {updateNav} from './components/nav/enhancement';
 let initialLoad = true;
 
 // using [] as base url because a) it's truthy, so gets used b) [].toString = ''
-const templateLoader = window.templateLoader = new nunjucks.Environment(new nunjucks.WebLoader([], {
+const templateLoader = window.templateLoader = new nunjucks.Environment(new nunjucks.WebLoader('/templates', {
 	async: true,
 	useCache: true
 }))
