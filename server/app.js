@@ -12,7 +12,13 @@ const app = koa();
 
 // static assets
 import serve from 'koa-static';
-app.use(serve(process.env.WEB_ROOT))
+import mount from 'koa-mount';
+app.use(serve('public'));
+
+// enable dynamic template loading in dev
+if (process.env !== 'production') {
+	app.use(mount('/templates', serve('webapp')));
+}
 
 // dump out useful global config
 app.use(function *(next) {
@@ -23,7 +29,6 @@ app.use(function *(next) {
 	};
 	yield next;
 });
-
 
 // routing
 import qs from 'koa-qs';
