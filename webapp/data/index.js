@@ -1,3 +1,6 @@
+// TODO: http://pouchdb.com/2014/06/17/12-pro-tips-for-better-code-with-pouchdb.html
+
+
 import PouchDB from 'pouchdb';
 import * as tunes from './indexes/tunes';
 import * as transitions from './indexes/transitions';
