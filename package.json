@@ -38,6 +38,9 @@
     "querystring": "^0.2.0",
     "webpack": "^1.12.14"
   },
+  "engines": {
+    "node": "6.0.0"
+  },
   "devDependencies": {
     "babel-loader": "^6.0.0",
     "haikro": "^2.3.2",
