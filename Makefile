@@ -16,6 +16,9 @@ mongo-import: mongo-export import
 run:
 	source ./.env; nodemon -e js,html server
 
+run2:
+	source ./.env; node server
+
 build:
 	node-sass webapp/main.scss -o public
 	webpack
@@ -29,7 +32,7 @@ build-prod:
 	export PRODUCTION_BUILD=true; webpack;
 	node-sass webapp/main.scss -o public
 	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
-	nunjucks-precompile webapp > public/templates.js
+	nunjucks-precompile ./webapp 0> ./public/templates.js
 
 deploy:
 	# Package+deploy

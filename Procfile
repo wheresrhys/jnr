@@ -1,1 +1,1 @@
-web: ./node_modules/.bin/forever server/index.js
+web: server/index.js
