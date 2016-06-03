@@ -1,7 +1,8 @@
 .PHONY: test mongo-export
 
 install:
-	npm install
+	npm install --no-spin --no-progress
+	rm -rf abcjs 2>/dev/null
 	git clone -b master --depth=1 --single-branch https://github.com/paulrosen/abcjs.git abcjs
 
 mongo-export:
@@ -25,8 +26,12 @@ watch:
 	webpack --watch
 
 build-prod:
-	nunjucks-precompile webapp > public/templates.js
 	export PRODUCTION_BUILD=true; webpack;
 	node-sass webapp/main.scss -o public
 	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
+	nunjucks-precompile webapp > public/templates.js
 
+deploy:
+	# Package+deploy
+	@haikro build
+	@haikro deploy --app jnr3 --commit `git rev-parse HEAD`

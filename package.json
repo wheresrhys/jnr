@@ -23,6 +23,7 @@
     "dom-delegate": "^2.0.3",
     "exports-loader": "^0.6.2",
     "fetchres": "^1.5.1",
+    "forever": "^0.15.2",
     "isomorphic-fetch": "^2.2.0",
     "koa": "^1.1.2",
     "koa-bodyparser": "^2.0.1",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "babel-loader": "^6.0.0",
+    "haikro": "^2.3.2",
     "lodash": "^3.10.1",
     "node-sass": "^3.4.2",
     "nodemon": "^1.8.1",

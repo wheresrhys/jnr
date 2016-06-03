@@ -1,0 +1,14 @@
+./.git
+./.gitignore
+./.slugignore
+./Makefile
+./circle.yml
+.DS_Store
+*.scss
+./scripts
+./abcjs
+./jigsnreels
+./jnr
+./mongo-export
+webpack.config.js
+README.md
