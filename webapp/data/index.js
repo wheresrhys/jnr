@@ -26,7 +26,7 @@ if (isBrowser) {
 	if (!pouch.adapter) { // websql not supported by this browser
 		pouch = new PouchDB('jnr');
 	}
-	PouchDB.sync('jnr', `${location.protocol}//${location.hostname}:5984/jnr`, {
+	PouchDB.sync('jnr', window.pouchHost || `${location.protocol}//${location.hostname}:5984/jnr`, {
 		push: {
 			live: true
 		}

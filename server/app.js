@@ -41,6 +41,7 @@ import {model as nav} from '../webapp/components/nav/model';
 
 app.use(function *(next) {
 	this.data.nav = nav;
+	this.data.pouchHost = process.env.POUCHDB_HOST;
 	yield next;
 });
 
