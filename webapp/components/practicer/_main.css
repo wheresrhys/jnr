@@ -1,6 +1,7 @@
 .practicer {
 	position: relative;
 	max-width: 200px;
+	margin-top: 10px;
 }
 
 .practicer__wrapper {
