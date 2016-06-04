@@ -20,9 +20,10 @@ run2:
 	source ./.env; node server
 
 build:
-	node-sass webapp/main.scss -o public
 	webpack
+	node-sass webapp/main.scss -o public
 	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
+	cp webapp/favicon.ico public/favicon.ico
 
 watch:
 	node-sass webapp/main.scss -o public -w webapp
@@ -34,7 +35,7 @@ build-prod:
 	export PRODUCTION_BUILD=true; webpack;
 	node-sass webapp/main.scss -o public
 	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
-
+	cp webapp/favicon.ico public/favicon.ico
 
 deploy:
 	# Package+deploy
