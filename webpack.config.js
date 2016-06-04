@@ -23,18 +23,22 @@ const conf = {
       }
 		]
 	},
-	resolve: {
-		alias: {
-			nunjucks: 'nunjucks/browser/nunjucks.js',
-			templates: __dirname + '/webapp/dev-templates.js'
-		}
-	}
+	resolve: {}
 };
 
+const path = require('path');
 if (process.env.PRODUCTION_BUILD) {
-	conf.resolve.alias.nunjucks = 'nunjucks/browser/nunjucks-slim.js';
-	conf.resolve.alias.templates = __dirname + '/webapp/prod-templates.js'
-	conf.resolve.alias['compiled-templates'] = __dirname + '/public/templates.js'
+	console.log(__dirname);
+	conf.resolve.alias = {
+		nunjucks: 'nunjucks/browser/nunjucks-slim.js',
+		templates: path.join(__dirname, '/webapp/prod-templates.js'),
+		'compiled-templates': path.join(__dirname, '/public/templates.js')
+	}
+} else {
+	conf.resolve.alias = {
+		nunjucks: 'nunjucks/browser/nunjucks.js',
+		templates: path.join(__dirname, '/webapp/dev-templates.js')
+	}
 }
 
 module.exports = conf;

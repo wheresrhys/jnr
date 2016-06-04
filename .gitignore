@@ -8,3 +8,5 @@
 couchdb.std*
 /jigsnreels/
 /abcjs/
+.haikro-cache
+/node-*

@@ -29,10 +29,12 @@ watch:
 	webpack --watch
 
 build-prod:
+	mkdir public 2>/dev/null
+	nunjucks-precompile ./webapp > ./public/templates.js
 	export PRODUCTION_BUILD=true; webpack;
 	node-sass webapp/main.scss -o public
 	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
-	nunjucks-precompile ./webapp 0> ./public/templates.js
+
 
 deploy:
 	# Package+deploy
