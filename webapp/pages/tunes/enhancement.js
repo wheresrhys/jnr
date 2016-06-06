@@ -1,5 +1,6 @@
 import {getAll} from '../../data/models/tunes';
 import querystring from 'querystring';
+import {loader as templateLoader} from 'templates';
 
 const debounceCallback = func => {
 	let timeout;
