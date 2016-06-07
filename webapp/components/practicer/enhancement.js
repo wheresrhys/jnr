@@ -11,9 +11,9 @@ function getSettingId (el) {
 	return getContainer(el).dataset.settingId;
 }
 
-export function init (del) {
+export function init (del, opts) {
 
-	del.on('mousedown', '.practicer__wrapper', function (ev) {
+	del.on('mousedown', `#${opts.id} .practicer__wrapper`, function (ev) {
 		const container = getContainer(ev.target);
 		const input = container.querySelector('[name="urgency"]');
 		const bar = container.querySelector('.practicer__bar');
@@ -38,7 +38,7 @@ export function init (del) {
 		}, 30);
 	});
 
-	del.on('mouseup', '.practicer__wrapper', function (ev) {
+	del.on('mouseup', `#${opts.id} .practicer__wrapper`, function (ev) {
 		const container = getContainer(ev.target);
 		container.oscillator && clearInterval(container.oscillator);
 		const settingId = getSettingId(ev.target);

@@ -42,9 +42,9 @@ function constructTransition (el) {
 }
 
 
-export function init (del) {
+export function init (del, opts) {
 
-	del.on('click', '.set__dismiss', function (ev) {
+	del.on('click', `#${opts.id} .set__dismiss`, function (ev) {
 		ev.preventDefault();
 		const container = getContainer(ev.target)
 		Array.from(container.querySelectorAll('.practicer')).map(el => {
@@ -55,7 +55,7 @@ export function init (del) {
 		container.parentNode.removeChild(container);
 	});
 
-	del.on('click', '.set__tune-render', function (ev) {
+	del.on('click', `#${opts.id} .set__tune-render`, function (ev) {
 		ev.preventDefault();
 		getAbc(getSettingId(ev.target))
 			.then(abc => {
@@ -71,7 +71,7 @@ export function init (del) {
 			})
 	});
 
-	del.on('score.rendered', '.set', ev => {
+	del.on('score.rendered', `#${opts.id} .set`, ev => {
 		const manuscript = ev.target.querySelector('.set__tune-score');
 		Array.from(del.rootEl.querySelectorAll('.set__tune-score'))
 			.forEach(el => {
@@ -82,7 +82,7 @@ export function init (del) {
 			})
 	});
 
-	del.on('click', '.set__save-transition', function (ev) {
+	del.on('click', `#${opts.id} .set__save-transition`, function (ev) {
 		ev.preventDefault();
 		const container = getTuneContainer(ev.target);
 		const doc = constructTransition(container);
@@ -90,7 +90,7 @@ export function init (del) {
 			.then(() =>	container.classList.remove('set__tune--new-transition'))
 	});
 
-	del.on('click', '.set__remove-transition', function (ev) {
+	del.on('click', `#${opts.id} .set__remove-transition`, function (ev) {
 		ev.preventDefault();
 		const container = getTuneContainer(ev.target);
 		const doc = constructTransition(container);

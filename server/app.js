@@ -96,7 +96,7 @@ app
 import {init} from '../webapp/data';
 
 init()
-	.then(() => app.listen(process.env.PORT || 3000, function () {
-		console.log(`listening on ${process.env.PORT || 3000}`);
+	.then(() => app.listen(process.env.PORT || 3001, function () {
+		console.log(`listening on ${process.env.PORT || 3001}`);
 	}))
 	.catch(logErr);
