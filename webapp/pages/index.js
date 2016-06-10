@@ -18,7 +18,7 @@ const routeMappings = {
 };
 
 export function configureRoutes(router, wrapper) {
-	for(let name in routeMappings) {
+	for (let name in routeMappings) {
 		if (controllers[name]) {
 			const controller = wrapper(controllers[name]);
 			routeMappings[name].forEach(pattern => {

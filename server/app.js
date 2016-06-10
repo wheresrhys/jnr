@@ -6,9 +6,21 @@ global.logErr = (err) => {
 };
 
 import 'isomorphic-fetch';
+
 // create a koa app and initialise the database
-import koa from 'koa';
-const app = koa();
+import Koa from 'koa';
+const app = new Koa();
+const convert = require('koa-convert');
+
+// handle errors
+app.use(async (ctx, next) => {
+	try {
+		await next();
+	} catch (err) {
+		log(err);
+		log(ctx);
+	}
+});
 
 // static assets
 import serve from 'koa-static';
@@ -20,46 +32,51 @@ if (process.env !== 'production') {
 	app.use(mount('/templates', serve('webapp')));
 }
 
-// dump out useful global config
-app.use(function *(next) {
-	this.data = {
+// templating and global setup
+import {model as nav} from '../webapp/components/nav/model';
+import nunjucks from 'nunjucks';
+nunjucks.configure('webapp', { autoescape: true });
+
+app.use(async (ctx, next) => {
+	// useful bits and pieces for the view
+	ctx.data = {
+		nav: nav,
+		pouchHost: process.env.POUCHDB_HOST,
 		user: 'wheresrhys',
 		renderWrapper: true,
-		currentUrl: this.request.url
+		currentUrl: ctx.request.url
 	};
-	yield next;
+
+	await next();
+
+	ctx.body = nunjucks.render(`pages/${ctx.controller}/${ctx.params && ctx.params.action ? ctx.params.action + '/' : ''}tpl.html`, ctx.data);
+	ctx.type = 'text/html';
 });
 
 // routing
 import qs from 'koa-qs';
-qs(app);
 import koaRouter from 'koa-router';
+import {configureRoutes} from '../webapp/pages';
+
+qs(app);
 const router = koaRouter();
 
-import {configureRoutes} from '../webapp/pages';
-import {model as nav} from '../webapp/components/nav/model';
-
-app.use(function *(next) {
-	this.data.nav = nav;
-	this.data.pouchHost = process.env.POUCHDB_HOST;
-	yield next;
-});
-
 configureRoutes(router, func => {
-	return function *(next) {
-		yield func.call(this);
-		yield next
+	return async (ctx, next) => {
+		await func(ctx);
+		await next();
 	}
 });
 
 import {api as tuneApi} from '../webapp/pages/tune/controller'
 import {api as settingApi} from '../webapp/pages/setting/controller'
+
 const apiControllers = {
-	tune: function *(next) {
-		yield tuneApi.call(this);
+	tune: async (ctx, next) => {
+		await tuneApi(ctx);
 	},
-	setting: function *(next) {
-		yield settingApi.call(this);
+	setting: async (ctx, next) => {
+		await settingApi(ctx);
 	}
 };
 
@@ -70,9 +87,8 @@ const apiMappings = {
 	setting: ['/settings/:settingId']
 };
 
-for(let name in apiMappings) {
+for (let name in apiMappings) {
 	if (apiControllers[name]) {
-
 		apiMappings[name].forEach(pattern => {
 			router.post('/api' + pattern, bodyParser(), apiControllers[name]);
 		});
@@ -82,16 +98,6 @@ for(let name in apiMappings) {
 app
 	.use(router.routes())
 	.use(router.allowedMethods())
-
-// templating
-import nunjucks from 'nunjucks';
-nunjucks.configure('webapp', { autoescape: true });
-
-app
-	.use(function *(next) {
-		this.body = nunjucks.render(`pages/${this.controller}/${this.params && this.params.action ? this.params.action + '/' : ''}tpl.html`, this.data);
-		this.type = 'text/html';
-	})
 
 import {init} from '../webapp/data';
 

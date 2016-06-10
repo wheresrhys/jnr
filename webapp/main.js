@@ -17,15 +17,15 @@ import {loader as templateLoader} from 'templates';
 
 let initialLoad = true;
 
-function appify (generator) {
-	return co.wrap(function* (ctx) {
+function appify (controller) {
+	return async (ctx) => {
 		ctx.data = {};
 		ctx.start = Date.now();
 		ctx.query = querystring.parse(ctx.querystring);
 		if (initialLoad) {
 			ctx.initialLoad = true;
 		}
-		yield (co.wrap(generator))(ctx);
+		await controller(ctx);
 
 		if (initialLoad) {
 			initialLoad = false;
@@ -40,14 +40,14 @@ function appify (generator) {
 			enhance(ctx);
 		});
 
-	})
+	}
 }
 
 configureRoutes({
 	get: page
 }, func => {
-	return appify(function* (ctx) {
-		yield func.call(ctx);
+	return appify(async (ctx) => {
+		await func(ctx);
 	})
 });
 

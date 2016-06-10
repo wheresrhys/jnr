@@ -14,13 +14,16 @@ const conf = {
 				exclude: /node_modules/,
 				loader: 'babel',
 				query: {
-					plugins: ['transform-es2015-modules-commonjs']
+					plugins: [
+						'transform-es2015-modules-commonjs',
+						'transform-async-to-generator'
+					]
 				}
 			},
 			{
-        test: /nunjucks\/browser\/nunjucks(-slim)?/,
-        loader: 'exports?nunjucks'
-      }
+				test: /nunjucks\/browser\/nunjucks(-slim)?/,
+				loader: 'exports?nunjucks'
+			}
 		]
 	},
 	resolve: {}

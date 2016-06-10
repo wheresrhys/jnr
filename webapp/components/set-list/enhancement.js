@@ -26,7 +26,7 @@ export function init (del, opts) {
 
 		container.parentNode.removeChild(container);
 
-		co.wrap(getSetCollection)(opts.orderBy, 1, [ev.detail.tuneId].concat(Array.from(del.rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
+		getSetCollection(opts.orderBy, 1, [ev.detail.tuneId].concat(Array.from(del.rootEl.querySelectorAll('[data-tune-id]')).map(el => el.dataset.tuneId)))
 			.then(sets => {
 				templateLoader.render(`components/set/tpl.html`, {
 					set: sets[0]

@@ -75,8 +75,8 @@ export function buildSet (set, opts) {
 	return set;
 }
 
-export function* buildSets (opts) {
-	opts.transitions = yield query('transitions', {
+export const buildSets = async (opts) => {
+	opts.transitions = await query('transitions', {
 		include_docs: true,
 		// Don't bother filtering by setting key here
 		// In the browser performance is about half as good compared to just getting all transitions
@@ -106,9 +106,9 @@ export function* buildSets (opts) {
 	return sets;
 }
 
-export function* getSetCollection (ordering, number, excludedTunes) {
+export const getSetCollection = async (ordering, number, excludedTunes) => {
 	const config = configs[ordering];
-	let settings = yield query(ordering, {
+	let settings = await query(ordering, {
 		include_docs: true,
 		limit: config.tunePoolSize,
 		descending: config.descending
@@ -116,7 +116,7 @@ export function* getSetCollection (ordering, number, excludedTunes) {
 	if (excludedTunes) {
 		settings = settings.filter(setting => excludedTunes.indexOf(setting.tuneId) === -1)
 	}
-	return yield buildSets({
+	return buildSets({
 		settings,
 		setCount: number || config.setsToReturn,
 		tunesPerSet: config.tunesPerSet,
