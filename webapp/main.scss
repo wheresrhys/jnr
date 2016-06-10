@@ -10,6 +10,98 @@ $red: #b00;
 $amber: #b90;
 $blue: #27d;
 
+@mixin icon ($name, $size, $color: black) {
+	background: url('/img/ic_#{$name}_#{$color}.svg') no-repeat;
+	background-size: $size + px;
+}
+
+@mixin inlineIconButton ($name) {
+	border: none;
+	outline: none;
+	cursor: pointer;
+	height: 20px;
+	display: inline-block;
+	width: 20px;
+	@include icon($name, 20);
+	position: relative;
+	top: 5px;
+}
+
+/*
+
+
+.piece__stats--good {
+	@include icon(thumb_up, 15);
+}
+
+.piece__stats--bad {
+	@include icon(thumb_down, 15);
+}
+
+.piece__stats--neutral {
+	@include icon(thumbs_up_down, 15);
+}
+
+.piece__practice--good {
+	@include primaryAction(thumb_up, $green);
+}
+
+.piece__practice--bad {
+	@include primaryAction(thumb_down, $red);
+}
+
+.piece__practice--neutral {
+	@include primaryAction(thumbs_up_down, $amber);
+}
+
+.piece__practice--skip {
+	@include primaryAction(schedule, $blue);
+}
+
+.tune__edit {
+	@include primaryAction(mode_edit, $blue);
+}
+
+.tune__edit-tunebooks {
+	@include primaryAction(my_library_add, $green);
+}
+*/
+
+
+@mixin actions($item-selectors) {
+	display: flex;
+	align-items: stretch;
+	position: relative;
+
+	#{$item-selectors} {
+		flex: 0 1 60px;
+		align-self: auto;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		min-height: 35px;
+		text-align: center;
+
+		&>i {
+			display: inline-block;
+			width: 18px;
+			height: 18px;
+			background-position: 0px center;
+		}
+	}
+}
+
+@mixin primaryAction($icon, $bg-color, $invert: false) {
+	background-color: $bg-color;
+	$color: white;
+	@if $invert {
+		$color: black;
+	}
+	i {
+		@include icon($icon, 18, $color);
+	}
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -49,6 +141,12 @@ ul, li, ol {
 		margin: 5px;
 		overflow: hidden;
 		box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.1);
+	}
+}
+
+@media screen and (max-width: 300px) {
+	.the {
+		display: none;
 	}
 }
 

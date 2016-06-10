@@ -31,10 +31,7 @@ export class ABC {
 	}
 
 	toString (length) {
-		return `K: ${this.key}
-M: ${this.meter}
-R: ${this.rhythm}
-${this.wrap(length)}`
+		return `K: ${this.key}\nM: ${this.meter}\nR: ${this.rhythm}\n${this.wrap(length)}`;
 	}
 
 	wrap (length) {
@@ -86,6 +83,6 @@ ${this.wrap(length)}`
 
 			return compressedAbc.join('\n').replace(/\|{3,}/g, '||');
 		}
-		return abcLines.join('\n');
+		return abcLines.filter(l => !!l).join('\n');
 	}
 }
