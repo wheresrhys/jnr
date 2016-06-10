@@ -69,3 +69,7 @@
 		display: block;
 	}
 }
+
+.set__tune-render {
+	@include inlineIconButton(queue_music);
+}

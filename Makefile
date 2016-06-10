@@ -24,6 +24,7 @@ build:
 	node-sass webapp/main.scss -o public
 	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
 	cp webapp/favicon.ico public/favicon.ico
+	cp -r webapp/img public/img
 
 watch:
 	node-sass webapp/main.scss -o public -w webapp
@@ -36,6 +37,7 @@ build-prod:
 	node-sass webapp/main.scss -o public
 	cp abcjs/bin/abcjs_basic_2.3-min.js public/abc.js
 	cp webapp/favicon.ico public/favicon.ico
+	cp -r webapp/img public/img
 
 deploy:
 	# Package+deploy
