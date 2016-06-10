@@ -32,30 +32,34 @@ if (process.env !== 'production') {
 	app.use(mount('/templates', serve('webapp')));
 }
 
-// dump out useful global config
+// templating and global setup
+import {model as nav} from '../webapp/components/nav/model';
+import nunjucks from 'nunjucks';
+nunjucks.configure('webapp', { autoescape: true });
+
 app.use(async (ctx, next) => {
+	// useful bits and pieces for the view
 	ctx.data = {
+		nav: nav,
+		pouchHost: process.env.POUCHDB_HOST,
 		user: 'wheresrhys',
 		renderWrapper: true,
 		currentUrl: ctx.request.url
 	};
+
 	await next();
+
+	ctx.body = nunjucks.render(`pages/${ctx.controller}/${ctx.params && ctx.params.action ? ctx.params.action + '/' : ''}tpl.html`, ctx.data);
+	ctx.type = 'text/html';
 });
 
 // routing
 import qs from 'koa-qs';
-qs(app);
 import koaRouter from 'koa-router';
-const router = koaRouter();
-
 import {configureRoutes} from '../webapp/pages';
-import {model as nav} from '../webapp/components/nav/model';
 
-app.use(async (ctx, next) => {
-	ctx.data.nav = nav;
-	ctx.data.pouchHost = process.env.POUCHDB_HOST;
-	await next();
-});
+qs(app);
+const router = koaRouter();
 
 configureRoutes(router, func => {
 	return async (ctx, next) => {
@@ -94,16 +98,6 @@ for (let name in apiMappings) {
 app
 	.use(router.routes())
 	.use(router.allowedMethods())
-
-// templating
-import nunjucks from 'nunjucks';
-nunjucks.configure('webapp', { autoescape: true });
-
-app
-	.use(async (ctx, next) => {
-		ctx.body = nunjucks.render(`pages/${ctx.controller}/${ctx.params && ctx.params.action ? ctx.params.action + '/' : ''}tpl.html`, ctx.data);
-		ctx.type = 'text/html';
-	})
 
 import {init} from '../webapp/data';
 
