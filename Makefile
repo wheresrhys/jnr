@@ -14,7 +14,7 @@ import:
 mongo-import: mongo-export import
 
 run:
-	source ./.env; nodemon -e js,html server
+	source ./.env; nodemon -e js,html server -w webapp -w server
 
 run2:
 	source ./.env; node server

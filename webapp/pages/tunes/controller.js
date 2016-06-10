@@ -1,8 +1,8 @@
 import {getAll} from '../../data/models/tunes';
 
-export default function *controller () {
-	this.controller = 'tunes';
+export default async () => {
+	ctx.controller = 'tunes';
 
-	Object.assign(this.data, yield getAll(this.query));
-	this.data.q = this.query.q || '';
+	Object.assign(ctx.data, await getAll(ctx.query));
+	ctx.data.q = ctx.query.q || '';
 }
