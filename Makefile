@@ -27,8 +27,7 @@ build:
 	cp -r webapp/img public/img
 
 watch:
-	node-sass webapp/main.scss -o public -w webapp
-	webpack --watch
+	node-sass webapp/main.scss -o public -w webapp & webpack --watch
 
 build-prod:
 	mkdir public 2>/dev/null

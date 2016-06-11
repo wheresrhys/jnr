@@ -13,35 +13,14 @@ function getSettingId (el) {
 
 export function init (del, opts) {
 
-	del.on('mousedown', `#${opts.id} .practicer__wrapper`, function (ev) {
+	del.on('click', `#${opts.id} .practicer`, function (ev) {
 		const container = getContainer(ev.target);
 		const input = container.querySelector('[name="urgency"]');
-		const bar = container.querySelector('.practicer__bar');
-
-		let increasing = input.value < 9;
-
-		container.oscillator = setInterval(function () {
-			input.value = Number(input.value) + (increasing ? 0.5 : -0.5);
-			if (input.value == 1) {
-				increasing = true;
-			}
-			if (input.value == 10) {
-				increasing = false;
-			}
-			const badness = 1 - ((input.value - 1)/ 9);
-			const hue = 120 * badness;
-			const yellowDimming = 10;
-			// by solving ax^2 + bx + c
-			const luminescence = ((yellowDimming / 3600) * hue * hue) - ((yellowDimming / 30) * hue) + 50;
-			bar.style.backgroundColor = `hsl(${hue}, 95%, ${luminescence}%)`;
-			bar.style.transform = `translateX(-${100 * badness}%)`;
-		}, 30);
-	});
-
-	del.on('mouseup', `#${opts.id} .practicer__wrapper`, function (ev) {
-		const container = getContainer(ev.target);
-		container.oscillator && clearInterval(container.oscillator);
 		const settingId = getSettingId(ev.target);
+		const score = Math.round(20 * (ev.clientX - container.offsetLeft) / container.clientWidth) / 2;
+
+		input.value = score;
+
 		container.setAttribute('data-practiced', '');
 		container.dispatchEvent(new CustomEvent('tune.practiced', {
 			bubbles: true,
@@ -50,7 +29,7 @@ export function init (del, opts) {
 			}
 		}))
 
-		practice(settingId, container.querySelector('[name="urgency"]').value)
+		practice(settingId, input.value)
 
 	});
 
