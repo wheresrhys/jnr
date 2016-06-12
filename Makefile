@@ -16,9 +16,6 @@ mongo-import: mongo-export import
 run:
 	source ./.env; nodemon -e js,html server -w webapp -w server
 
-run2:
-	source ./.env; node server
-
 build:
 	webpack
 	node-sass webapp/main.scss -o public

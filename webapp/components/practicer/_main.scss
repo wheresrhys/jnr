@@ -1,31 +1,32 @@
+.practicer {
+	margin-top: 20px;
+}
 .has-js .practicer {
 	position: relative;
-	max-width: 200px;
-	margin-top: 10px;
-	height: 20px;
+	max-width: 300px;
+	width: 100%;
+	height: 30px;
 	background: linear-gradient(to right, $red 0%,$amber 50%,$green 100%);
 	border-radius: 5px;
 
-	&::before {
-		@include icon(thumb_down, 15, white);
+	&::before,
+	&::after {
 		display: block;
 		content: ' ';
 		position: absolute;
-		left: 2px;
 		height: 15px;
 		width: 15px;
-		top: 2px;
+		top: 5px;
+	}
+
+	&::before {
+		@include icon(thumb_down, 15, white);
+		left: 5px;
 	}
 
 	&::after {
 		@include icon(thumb_up, 15, white);
-		display: block;
-		content: ' ';
-		position: absolute;
-		right: 2px;
-		height: 15px;
-		width: 15px;
-		top: 2px;
+		right: 5px;
 	}
 
 }

@@ -35,7 +35,9 @@ if (process.env !== 'production') {
 // templating and global setup
 import {model as nav} from '../webapp/components/nav/model';
 import nunjucks from 'nunjucks';
-nunjucks.configure('webapp', { autoescape: true });
+import extendNunjucks from '../webapp/nunjucks-extensions';
+const nunjucksEnv = nunjucks.configure('webapp', { autoescape: true });
+extendNunjucks(nunjucksEnv);
 
 app.use(async (ctx, next) => {
 	// useful bits and pieces for the view

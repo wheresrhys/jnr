@@ -1,8 +1,7 @@
 import {getSetCollection} from '../set/model';
 import {init as initPracticers} from '../practicer/enhancement';
 import {init as initSets} from '../set/enhancement';
-
-import co from 'co';
+import {loader as templateLoader} from 'templates';
 
 function getSetContainer (el) {
 	while (!el.classList.contains('set')) {
