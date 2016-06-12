@@ -13,7 +13,7 @@ function getSettingId (el) {
 
 export function init (del, opts) {
 
-	del.on('click', `#${opts.id} .practicer`, function (ev) {
+	del.on('mouseup', `#${opts.id} .practicer`, function (ev) {
 		const container = getContainer(ev.target);
 		const input = container.querySelector('[name="urgency"]');
 		const settingId = getSettingId(ev.target);
