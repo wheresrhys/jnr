@@ -2,7 +2,6 @@
 
 
 import PouchDB from 'pouchdb';
-import * as tunes from './indexes/tunes';
 import * as transitions from './indexes/transitions';
 import * as learn from './indexes/learn';
 import * as remind from './indexes/remind';
@@ -12,7 +11,6 @@ import isBrowser from '../lib/is-browser';
 
 const indexes = {
 	transitions: transitions,
-	tunes: tunes,
 	learn: learn,
 	remind: remind,
 	improve: improve,

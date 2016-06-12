@@ -6,6 +6,7 @@ export const ddoc = {
 			map: function (doc) {
 				if (doc.docType === 'setting') {
 					emit(doc.name.replace(/^(The|Y) /, ''));
+					emit(doc._id);
 				}
 			}.toString()
 		}
