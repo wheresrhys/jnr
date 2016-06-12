@@ -16,7 +16,11 @@ const conf = {
 				query: {
 					plugins: [
 						'transform-es2015-modules-commonjs',
-						'transform-async-to-generator'
+						'transform-async-to-generator',
+						'transform-runtime'
+					],
+					presets: [
+						'es2015'
 					]
 				}
 			},

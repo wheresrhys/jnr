@@ -12,7 +12,6 @@ function getSettingId (el) {
 }
 
 export function init (del, opts) {
-
 	del.on('click', `#${opts.id} .practicer`, function (ev) {
 		const container = getContainer(ev.target);
 		const input = container.querySelector('[name="urgency"]');

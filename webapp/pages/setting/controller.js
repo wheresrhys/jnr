@@ -1,7 +1,7 @@
 import {query, db} from '../../data/index';
 
 export const api = async(ctx) => {
-	ctx.data.setting = await db.get(ctx.params.settingId);
+	ctx.data.setting = await db().get(ctx.params.settingId);
 
 	if ('urgency' in ctx.request.body) {
 		const practices = ctx.data.setting.practices;
@@ -12,7 +12,7 @@ export const api = async(ctx) => {
 		if (practices.length > 5) {
 			practices.pop();
 		}
-		await db.put(ctx.data.setting)
+		await db().put(ctx.data.setting)
 			.then(() => {
 				ctx.response.redirect(ctx.request.header.referer);
 			})

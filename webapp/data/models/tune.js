@@ -41,7 +41,7 @@ function tuneModel () {
 }
 
 export function getTune (tuneId) {
-	const tunePromise = /^thesession/.test(tuneId) ? getSessionTune(tuneId) : db.get(tuneId);
+	const tunePromise = /^thesession/.test(tuneId) ? getSessionTune(tuneId) : db().get(tuneId);
 	return Promise.all([tunePromise, updateTunes()])
 		.then(res => tuneModel.apply(res[0]))
 }

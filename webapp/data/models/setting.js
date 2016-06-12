@@ -3,7 +3,7 @@ import {ABC} from '../../lib/abc';
 import {addSetting} from './tunes';
 
 export function getAbc (settingId) {
-	return db.get(settingId)
+	return db().get(settingId)
 		.then(setting => {
 			return new ABC({
 				key: setting.key,
@@ -16,7 +16,7 @@ export function getAbc (settingId) {
 
 export function practice (settingId, urgency) {
 
-	return db.get(settingId)
+	return db().get(settingId)
 		.then(setting => {
 			setting.practices.unshift({
 				date: new Date().toISOString(),
@@ -25,7 +25,7 @@ export function practice (settingId, urgency) {
 			if (setting.practices.length > 5) {
 				setting.practices.pop();
 			}
-			return db.put(setting);
+			return db().put(setting);
 		});
 }
 
@@ -33,7 +33,7 @@ export function create(tune, key, settingIndex) {
 	const abc = tune.getAbc(settingIndex, key);
 	addSetting(tune._id, abc.key);
 
-	return db.put({
+	return db().put({
 		_id: `${tune._id}|${abc.key}`,
 		practices: [{
 			date: new Date().toISOString(),
