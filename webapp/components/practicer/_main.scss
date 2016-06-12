@@ -1,6 +1,10 @@
 .practicer {
 	margin-top: 20px;
-}
+
+	&[data-practiced] {
+		opacity: 0.3;
+	}
+ }
 .has-js .practicer {
 	position: relative;
 	max-width: 300px;

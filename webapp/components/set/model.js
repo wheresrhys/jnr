@@ -31,6 +31,7 @@ function findAdjacentTune (direction, setting, opts) {
 	if (transition) {
 		const setting = opts.settings.find(setting => setting.tuneId === transition[toReturn].id && transition[toReturn].key === setting.key);
 		if (setting) {
+			opts.settings.splice(opts.settings.indexOf(setting), 1);
 			return setting;
 		}
 	}
