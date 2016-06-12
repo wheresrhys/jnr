@@ -30,3 +30,12 @@
 		border: 1px solid $lines;
 	}
 }
+
+.tune-search__results {
+	display: block;
+	background: white;
+
+	a {
+		display: block;
+	}
+}

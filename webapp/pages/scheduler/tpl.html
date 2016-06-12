@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
 	<h1>Tunes to {{list.orderBy}}</h1>
+	<form class="tune-search">
+		<input type="search" name="q" placeholder="Search for a tune" value="{{q}}" autocomplete="off">
+		<button class="no-js" type="submit">search</button>
+	</form>
+	<div class="tune-search__results"></div>
 	{% include "components/set-list/tpl.html" %}
 {% endblock %}

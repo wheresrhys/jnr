@@ -1,4 +1,4 @@
-import {getSetCollection} from '../set/model';
+import {getSetCollection, getSetFromTune} from '../set/model';
 import {init as initPracticers} from '../practicer/enhancement';
 import {init as initSets} from '../set/enhancement';
 import {loader as templateLoader} from 'templates';
@@ -14,6 +14,7 @@ export function init (del, opts) {
 	const setListEl = document.querySelector(`#${opts.id}`);
 	initPracticers(del, {id: opts.id});
 	initSets(del, {id: opts.id});
+
 	del.on('tune.practiced', `#${opts.id} .practicer`, ev => {
 		const container = getSetContainer(ev.target);
 
@@ -29,6 +30,19 @@ export function init (del, opts) {
 					set: sets[0]
 				}, (err, res) => {
 					setListEl.insertAdjacentHTML('beforeend', res);
+				});
+			});
+	})
+
+
+	del.on('tune.add', `#${opts.id}`, ev => {
+
+		getSetFromTune(ev.detail.tuneId, 1)
+			.then(set => {
+				templateLoader.render(`components/set/tpl.html`, {
+					set: set
+				}, (err, res) => {
+					setListEl.insertAdjacentHTML('afterBegin', res);
 				});
 			});
 	})

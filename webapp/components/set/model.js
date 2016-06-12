@@ -123,3 +123,24 @@ export const getSetCollection = async (ordering, number, excludedTunes) => {
 		dismissable: config.dismissable
 	});
 }
+
+export function getSetFromTune(tuneId, length) {
+	if (length > 1) {
+		throw 'unsupported';
+	}
+	return query('learn', {
+		key: tuneId,
+		include_docs: true,
+		limit: 1
+	})
+		.then(tunes => {
+			return buildSets({
+				settings: tunes,
+				setCount: 1,
+				tunesPerSet: length
+			})
+				.then(sets => sets[0])
+		})
+
+
+}

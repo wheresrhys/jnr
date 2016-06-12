@@ -126,10 +126,7 @@ function search (term, tunes) {
 				return t1.score === t2.score ? 0 : t1.score > t2.score ? -1: 1
 			});
 	}
-
-
 	return tunes;
-
 }
 
 export function getAll (opts) {
@@ -139,7 +136,7 @@ export function getAll (opts) {
 
 	return update()
 		.then(() => {
-			let tunes = opts.status ? allTunes[opts.status] : allTunes.all;
+			let tunes = opts.status === 'active' ? allTunes.all.filter(t => t.isActive) : allTunes.all;
 			if (opts.q) {
 				tunes = search(opts.q, tunes).slice(0, limit);
 			} else {
