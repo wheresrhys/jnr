@@ -1,21 +1,25 @@
 {% extends "layout.html" %}
-{% block body %}
-	<p>{{tune.name}}{%if unsaved %} <small>Alternative setting {{settingIndex}}</small>{%endif%}</p>
-{%if not isActive%}
-<form action="/api/tunes/{{tune._id}}" method="post" class="tune__start-learning">
-	<input type="hidden" name="learn" value="true">
-	<input type="hidden" name="key" value="{{abc.key}}">
-	<input type="hidden" name="settingIndex" value="{{settingIndex - 1}}">
-	<button type="submit">Start learning in {{abc.key}}</button>
-</form>
-<a href="/create-set?tunes={{tune._id}}">Use in set</a>
 
-{%endif%}
-	<pre class="tune__abc">{{abc}}</pre>
-	{%if paginate %}
-	<nav>
-			<a href="/tunes/{{tune._id}}{{nextSettingQuery}}">Next</a>,
-			<a href="/tunes/{{tune._id}}">Reset</a>
-	</nav>
-	{%endif%}
-{% endblock %}
+	{% block body %}
+	<div class="tune">
+		<p>{{tune.name}}{%if unsaved %} <small>Alternative setting {{settingIndex}}</small>{%endif%}</p>
+		{%if not isActive%}
+		<form action="/api/tunes/{{tune._id}}" method="post" class="tune__start-learning">
+			<input type="hidden" name="learn" value="true">
+			<input type="hidden" name="key" value="{{abc.key}}">
+			<input type="hidden" name="settingIndex" value="{{settingIndex - 1}}">
+			<button type="submit">Start learning in {{abc.key}}</button>
+		</form>
+		<a href="/create-set?tunes={{tune._id}}">Use in set</a>
+
+		{%endif%}
+		<pre class="tune__abc">{{abc}}</pre>
+		{%if paginate %}
+		<nav>
+				<a href="/tunes/{{tune._id}}{{nextSettingQuery}}">Next</a>,
+				<a href="/tunes/{{tune._id}}">Reset</a>
+		</nav>
+		{%endif%}
+	</div>
+	{% endblock %}
+

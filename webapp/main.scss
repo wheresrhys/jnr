@@ -15,14 +15,14 @@ $blue: #27d;
 	background-size: $size + px;
 }
 
-@mixin inlineIconButton ($name) {
+@mixin inlineIconButton ($name, $color: black) {
 	border: none;
 	outline: none;
 	cursor: pointer;
 	height: 20px;
 	display: inline-block;
 	width: 20px;
-	@include icon($name, 20);
+	@include icon($name, 20, $color);
 	position: relative;
 	top: 5px;
 }
@@ -106,7 +106,7 @@ $blue: #27d;
 	margin: 0;
 	padding: 0;
 	font-family: Arial, Helvetica, SansSerif;
-	color: $font-color;
+
 	font-size: 16px;
 	box-sizing: border-box;
 }
@@ -118,6 +118,12 @@ html {
 body {
 	max-width: 800px;
 	margin: 40px auto 0;
+	background: black;
+	color: $font-color;
+}
+
+h1 {
+	color: $neutral-bg;
 }
 
 ul, li, ol {
@@ -154,3 +160,4 @@ ul, li, ol {
 @import "components/set/main";
 @import "components/practicer/main";
 @import "pages/tunes/main";
+@import "pages/tune/main";

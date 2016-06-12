@@ -31,7 +31,7 @@ export function practice (settingId, urgency) {
 
 export function create(tune, key, settingIndex) {
 	const abc = tune.getAbc(settingIndex, key);
-	addSetting(tune._id, abc.key);
+	addSetting(tune._id, abc.key)
 
 	return db().put({
 		_id: `${tune._id}|${abc.key}`,

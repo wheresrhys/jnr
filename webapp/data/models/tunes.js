@@ -101,10 +101,10 @@ function _addSetting (obj, tuneId, key) {
 }
 
 export function addSetting(tuneId, key) {
-	update()
+	return update()
 		.then(() => {
 			_addSetting(allTunes.activeIds, tuneId, key)
-			allTunes.all.find(t => t._id === tuneId).isActive = true;
+			allTunes.all.find(t => t.id === tuneId).isActive = true;
 		})
 
 }

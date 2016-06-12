@@ -2,18 +2,18 @@
 	<ol class="set__tunes">
 		{% for setting in set.tunes %}
 			<li class="set__tune{%if setting.isNewTransition%} set__tune--new-transition{%endif%}" data-setting-id="{{setting._id}}" data-tune-id="{{setting.tuneId}}" data-tune-key="{{setting.key}}">
-				<button class="set__save-transition">save</button>
-				<button class="set__remove-transition">remove</button>
 				<h2 class="set__tune__title">
-					<a href="/tunes/{{setting.tuneId}}?key={{setting.key}}">{{setting.name | wrapFillerWords | safe}} <small>({{setting.rhythm}} in {{setting.key}})</small></a>
+					<button class="set__save-transition"></button>
+					<button class="set__remove-transition" aria-pressed="true"></button>
+					<a href="/tunes/{{setting.tuneId}}?key={{setting.key}}">{{setting.name | wrapFillerWords | safe}} <small class="filler">({{setting.rhythm}} in {{setting.key}})</small></a>
 					<button class="set__tune-render js"></button>
 				</h2>
 				{% include "components/practicer/tpl.html" %}
 			</li>
 		{% endfor %}
 	</ol>
-	{%if set.dismissable %}
-	<button class="set__dismiss">dismiss</button>
-	{%endif%}
+<!-- 	{%if set.dismissable %}
+	<button class="set__dismiss"></button>
+	{%endif%} -->
 	<div class="set__tune-score"></div>
 </li>

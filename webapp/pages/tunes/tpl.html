@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 	<form class="tune-search">
-		<input type="search" name="q" placeholder="Search for a tune" value="{{q}}">
+		<input type="search" name="q" placeholder="Search for a tune" value="{{q}}" autocomplete="off">
 		<button class="no-js" type="submit">search</button>
 	</form>
 	{% include "pages/tunes/list.html" %}

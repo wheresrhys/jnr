@@ -17,7 +17,7 @@ const conf = {
 					plugins: [
 						'transform-es2015-modules-commonjs',
 						'transform-async-to-generator',
-						'transform-runtime'
+						['transform-runtime', {polyfills: false}]
 					],
 					presets: [
 						'es2015'

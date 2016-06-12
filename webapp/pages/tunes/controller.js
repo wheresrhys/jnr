@@ -1,6 +1,6 @@
 import {getAll} from '../../data/models/tunes';
 
-export default async () => {
+export default async ctx => {
 	ctx.controller = 'tunes';
 
 	Object.assign(ctx.data, await getAll(ctx.query));

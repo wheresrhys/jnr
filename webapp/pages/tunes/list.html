@@ -1,7 +1,7 @@
 <ol class="tune-list list">
 	{% for tune in tunes %}
 	<li>
-		<a class="tune-list__tune-link" href="/tunes/{{tune.id}}">{{tune.name}} (<small>{{tune.type}}</small>)</a>
+		<a class="tune-list__tune-link" href="/tunes/{{tune.id}}">{{tune.name | wrapFillerWords | safe}}(<small>{{tune.type}}</small>)</a>
 		{%if not tune.isActive%}new{%endif%}
 		<a class="tune-list__edit-link" href="/tunes/{{tune.id}}/edit">edit</a>
 	</li>
