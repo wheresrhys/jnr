@@ -8,7 +8,7 @@ export default function (del) {
 	del.on('submit', '.tune__select-arrangement', ev => {
 		ev.preventDefault();
 		this.data.tune.arrangement = this.data.alternateArrangements[ev.target.querySelector('input[name="arrangement"]').value];
-		db.put(this.data.tune);
+		db().put(this.data.tune);
 		ev.target.parentNode.removeChild(ev.target);
 		window.history.pushState({}, this.data.tune.name, window.location.pathname);
 	});

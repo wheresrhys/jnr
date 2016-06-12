@@ -86,7 +86,7 @@ export function init (del, opts) {
 		ev.preventDefault();
 		const container = getTuneContainer(ev.target);
 		const doc = constructTransition(container);
-		db.put(doc)
+		db().put(doc)
 			.then(() =>	container.classList.remove('set__tune--new-transition'))
 	});
 
@@ -94,8 +94,8 @@ export function init (del, opts) {
 		ev.preventDefault();
 		const container = getTuneContainer(ev.target);
 		const doc = constructTransition(container);
-		db.get(doc._id)
-			.then(doc => db.remove(doc))
+		db().get(doc._id)
+			.then(doc => db().remove(doc))
 			.then(() => container.classList.add('set__tune--new-transition'))
 	});
 

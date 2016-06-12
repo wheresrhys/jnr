@@ -11,11 +11,9 @@ function getSetContainer (el) {
 }
 
 export function init (del, opts) {
-
 	const setListEl = document.querySelector(`#${opts.id}`);
 	initPracticers(del, {id: opts.id});
 	initSets(del, {id: opts.id});
-
 	del.on('tune.practiced', `#${opts.id} .practicer`, ev => {
 		const container = getSetContainer(ev.target);
 
